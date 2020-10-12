@@ -2,7 +2,7 @@ const { sequelize } = require('../models');
 const User = sequelize.models.User;
 
 //@desc get all users
-//@route Get /users/
+//@route GET /users/
 //@access Public
 exports.getUsers = async (req, res) => {
   try {
@@ -14,7 +14,7 @@ exports.getUsers = async (req, res) => {
 };
 
 //@desc Create new user
-//@route Post /users/
+//@route POST /users/
 //@access Public
 exports.createUser = async (req, res) => {
   try {
