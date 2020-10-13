@@ -20,7 +20,10 @@ exports.createUser = async (req, res) => {
   try {
     // Insert into table
     const user = await User.create({
-      name: req.body.name,
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+
     });
 
     res.json(user);

@@ -9,8 +9,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING
+      username: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [1, 20],
+            msg: "please use the right length"
+          }
+        }
+      },
+      email: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
