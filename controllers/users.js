@@ -1,5 +1,6 @@
 const { sequelize } = require('../models');
 const User = sequelize.models.User;
+//const { getSigendJwtToken } = require('../middleware/auth')
 
 //@desc get all users
 //@route GET /users/
@@ -22,8 +23,7 @@ exports.createUser = async (req, res) => {
     const user = await User.create({
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password
-
+      password: req.body.password,
     });
 
     res.json(user);
