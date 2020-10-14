@@ -1,5 +1,5 @@
 const { sequelize } = require('../models');
-const User = sequelize.models.User;
+const User = sequelize.models.user;
 //const { getSigendJwtToken } = require('../middleware/auth')
 
 //@desc get all users
@@ -50,21 +50,16 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    // update a user
-    if (username || email || password) {
-      const user = await User.update(
-        {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-        },
-        { where: { id: req.params.id } }
-      );
+    const user = await User.update(
+      {
+        username: username,
+        email: email,
+        password: password,
+      },
+      { where: { id: req.params.id } }
+    );
 
-      res.json(user);
-    } else {
-      res.json({ msg: 'No changes were made' });
-    }
+    res.json(user);
   } catch (error) {
     console.log(error);
   }
