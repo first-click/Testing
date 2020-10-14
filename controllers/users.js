@@ -56,7 +56,7 @@ exports.updateUser = async (req, res) => {
         email: email,
         password: password,
       },
-      { where: { id: req.params.id } }
+      { where: { id: req.params.id }, returning: true }
     );
 
     res.json(user);
