@@ -34,20 +34,20 @@ module.exports = (sequelize, DataTypes) => {
 
     {
       hooks: {
-        beforeSave: async (user) => {
-          const salt = await bcrypt.genSaltSync();
+        beforeCreate: (user) => {
+          const salt = bcrypt.genSaltSync();
           user.password = bcrypt.hashSync(user.password, salt);
         },
-        // beforeUpdate: (user) => {
-        //   console.log(user);
-        //   if (user.password) {
-        //     user.password = bcrypt.hashSync(
-        //       user.previous.password,
-        //       bcrypt.genSaltSync(10),
-        //       null
-        //     );
-        //   }
-        // },
+        beforeBulkUpdate: async (user) => {
+          console.log();
+          if (user.password) {
+            user.password = await bcrypt.hashSync(
+              user.previous.password,
+              bcrypt.genSaltSync(10),
+              null
+            );
+          }
+        },
       },
       instanceMethods: {
         validPassword: function (password) {
