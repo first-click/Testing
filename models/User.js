@@ -38,6 +38,16 @@ module.exports = (sequelize, DataTypes) => {
           const salt = bcrypt.genSaltSync();
           user.password = bcrypt.hashSync(user.password, salt);
         },
+        beforeBulkUpdate: (user) => {
+          console.log(user);
+          if (user.password) {
+            user.password = bcrypt.hashSync(
+              user.previous.password,
+              bcrypt.genSaltSync(10),
+              null
+            );
+          }
+        },
       },
       instanceMethods: {
         validPassword: function (password) {
