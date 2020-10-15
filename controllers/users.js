@@ -50,13 +50,14 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    // update a user
     const user = await User.update(
       {
         username: username,
         email: email,
         password: password,
       },
-      { where: { id: req.params.id }, returning: true }
+      { where: { id: req.params.id } }
     );
 
     res.json(user);
@@ -70,9 +71,12 @@ exports.updateUser = async (req, res) => {
 //@access Public
 exports.deleteUser = async (req, res) => {
   try {
-    // Insert into table
+    // Delete user
     const user = await User.destroy({ where: { id: req.params.id } });
-    res.json(user);
+    res.status(200).json({
+      success: true,
+      data: {},
+    });
   } catch (error) {
     console.log(error);
   }
