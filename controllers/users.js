@@ -1,36 +1,31 @@
 const { sequelize } = require('../models');
+const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
+
 //const { getSigendJwtToken } = require('../middleware/auth')
 
 //@desc get all users
 //@route GET /api/v1/users
-//@access Public
-exports.getUsers = async (req, res) => {
-  try {
+//@access Private/Admin
+exports.getUsers = asyncHandler( (req, res) => {
     const users = await User.findAll();
     res.json(users);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  
+});
 
 //@desc get single user
 //@route GET /api/v1/users/:id
-//@access Public
-exports.getUser = async (req, res) => {
-  try {
+//@access Private/Admin
+exports.getUser = asyncHandler( (req, res) => {
     const user = await User.findByPk(req.params.id);
     res.json(user);
-  } catch (error) {
-    console.log(error);
-  }
-};
+});
 
 //@desc Create new user
 //@route POST /api/v1/users
-//@access Public
-exports.createUser = async (req, res) => {
-  try {
+//@access Private/Admin
+exports.createUser = asyncHandler( (req, res) => {
+ 
     // Insert into table
     const user = await User.create({
       username: req.body.username,
@@ -39,45 +34,36 @@ exports.createUser = async (req, res) => {
     });
 
     res.json(user);
-  } catch (error) {
-    console.log(error);
-  }
-};
+
+});
 
 //@desc Update a user
 //@route PUT /api/v1/users/:id
-//@access Public
-exports.updateUser = async (req, res) => {
-  try {
+//@access Private/Admin
+exports.updateUser = asyncHandler( (req, res) => {
     const { username, email, password } = req.body;
     // update a user
     const user = await User.update(
       {
         username: username,
         email: email,
-        password: password,
       },
       { where: { id: req.params.id } }
     );
 
     res.json(user);
-  } catch (error) {
-    console.log(error);
-  }
-};
+
+});
 
 //@desc Delete a user
 //@route DELETE /api/v1/users/:id
-//@access Public
-exports.deleteUser = async (req, res) => {
-  try {
+//@access Private/Admin
+exports.deleteUser = asyncHandler( (req, res) => {
     // Delete user
     const user = await User.destroy({ where: { id: req.params.id } });
     res.status(200).json({
       success: true,
       data: {},
     });
-  } catch (error) {
-    console.log(error);
-  }
-};
+
+});
