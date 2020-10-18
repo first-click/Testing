@@ -1,20 +1,20 @@
 const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
+const { sequelize } = require('../models');
 const asyncHandler = require('../middleware/async');
-const User = require('../models/User');
+const User = sequelize.models.user;
 
 //@desc Register
 //@route Post /api/v1/auth/register
 //@access Public
-exports.register = asyncHandler(async (req, res, next) => {
-  const { username, email, password, role } = req.body;
 
-  // Create user
+exports.register = asyncHandler(async (req, res) => {
+  // Insert into table
   const user = await User.create({
-    username,
-    email,
-    password,
-    role,
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+    role: req.body.role,
   });
 
   sendTokenResponse(user, 200, res);

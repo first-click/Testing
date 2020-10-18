@@ -1,6 +1,8 @@
 'use strict';
+const crypto = require('crypto');
 const { Model } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const User = (sequelize, DataTypes) => {
   class User extends Model {
@@ -39,19 +41,20 @@ const User = (sequelize, DataTypes) => {
       resetPasswordToken: DataTypes.STRING,
       resetPasswordExpire: DataTypes.DATE,
     },
-
     {
+      hooks: {
+        beforeCreate: (user) => {
+          const salt = bcrypt.genSaltSync();
+          user.password = bcrypt.hashSync(user.password, salt);
+        },
+      },
+
       // Match user entered password to hashed password in database
       instanceMethods: {
         matchPassword: async function (enteredPassword) {
           return await bcrypt.compare(enteredPassword, this.password);
         },
-        // Sign JWT and return
-        getSignedJwtToken: function () {
-          return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRE,
-          });
-        },
+
         // Generate and hash password token
         getResetPasswordToken: function () {
           // Generate token
@@ -74,10 +77,12 @@ const User = (sequelize, DataTypes) => {
       modelName: 'user',
     }
   );
-  User.beforeCreate(async (user) => {
-    const salt = await bcrypt.genSaltSync();
-    user.password = bcrypt.hashSync(user.password, salt);
-  });
+  // Sign JWT and return
+  User.prototype.getSignedJwtToken = function () {
+    return jwt.sign({ id: this.id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
+    });
+  };
 
   return User;
 };

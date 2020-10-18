@@ -29,6 +29,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      role: {
+        type: Sequelize.STRING,
+        enum: ['user', 'publisher'],
+        default: 'user',
+      },
+      resetPasswordToken: Sequelize.STRING,
+      resetPasswordExpire: Sequelize.DATE,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
