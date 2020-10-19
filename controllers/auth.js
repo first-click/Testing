@@ -9,12 +9,14 @@ const User = sequelize.models.user;
 //@access Public
 
 exports.register = asyncHandler(async (req, res) => {
+  const { username, email, password, role } = req.body;
+
   // Insert into table
   const user = await User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    role: req.body.role,
+    username,
+    email,
+    password,
+    role,
   });
 
   sendTokenResponse(user, 200, res);
@@ -26,6 +28,7 @@ exports.register = asyncHandler(async (req, res) => {
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
+  //  Order.findById(req.params.orderId, {include: [{ all: true }]});
   // Validate email & password
   if (!email || !password) {
     return next(new ErrorResponse('Please provide an email and password', 400));

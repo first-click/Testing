@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+const errorHandler = require('./middleware/error');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -14,6 +15,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use('/api/v1/users', users);
 app.use('/api/v1/auth', auth);
+
+app.use(errorHandler);
 
 app.listen(
   PORT,

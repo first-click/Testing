@@ -23,10 +23,12 @@ exports.getUser = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.createUser = asyncHandler(async (req, res) => {
   // Insert into table
+  const { username, email, password, role } = req.body;
   const user = await User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
+    username,
+    email,
+    password,
+    role,
   });
 
   res.json(user);
