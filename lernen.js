@@ -18,7 +18,7 @@
 
 // hooks greifen in den lifecycle ein. hooks beziehen sich auf das model.
 // hooks speichern die Daten im Backend
-// das ist mir noch nicht klar, ich meine, dass es hooks für einzelen instancen gibt und damit
+// das ist mir noch nicht klar, ich meine, dass es hooks für einzelne instancen gibt und damit
 // sich nicht auf das model beziehen, wie beispielsweise beforeupdate????
 
 // instance methods, beziehen sich auf eine instance und werden auf den prototype gesetzt
@@ -53,6 +53,18 @@
 // })
 
 // virtuals
+//Virtual columns are similar to instance methods. The difference is you access
+//virtual columns the same way you access a regular property
+//(via the 'get' and 'set' meta-operation), whereas instance methods are functions
+//that you must invoke.
+// fullName: {
+//   type: Sequelize.VIRTUAL,
+//   get () {
+//     return this.getDataValue('firstName') + ' ' + this.getDataValue('lastName')
+//   }
+// }
+// const pug = await Pug.create({firstName: 'Cody', lastName: 'McPug'})
+// console.log(pug.fullName) // "Cody McPug"
 
 // hooks: {
 //   beforeCreate: (user) => {
@@ -69,3 +81,26 @@
 // User.beforeUpdate(async (user) => {
 //   console.log('hello');
 // });
+
+// AND logic
+// const sevenYearOldBlackPugs = await Pug.findAll({
+//   where: { // like saying: SELECT * from pugs WHERE age = 7 AND color = 'black';
+//     age: 7,
+//     color: 'black'
+//   }
+// })
+
+// console.log(sevenYearOldBlackPugs)
+
+// Search Operators
+// Sequelize stores these operators on the `Sequelize.Op` module:
+// const Op = Sequelize.Op
+
+// Pug.findAll({
+//   where: {
+//     age: {
+//       [Op.lte]: 7 // square brackets are needed for property names that aren't plain strings
+//     }
+//   }
+// })
+//https://sequelizedocs.fullstackacademy.com/search-operators/

@@ -4,6 +4,8 @@ const { sequelize } = require('../models');
 const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
 
+// nochmal checken, ob das mit den attributes richtig ist????
+
 //@desc Register
 //@route Post /api/v1/auth/register
 //@access Public
