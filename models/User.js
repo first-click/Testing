@@ -53,6 +53,10 @@ const User = (sequelize, DataTypes) => {
       modelName: 'user',
     }
   );
+  User.prototype.beforeSave = function (password) {
+    const salt = bcrypt.genSaltSync();
+    return bcrypt.hashSync(password, salt);
+  };
   // Sign JWT and return
   User.prototype.getSignedJwtToken = function () {
     return jwt.sign({ id: this.id }, process.env.JWT_SECRET, {
