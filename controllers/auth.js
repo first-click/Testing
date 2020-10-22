@@ -85,7 +85,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Update user details
-//@route PUT /api/v1/auth/updatedetails
+//@route PUT /api/v1/auth/updatedetails/:id
 //@access Private
 exports.updateDetails = asyncHandler(async (req, res, next) => {
   const { username, email } = req.body;
@@ -104,6 +104,7 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
   });
 });
 
+// ???
 //@desc Update password
 //@route PUT /api/v1/auth/updatepassword
 //@access Private
