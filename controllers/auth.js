@@ -86,13 +86,14 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 //@access Private
 exports.updateDetails = asyncHandler(async (req, res, next) => {
   const { username, email } = req.body;
-
+  console.log(typeof req.user.id);
+  console.log(typeof req.params.id);
   const user = await User.update(
     {
       username: username,
       email: email,
     },
-    { where: { id: req.params.id } }
+    { where: { id: req.user.id.toString() } }
   );
 
   res.status(200).json({
