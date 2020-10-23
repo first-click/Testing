@@ -5,8 +5,6 @@ const { sequelize } = require('../models');
 const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
 
-// nochmal checken, ob das mit den attributes richtig ist????
-
 //@desc Register
 //@route Post /api/v1/auth/register
 //@access Public
@@ -31,7 +29,6 @@ exports.register = asyncHandler(async (req, res) => {
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  //  Order.findById(req.params.orderId, {include: [{ all: true }]});
   // Validate email & password
   if (!email || !password) {
     return next(new ErrorResponse('Please provide an email and password', 400));
@@ -40,13 +37,13 @@ exports.login = asyncHandler(async (req, res, next) => {
   //Check for user
   const user = await User.findOne({
     where: { email: email },
-    attributes: { include: ['password', 'email'] },
+    attributes: ['password', 'email'],
   });
 
   if (!user) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
-
+  console.log(user);
   //Check if password matches
   const isMatch = await user.matchPassword(password);
 
@@ -104,21 +101,22 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
   });
 });
 
-// ???
+// warum geht req.user.id nicht? das bekomme ich doch aus der middleware
+// jwt token geht aber kein payload, den ich nutzen kann
 //@desc Update password
-//@route PUT /api/v1/auth/updatepassword
+//@route PUT /api/v1/auth/updatepassword/:id
 //@access Private
 exports.updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({
-    where: { id: req.user.id },
-    attributes: { include: ['password', 'email'] },
+    where: { id: req.params.id },
   });
 
   // Check current password
   if (!(await user.matchPassword(req.body.currentPassword))) {
     return next(new ErrorResponse('Password is incorrect', 401));
   }
-  user.password = req.body.newPassword;
+
+  user.password = user.beforeSave(req.body.newPassword);
 
   await user.save();
 

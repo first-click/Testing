@@ -104,3 +104,15 @@
 //   }
 // })
 //https://sequelizedocs.fullstackacademy.com/search-operators/
+
+// query Abfrage aus zwei Modellen
+//https://gist.github.com/zcaceres/83b554ee08726a734088d90d455bc566
+// Albums.findAll({
+//   include: [{
+//     model: Artists,
+//     as: 'Singer',
+//     where: { name: 'Al Green' } //
+//   }]
+// })
+// .then(albums => console.log(albums))
+// .catch(console.error)
