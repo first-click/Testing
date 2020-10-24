@@ -1,0 +1,2 @@
+1. Derzeit kein cookie drin, code ist auskommentiert, in prod ändern
+2. spezielle ROllen sind noch nicht implementiert, ist in der middleware authorize

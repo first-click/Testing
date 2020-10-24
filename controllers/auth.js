@@ -102,8 +102,6 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
   });
 });
 
-// warum geht req.user.id nicht? das bekomme ich doch aus der middleware
-// jwt token geht aber kein payload, den ich nutzen kann
 //@desc Update password
 //@route PUT /api/v1/auth/updatepassword/:id
 //@access Private

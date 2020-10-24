@@ -2,14 +2,8 @@ const ErrorResponse = require('../utils/errorResponse');
 
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
-  console.log(error);
 
   error.message = err.message;
-
-  console.log(error.message);
-
-  // Log to console for dev
-  console.log(err);
 
   // Postgres bad ObjectId
   if (err.name == 'CastError') {

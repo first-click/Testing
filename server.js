@@ -1,22 +1,10 @@
-const express = require('express');
+const app = require('./app');
 const dotenv = require('dotenv');
-const users = require('./routes/users');
-const auth = require('./routes/auth');
-const errorHandler = require('./middleware/error');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
-const app = express();
-
-app.use(express.json({ extended: false }));
-
 const PORT = process.env.PORT || 5000;
-
-app.use('/api/v1/users', users);
-app.use('/api/v1/auth', auth);
-
-app.use(errorHandler);
 
 app.listen(
   PORT,
