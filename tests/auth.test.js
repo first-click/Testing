@@ -2,10 +2,14 @@ const request = require('supertest');
 const app = require('../app');
 const { sequelize } = require('../models');
 const User = sequelize.models.user;
+const dotenv = require('dotenv');
+
+// Load env vars
+dotenv.config({ path: './config/config.env' });
 
 const userOne = {
-  username: 'testit6',
-  email: 'testit6@gmx.de',
+  username: 'testit10',
+  email: 'testit10@gmx.de',
   password: '123456',
   role: 'user',
 };
@@ -19,12 +23,12 @@ test('Should register a new user', async () => {
   await request(app)
     .post('/api/v1/auth/register')
     .send({
-      username: 'testitson4',
-      email: 'testitson4@gmx.de',
+      username: 'testitson21',
+      email: 'testitson21@gmx.de',
       password: '123456',
       role: 'user',
     })
-    .expect({ success: true, token: !null });
+    .expect(200);
 });
 
 // test('Should login existing user', async () => {
