@@ -4,8 +4,8 @@ const { sequelize } = require('../models');
 const User = sequelize.models.user;
 
 const userOne = {
-  username: 'testit5',
-  email: 'testit5@gmx.de',
+  username: 'testit6',
+  email: 'testit6@gmx.de',
   password: '123456',
   role: 'user',
 };
@@ -19,12 +19,12 @@ test('Should register a new user', async () => {
   await request(app)
     .post('/api/v1/auth/register')
     .send({
-      username: 'testitneu',
-      email: 'testitneu@gmx.de',
+      username: 'testitson4',
+      email: 'testitson4@gmx.de',
       password: '123456',
       role: 'user',
     })
-    .expect(200);
+    .expect({ success: true, token: !null });
 });
 
 // test('Should login existing user', async () => {
