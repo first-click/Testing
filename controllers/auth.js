@@ -43,7 +43,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
-  console.log(user);
+  //console.log(user);
   //Check if password matches
   const isMatch = await user.matchPassword(password);
 
@@ -86,8 +86,8 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 //@access Private
 exports.updateDetails = asyncHandler(async (req, res, next) => {
   const { username, email } = req.body;
-  console.log(typeof req.user.id);
-  console.log(typeof req.params.id);
+  //console.log(typeof req.user.id);
+  //console.log(typeof req.params.id);
   const user = await User.update(
     {
       username: username,
