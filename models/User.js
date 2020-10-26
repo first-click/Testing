@@ -59,6 +59,7 @@ const User = (sequelize, DataTypes) => {
   };
   // Sign JWT and return
   User.prototype.getSignedJwtToken = function () {
+    console.log(this.id);
     return jwt.sign({ id: this.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
     });

@@ -10,7 +10,7 @@
     "test": "jest --watch"
   },
   "jest": {
-    "testEnvironmet": "node"
+    "testEnvironment": "node"
   },
   "author": "J&P",
   "license": "MIT",
