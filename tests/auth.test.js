@@ -23,21 +23,6 @@ beforeEach(async () => {
   await User.create(userOne);
 });
 
-// test('Should register a new user', async () => {
-//   const response = await request(app)
-//     .post('/api/v1/auth/register')
-//     .send({
-//       username: 'testitson22',
-//       email: 'testitson22@gmx.de',
-//       password: '123456',
-//       role: 'user',
-//     })
-//     .expect(200);
-
-//   token = JSON.parse(response.text);
-//   console.log(token.token);
-// });
-
 test('Should login existing user', async () => {
   const response = await request(app)
     .post('/api/v1/auth/login')
@@ -52,15 +37,15 @@ test('Should login existing user', async () => {
   //console.log(token.token);
 });
 
-// test('Should not login with bad credentials', async () => {
-//   await request(app)
-//     .post('/api/v1/auth/login')
-//     .send({
-//       email: userOne.email,
-//       password: 'wrongemail',
-//     })
-//     .expect(401);
-// });
+test('Should not login with bad credentials', async () => {
+  await request(app)
+    .post('/api/v1/auth/login')
+    .send({
+      email: userOne.email,
+      password: 'wrongemail',
+    })
+    .expect(401);
+});
 
 test('Should get current logged in user ', async () => {
   console.log(token.token);
@@ -68,5 +53,17 @@ test('Should get current logged in user ', async () => {
     .get('/api/v1/auth/me')
     .set('Authorization', `Bearer ${token.token}`)
     .send()
+    .expect(200);
+});
+
+test('Should register a new user', async () => {
+  const response = await request(app)
+    .post('/api/v1/auth/register')
+    .send({
+      username: 'testitson22',
+      email: 'testitson22@gmx.de',
+      password: '123456',
+      role: 'user',
+    })
     .expect(200);
 });
