@@ -1,4 +1,5 @@
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
 const app = require('../app');
 const { sequelize } = require('../models');
 const User = sequelize.models.user;
@@ -7,9 +8,7 @@ const dotenv = require('dotenv');
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 let token;
-// wie bekomme ich eine einmalige id hin bei mongoose new mongoose.Types.ObjectId()
-//brauche ich die überhaupt?
-const userOneId = Math.floor(Math.random() * 10);
+
 const userOne = {
   id: 1,
   username: 'testit11',
@@ -31,10 +30,8 @@ test('Should login existing user', async () => {
       password: userOne.password,
     })
     .expect(200);
-  console.log(response.body);
 
   token = JSON.parse(response.text);
-  //console.log(token.token);
 });
 
 test('Should not login with bad credentials', async () => {
@@ -48,7 +45,7 @@ test('Should not login with bad credentials', async () => {
 });
 
 test('Should get current logged in user ', async () => {
-  console.log(token.token);
+  // console.log(token.token);
   await request(app)
     .get('/api/v1/auth/me')
     .set('Authorization', `Bearer ${token.token}`)
@@ -66,4 +63,12 @@ test('Should register a new user', async () => {
       role: 'user',
     })
     .expect(200);
+  //Assert that the database was change correctly
+  const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET);
+  const user = await User.findByPk(decoded.id);
+  expect(user).not.toBeNull();
+
+  //Assertions about the response
+  expect(user.username).toBe('testitson22');
+  expect(user.password).not.toBe('123456');
 });
