@@ -17,7 +17,7 @@ const userOne = {
   role: 'user',
 };
 
-beforeEach(async () => {
+beforeAll(async () => {
   await User.destroy({ truncate: true });
   await User.create(userOne);
 });
