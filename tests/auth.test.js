@@ -4,23 +4,13 @@ const app = require('../app');
 const { sequelize } = require('../models');
 const User = sequelize.models.user;
 const dotenv = require('dotenv');
+const { userOne, setUpDatabase } = require('./fixtures/db');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 let token;
 
-const userOne = {
-  id: 1,
-  username: 'testit11',
-  email: 'testit11@gmx.de',
-  password: '123456',
-  role: 'user',
-};
-
-beforeAll(async () => {
-  await User.destroy({ truncate: true });
-  await User.create(userOne);
-});
+beforeAll(setUpDatabase);
 
 test('Should login existing user', async () => {
   const response = await request(app)
