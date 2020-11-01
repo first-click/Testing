@@ -61,8 +61,10 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 exports.logout = asyncHandler(async (req, res, next) => {
   //res.set(Authorization, '');
-
-  res.cookie('token', 'non', {
+  console.log('vorher:', req.headers);
+  delete req.headers.authorization;
+  console.log('nachher:', req.headers);
+  res.cookie('token', '', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   });
