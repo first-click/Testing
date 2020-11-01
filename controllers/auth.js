@@ -26,6 +26,7 @@ exports.register = asyncHandler(async (req, res) => {
 //@desc Login user
 //@route Post /api/v1/auth/login
 //@access Public
+
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -55,9 +56,12 @@ exports.login = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Log user out / clear cookie
-//@route GET /api/v1/auth/logout
+//@route POST /api/v1/auth/logout
 //@access Private
+
 exports.logout = asyncHandler(async (req, res, next) => {
+  //res.set(Authorization, '');
+
   res.cookie('token', 'non', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
@@ -72,6 +76,9 @@ exports.logout = asyncHandler(async (req, res, next) => {
 //@desc Get currend logged in user
 //@route Get /api/v1/auth/me
 //@access Private
+
+// test
+// richtige eingeloggte user kommt zurück
 exports.getMe = asyncHandler(async (req, res, next) => {
   const user = await User.findByPk(req.user.id);
 
@@ -84,6 +91,11 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 //@desc Update user details
 //@route PUT /api/v1/auth/updatedetails/:id
 //@access Private
+
+// test
+// nur der user, der richtig eingeloggt ist, kann updaten
+// update auf Richtigkeit überprüfen
+
 exports.updateDetails = asyncHandler(async (req, res, next) => {
   const { username, email } = req.body;
   //console.log(typeof req.user.id);
@@ -105,6 +117,11 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
 //@desc Update password
 //@route PUT /api/v1/auth/updatepassword/:id
 //@access Private
+
+// test
+// user kann sich mit neuem password einloggen
+// user kann sich nicht mit dem alten password einloggen
+
 exports.updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({
     where: { id: req.params.id },
@@ -125,6 +142,11 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 //@desc Forgot password
 //@route Post /api/v1/auth/forgotpassword
 //@access Public
+
+// test
+// hat user resetToken bekommen
+// hat user neues password eingegeben und funktioniert es
+
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ where: { email: req.body.email } });
 
@@ -165,6 +187,10 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 //@desc Reset password
 //@route PUT /api/v1/auth/resetpassword/:resettoken
 //@access Public
+
+// test
+// funktioniert das neue Passwort
+// geht das alte Passwort nicht mehr
 
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   const { password } = req.body;
