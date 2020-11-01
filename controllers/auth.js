@@ -56,7 +56,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Log user out / clear cookie
-//@route POST /api/v1/auth/logout
+//@route GET /api/v1/auth/logout
 //@access Private
 
 exports.logout = asyncHandler(async (req, res, next) => {
