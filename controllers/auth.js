@@ -83,7 +83,11 @@ exports.logout = asyncHandler(async (req, res, next) => {
 // test
 // richtige eingeloggte user kommt zurück
 exports.getMe = asyncHandler(async (req, res, next) => {
-  const user = await User.findByPk(req.user.id);
+  const user = await User.findByPk(req.user.id, {
+    attributes: {
+      exclude: ['password', 'resetPasswordToken', 'resetPasswordExpire'],
+    },
+  });
 
   res.status(200).json({
     success: true,
