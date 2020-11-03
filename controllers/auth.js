@@ -61,7 +61,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 exports.logout = asyncHandler(async (req, res, next) => {
   //delete req.headers.authorization;
-  res.set(Authorization, '');
+  // res.set(Authorization, '');
 
   console.log(res);
   res.cookie('token', '', {
