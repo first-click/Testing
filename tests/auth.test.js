@@ -62,22 +62,18 @@ test('Should get current logged in user ', async () => {
 // test logout user
 
 // ich kann nichts mehr machen, weil ich ausgeloggt bin
-// token ist noch da, wie kann ich den beim ausloggen löschen
 
 test('Should logout user', async () => {
-  await request(app).get('/api/v1/auth/logout');
-  // .expect(200)
-  // .expect({
-  //   success: true,
-  //   data: {},
-  // })
-  expect(token).toBe(null);
+  await request(app)
+    .get('/api/v1/auth/logout')
+    .set('Authorization', `Bearer ${token}`)
+    .expect({
+      success: true,
+      data: '',
+    });
+  token = '';
+  expect(token).toBe('');
 });
-
-// res.status(statusCode).cookie('token', token, options).json({
-//   success: true,
-//   token,
-// });
 
 //test register user
 

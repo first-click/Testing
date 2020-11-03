@@ -60,7 +60,9 @@ exports.login = asyncHandler(async (req, res, next) => {
 //@access Private
 
 exports.logout = asyncHandler(async (req, res, next) => {
-  //res.set(Authorization, '');
+  //delete req.headers.authorization;
+  res.set('Authorization', '');
+  console.log(res);
 
   res.cookie('token', 'non', {
     expires: new Date(Date.now() + 10 * 1000),
@@ -69,7 +71,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: {},
+    data: '',
   });
 });
 
