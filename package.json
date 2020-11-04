@@ -6,10 +6,9 @@
   "scripts": {
     "start": "NODE_ENV=production node server",
     "server": "nodemon server",
+    "debug": "nodemon server",
     "dev": "nodemon server",
     "test": "jest --watch --runInBand --detectOpenHandles"
-    
-    
   },
   "jest": {
     "testEnvironment": "node"
@@ -33,4 +32,3 @@
     "supertest": "^5.0.0"
   }
 }
-
