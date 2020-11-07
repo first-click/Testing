@@ -2,7 +2,11 @@
 const crypto = require('crypto');
 const { Model } = require('sequelize');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
+var redis = require('redis');
+var JWTR = require('jwt-redis').default;
+var redisClient = redis.createClient();
+var jwtr = new JWTR(redisClient);
 
 const User = (sequelize, DataTypes) => {
   class User extends Model {
@@ -58,9 +62,15 @@ const User = (sequelize, DataTypes) => {
     return bcrypt.hashSync(password, salt);
   };
   // Sign JWT and return
+  // User.prototype.getSignedJwtToken = function () {
+  //   return jwtr.sign({ id: this.id }, process.env.JWT_SECRET, {
+  //     expiresIn: process.env.JWT_EXPIRE,
+  //   });
+  // };
+
   User.prototype.getSignedJwtToken = function () {
-    // console.log(this.id);
-    return jwt.sign({ id: this.id }, process.env.JWT_SECRET, {
+    // Create a token
+    return jwtr.sign({ id: this.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
     });
   };

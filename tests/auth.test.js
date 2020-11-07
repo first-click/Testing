@@ -1,5 +1,10 @@
 const request = require('supertest');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
+var redis = require('redis');
+var JWTR = require('jwt-redis').default;
+var redisClient = redis.createClient();
+var jwtr = new JWTR(redisClient);
+
 const app = require('../app');
 const { sequelize } = require('../models');
 const User = sequelize.models.user;
@@ -22,7 +27,7 @@ test('Should login existing user', async () => {
       password: userOne.password,
     })
     .expect(200);
-  const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET);
+  const decoded = jwtr.verify(response.body.token, process.env.JWT_SECRET);
   const user = await User.findByPk(decoded.id);
 
   expect(user.email).toBe('testit11@gmx.de');
@@ -52,7 +57,7 @@ test('Should get current logged in user ', async () => {
     .send()
     .expect(200);
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const decoded = jwtr.verify(token, process.env.JWT_SECRET);
   const user = await User.findByPk(decoded.id);
 
   expect(user.username).toBe('testit11');
@@ -85,7 +90,7 @@ test('Should register a new user', async () => {
     role: 'user',
   });
 
-  const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET);
+  const decoded = jwtr.verify(response.body.token, process.env.JWT_SECRET);
   const user = await User.findByPk(decoded.id);
 
   //Assertion about the token

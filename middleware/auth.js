@@ -1,4 +1,8 @@
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
+var redis = require('redis');
+var JWTR = require('jwt-redis').default;
+var redisClient = redis.createClient();
+var jwtr = new JWTR(redisClient);
 const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const { sequelize } = require('../models');
@@ -27,7 +31,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = await jwtr.verify(token, process.env.JWT_SECRET);
 
     req.user = await User.findByPk(decoded.id);
 

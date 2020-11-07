@@ -1,4 +1,8 @@
 const crypto = require('crypto');
+var redis = require('redis');
+var JWTR = require('jwt-redis').default;
+var redisClient = redis.createClient();
+var jwtr = new JWTR(redisClient);
 const ErrorResponse = require('../utils/errorResponse');
 const sendEMail = require('../utils/sendEmail');
 const { sequelize } = require('../models');
@@ -60,15 +64,28 @@ exports.login = asyncHandler(async (req, res, next) => {
 //@access Private
 
 exports.logout = asyncHandler(async (req, res, next) => {
-  //delete req.headers.authorization;
-  // res.set(Authorization, '');
+  let token;
 
-  console.log(res);
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    // Set token from Bearer token in header
+    token = req.headers.authorization.split(' ')[1];
+    // Set token from cookie
+  }
+
+  const decoded = await jwtr.decode(token, process.env.JWT_SECRET);
+
   res.clearCookie('token');
   // res.cookie('token', '', {
   //   expires: new Date(Date.now() + 10 * 1000),
   //   httpOnly: true,
   // });
+
+  await jwtr.destroy(decoded.jti, process.env.JWT_SECRET);
+
+  console.log(token);
 
   res.status(200).json({
     success: true,
@@ -228,10 +245,15 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 });
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = async (user, statusCode, res) => {
   // Create token
-  const token = user.getSignedJwtToken();
+  const token = await user.getSignedJwtToken();
+  // console.log(token);
 
+  // Token verification
+  jwtr.verify(token, process.env.JWT_SECRET);
+
+  // wozu habe ich die options drin? options.secure = true?
   const options = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
