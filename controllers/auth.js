@@ -253,7 +253,7 @@ const sendTokenResponse = async (user, statusCode, res) => {
   // Token verification
   jwtr.verify(token, process.env.JWT_SECRET);
 
-  // wozu habe ich die options drin? options.secure = true?
+  // wozu habe ich die options drin?
   const options = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
