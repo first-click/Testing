@@ -66,8 +66,6 @@ test('Should get current logged in user ', async () => {
 });
 
 // test update user
-// nur der user, der richtig eingeloggt ist, kann updaten
-// update auf Richtigkeit überprüfen
 test('Should update user', async () => {
   const response = await request(app)
     .put(`/api/v1/auth/updatedetails/${userOne.id}`)
@@ -83,6 +81,50 @@ test('Should update user', async () => {
   //Assertions about the user
   expect(user.username).toBe('jon10ee');
   expect(user.email).toBe('jon10eetest@gmx.de');
+  expect(user.username).not.toBe('testit11');
+  expect(user.email).not.toBe('testit11@gmx.de');
+});
+
+// test update password
+test('Should update password', async () => {
+  const response = await request(app)
+    .put(`/api/v1/auth/updatepassword/${userOne.id}`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      email: userOne.email,
+      currentPassword: userOne.password,
+      newPassword: '09876543',
+    });
+
+  const user = await User.findByPk(userOne.id);
+
+  expect(user.password).not.toBe('09876543');
+});
+
+// test update password
+// user kann sich mit altem password nicht einloggen
+
+test('Should login existing user', async () => {
+  const response = await request(app)
+    .post('/api/v1/auth/login')
+    .send({
+      email: 'jon10eetest@gmx.de',
+      password: '123456',
+    })
+    .expect(401);
+});
+
+// test update password
+// user kann sich mit neuem password einloggen
+
+test('Should login existing user', async () => {
+  const response = await request(app)
+    .post('/api/v1/auth/login')
+    .send({
+      email: 'jon10eetest@gmx.de',
+      password: '09876543',
+    })
+    .expect(200);
 });
 
 // test logout user
@@ -124,14 +166,6 @@ test('Should register a new user', async () => {
   expect(user.password).not.toBe('123456');
   expect(user.role).toBe('user');
 });
-
-//@desc Update password
-//@route PUT /api/v1/auth/updatepassword/:id
-//@access Private
-
-// test
-// user kann sich mit neuem password einloggen
-// user kann sich nicht mit dem alten password einloggen
 
 //@desc Forgot password
 //@route Post /api/v1/auth/forgotpassword
