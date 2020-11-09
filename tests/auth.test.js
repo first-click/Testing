@@ -139,6 +139,7 @@ test('Should get resetToken - forgot password', async () => {
 
   resetToken = await user.getResetPasswordToken();
   user.resetPasswordToken = resetToken;
+  console.log(user.resetPasswordToken);
 
   expect(200);
   expect(resetToken).toBeTruthy();
