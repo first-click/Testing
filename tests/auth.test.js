@@ -138,9 +138,9 @@ test('Should get resetToken - forgot password', async () => {
   const user = await User.findOne({ where: { email: 'testit12@gmx.de' } });
 
   resetToken = await user.getResetPasswordToken();
-  console.log(user.resetPasswordToken);
-  console.log(user);
-  console.log(resetToken);
+  // console.log(user);
+
+  //  console.log(resetToken);
 
   expect(200);
   expect(resetToken).toBeTruthy();
@@ -154,7 +154,7 @@ test('Should reset password', async () => {
   await request(app).put(`/api/v1/auth/resetpassword/${resetToken}`).send({
     password: '0987654',
   });
-  //console.log(`hello ${resetToken}`);
+  console.log(`hello ${resetToken}`);
 
   const resetPasswordToken = crypto
     .createHash('sha256')
@@ -164,7 +164,7 @@ test('Should reset password', async () => {
   console.log(resetPasswordToken);
   const user = await User.findOne({
     where: {
-      resetPasswordToken,
+      resetPasswordToken: resetPasswordToken,
     },
   });
   console.log(user);
@@ -215,11 +215,3 @@ test('Should register a new user', async () => {
   expect(user.password).not.toBe('123456');
   expect(user.role).toBe('user');
 });
-
-//@desc Reset password
-//@route PUT /api/v1/auth/resetpassword/:resettoken
-//@access Public
-
-// test
-// funktioniert das neue Passwort
-// geht das alte Passwort nicht mehr
