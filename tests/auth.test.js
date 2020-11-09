@@ -138,8 +138,9 @@ test('Should get resetToken - forgot password', async () => {
   const user = await User.findOne({ where: { email: 'testit12@gmx.de' } });
 
   resetToken = await user.getResetPasswordToken();
-  user.resetPasswordToken = resetToken;
   console.log(user.resetPasswordToken);
+  console.log(user);
+  console.log(resetToken);
 
   expect(200);
   expect(resetToken).toBeTruthy();
@@ -153,14 +154,16 @@ test('Should get resetToken - forgot password', async () => {
 //   await request(app).put(`/api/v1/auth/resetpassword/${resetToken}`).send({
 //     password: '0987654',
 //   });
-//   console.log(`hello ${resetToken}`);
-//   const resetPasswordToken = crypto
+//   //console.log(`hello ${resetToken}`);
+//   const resetPasswordToken = await crypto
 //     .createHash('sha256')
 //     .update(resetToken)
 //     .digest('hex');
 
-//   //console.log(resetPasswordToken);
-//   const user = await User.findOne({ where: { resetPasswordToken } });
+//   console.log(resetPasswordToken);
+//   const user = await User.findOne({
+//     where: { resetPasswordToken },
+//   });
 //   console.log(user);
 //   user.password = await user.beforeSave(password);
 //   user.resetPasswordToken = null;
