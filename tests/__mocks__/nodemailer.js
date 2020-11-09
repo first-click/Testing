@@ -1,4 +1,8 @@
 module.exports = {
   createTransport() {},
-  sendMail() {},
+  // sendMail() {},
 };
+
+// module.exports = {
+//   sendEMail() {},
+// };

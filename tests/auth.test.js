@@ -1,4 +1,5 @@
 const request = require('supertest');
+const crypto = require('crypto');
 //const jwt = require('jsonwebtoken');
 var redis = require('redis');
 var JWTR = require('jwt-redis').default;
@@ -14,6 +15,7 @@ const { userOne, setUpDatabase } = require('./fixtures/db');
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 let token;
+let resetToken;
 
 beforeAll(setUpDatabase);
 
@@ -76,7 +78,7 @@ test('Should update user', async () => {
     });
 
   const user = await User.findByPk(userOne.id);
-  console.log(user);
+  // console.log(user);
 
   //Assertions about the user
   expect(user.username).toBe('jon10ee');
@@ -127,6 +129,45 @@ test('Should login existing user', async () => {
     .expect(200);
 });
 
+// test get reset token
+
+test('Should get resetToken - forgot password', async () => {
+  await request(app).post('/api/v1/auth/forgotpassword').send({
+    email: 'testit12@gmx.de',
+  });
+  const user = await User.findOne({ where: { email: 'testit12@gmx.de' } });
+
+  resetToken = await user.getResetPasswordToken();
+  user.resetPasswordToken = resetToken;
+
+  expect(200);
+  expect(resetToken).toBeTruthy();
+});
+
+// test reset password
+// funktioniert das neue Passwort
+// geht das alte Passwort nicht mehr
+
+// test('Should reset password', async () => {
+//   await request(app).put(`/api/v1/auth/resetpassword/${resetToken}`).send({
+//     password: '0987654',
+//   });
+//   console.log(`hello ${resetToken}`);
+//   const resetPasswordToken = crypto
+//     .createHash('sha256')
+//     .update(resetToken)
+//     .digest('hex');
+
+//   //console.log(resetPasswordToken);
+//   const user = await User.findOne({ where: { resetPasswordToken } });
+//   console.log(user);
+//   user.password = await user.beforeSave(password);
+//   user.resetPasswordToken = null;
+//   user.resetPasswordExpire = null;
+
+//   expect(200);
+// });
+
 // test logout user
 // diesen test mit Julian durchsprechen, wenn logout steht
 
@@ -166,14 +207,6 @@ test('Should register a new user', async () => {
   expect(user.password).not.toBe('123456');
   expect(user.role).toBe('user');
 });
-
-//@desc Forgot password
-//@route Post /api/v1/auth/forgotpassword
-//@access Public
-
-// test
-// hat user resetToken bekommen
-// hat user neues password eingegeben und funktioniert es
 
 //@desc Reset password
 //@route PUT /api/v1/auth/resetpassword/:resettoken

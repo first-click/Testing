@@ -4,7 +4,7 @@ var JWTR = require('jwt-redis').default;
 var redisClient = redis.createClient();
 var jwtr = new JWTR(redisClient);
 const ErrorResponse = require('../utils/errorResponse');
-const sendEMail = require('../utils/sendEmail');
+const sendEmail = require('../utils/sendEmail');
 const { sequelize } = require('../models');
 const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
@@ -85,7 +85,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 
   await jwtr.destroy(decoded.jti, process.env.JWT_SECRET);
 
-  console.log(token);
+  // console.log(token);
 
   res.status(200).json({
     success: true,
@@ -97,8 +97,6 @@ exports.logout = asyncHandler(async (req, res, next) => {
 //@route Get /api/v1/auth/me
 //@access Private
 
-// test
-// richtige eingeloggte user kommt zurück
 exports.getMe = asyncHandler(async (req, res, next) => {
   const user = await User.findByPk(req.user.id, {
     attributes: {
@@ -115,10 +113,6 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 //@desc Update user details
 //@route PUT /api/v1/auth/updatedetails/:id
 //@access Private
-
-// test
-// nur der user, der richtig eingeloggt ist, kann updaten
-// update auf Richtigkeit überprüfen
 
 exports.updateDetails = asyncHandler(async (req, res, next) => {
   const { username, email } = req.body;
@@ -142,10 +136,6 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
 //@route PUT /api/v1/auth/updatepassword/:id
 //@access Private
 
-// test
-// user kann sich mit neuem password einloggen
-// user kann sich nicht mit dem alten password einloggen
-
 exports.updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({
     where: { id: req.params.id },
@@ -167,10 +157,6 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 //@route Post /api/v1/auth/forgotpassword
 //@access Public
 
-// test
-// hat user resetToken bekommen
-// hat user neues password eingegeben und funktioniert es
-
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ where: { email: req.body.email } });
 
@@ -191,7 +177,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const message = `Du willst dein Password zurücksetzen. Mache bitte einen PUT request to: \n\n ${resetUrl}`;
 
   try {
-    await sendEMail({
+    await sendEmail({
       email: user.email,
       subject: 'Password reset token',
       message,
@@ -225,7 +211,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     .update(req.params.resettoken)
     .digest('hex');
 
-  //console.log(resetPasswordToken);
+  console.log(resetPasswordToken);
 
   const user = await User.findOne({
     where: {
