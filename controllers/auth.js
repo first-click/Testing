@@ -210,7 +210,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   const resetPasswordToken = crypto
     .createHash('sha256')
-    .update(req.params.resettoken)
+    .update(req.params.resetToken)
     .digest('hex');
 
   console.log(resetPasswordToken);
@@ -218,6 +218,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({
     where: {
       resetPasswordToken,
+      //  resetPasswordExpire: { $gte: Date.now() },
     },
   });
   if (!user) {

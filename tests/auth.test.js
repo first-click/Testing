@@ -150,27 +150,31 @@ test('Should get resetToken - forgot password', async () => {
 // funktioniert das neue Passwort
 // geht das alte Passwort nicht mehr
 
-// test('Should reset password', async () => {
-//   await request(app).put(`/api/v1/auth/resetpassword/${resetToken}`).send({
-//     password: '0987654',
-//   });
-//   //console.log(`hello ${resetToken}`);
-//   const resetPasswordToken = await crypto
-//     .createHash('sha256')
-//     .update(resetToken)
-//     .digest('hex');
+test('Should reset password', async () => {
+  await request(app).put(`/api/v1/auth/resetpassword/${resetToken}`).send({
+    password: '0987654',
+  });
+  //console.log(`hello ${resetToken}`);
 
-//   console.log(resetPasswordToken);
-//   const user = await User.findOne({
-//     where: { resetPasswordToken },
-//   });
-//   console.log(user);
-//   user.password = await user.beforeSave(password);
-//   user.resetPasswordToken = null;
-//   user.resetPasswordExpire = null;
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
 
-//   expect(200);
-// });
+  console.log(resetPasswordToken);
+  const user = await User.findOne({
+    where: {
+      resetPasswordToken,
+    },
+  });
+  console.log(user);
+  user.password = await user.beforeSave(password);
+  user.resetPasswordToken = null;
+  user.resetPasswordExpire = null;
+  await user.save();
+
+  expect(200);
+});
 
 // test logout user
 // diesen test mit Julian durchsprechen, wenn logout steht
