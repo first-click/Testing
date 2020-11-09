@@ -35,3 +35,17 @@ test('Should create User', async () => {
     .expect(200);
   console.log(response.body);
 });
+
+// test('Should create User', async () => {
+//   const response = await request(app)
+//     .post('/api/v1/users')
+//     .set('Authorization', `Bearer ${token.token}`)
+//     .send({
+//       username: 'user1',
+//       email: 'user1@gmx.de',
+//       password: '123456',
+//       role: 'user',
+//     })
+//     .expect(200);
+//   console.log(response.body);
+// });
