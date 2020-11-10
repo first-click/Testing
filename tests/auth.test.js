@@ -135,15 +135,16 @@ test('Should get resetToken - forgot password', async () => {
   await request(app).post('/api/v1/auth/forgotpassword').send({
     email: 'testit12@gmx.de',
   });
+  expect(200);
   const user = await User.findOne({ where: { email: 'testit12@gmx.de' } });
 
-  resetToken = await user.getResetPasswordToken();
-  console.log(resetToken);
-
   console.log(user.resetPasswordToken);
+  resetToken = crypto
+    .createHash('sha256')
+    .update(user.resetPasswordToken)
+    .digest('hex');
 
-  expect(200);
-  expect(resetToken).toBeTruthy();
+  // expect(resetToken).toBeTruthy();
 });
 
 // test reset password
@@ -154,26 +155,17 @@ test('Should reset password', async () => {
   await request(app).put(`/api/v1/auth/resetpassword/${resetToken}`).send({
     password: '0987654',
   });
-  //console.log(`hello ${resetToken}`);
-
-  const resetPasswordToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-
-  // console.log(`fff ${resetPasswordToken}`);
-  const user = await User.findOne({
-    where: {
-      resetPasswordToken,
-    },
-  });
-  console.log(user);
-  user.password = await user.beforeSave(password);
-  user.resetPasswordToken = null;
-  user.resetPasswordExpire = null;
-  await user.save();
 
   expect(200);
+});
+test('Should login existing user', async () => {
+  await request(app)
+    .post('/api/v1/auth/login')
+    .send({
+      email: 'testit12@gmx.de',
+      password: '0987654',
+    })
+    .expect(200);
 });
 
 // test logout user
