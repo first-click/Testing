@@ -11,11 +11,22 @@ const { sequelize } = require('../models');
 const User = sequelize.models.user;
 const dotenv = require('dotenv');
 const { userOne, setUpDatabase } = require('./fixtures/db');
+const sendMailMock = jest.fn().mockReturnValue('mock worked');
+//const sendMailMock = jest.fn((mailOptions, callback) => callback());
+jest.mock('nodemailer');
+
+const nodemailer = require('nodemailer');
+nodemailer.createTransport.mockReturnValue({ sendMail: sendMailMock });
+
+beforeEach(() => {
+  sendMailMock.mockClear();
+  nodemailer.createTransport.mockClear();
+});
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 let token;
-let resetToken;
+let resetT;
 
 beforeAll(setUpDatabase);
 
@@ -132,19 +143,16 @@ test('Should login existing user', async () => {
 // test get reset token
 
 test('Should get resetToken - forgot password', async () => {
-  await request(app).post('/api/v1/auth/forgotpassword').send({
+  const response = await request(app).post('/api/v1/auth/forgotpassword').send({
     email: 'testit12@gmx.de',
   });
+
+  console.log(response.body);
+  resetT = response.body.resetToken;
+  //console.log(`hello ${response.resetToken}`);
+  console.log(`hello ${resetT}`);
   expect(200);
-  const user = await User.findOne({ where: { email: 'testit12@gmx.de' } });
-
-  console.log(user.resetPasswordToken);
-  resetToken = crypto
-    .createHash('sha256')
-    .update(user.resetPasswordToken)
-    .digest('hex');
-
-  // expect(resetToken).toBeTruthy();
+  expect(sendMailMock).toHaveBeenCalled();
 });
 
 // test reset password
@@ -152,12 +160,13 @@ test('Should get resetToken - forgot password', async () => {
 // geht das alte Passwort nicht mehr
 
 test('Should reset password', async () => {
-  await request(app).put(`/api/v1/auth/resetpassword/${resetToken}`).send({
+  await request(app).put(`/api/v1/auth/resetpassword/${resetT}`).send({
     password: '0987654',
   });
-
+  // console.log(resetT);
   expect(200);
 });
+
 test('Should login existing user', async () => {
   await request(app)
     .post('/api/v1/auth/login')

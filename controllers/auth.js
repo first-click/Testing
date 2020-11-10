@@ -185,7 +185,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
       message,
     });
 
-    res.status(200).json({ success: true, data: 'email sent' });
+    res.status(200).json({ success: true, data: 'email sent', resetToken });
   } catch (err) {
     //console.log(err);
     user.resetPasswordToken = undefined;
