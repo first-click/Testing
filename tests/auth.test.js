@@ -128,7 +128,7 @@ test('Should login existing user', async () => {
 });
 
 // test update password
-// user kann sich mit neuem password einloggen
+// user can login with new password
 
 test('Should login existing user', async () => {
   await request(app)
@@ -140,32 +140,30 @@ test('Should login existing user', async () => {
     .expect(200);
 });
 
-// test get reset token
+// test get reset token - forgot password
 
 test('Should get resetToken - forgot password', async () => {
   const response = await request(app).post('/api/v1/auth/forgotpassword').send({
     email: 'testit12@gmx.de',
   });
 
-  console.log(response.body);
   resetT = response.body.resetToken;
-  //console.log(`hello ${response.resetToken}`);
-  console.log(`hello ${resetT}`);
+
   expect(200);
   expect(sendMailMock).toHaveBeenCalled();
 });
 
-// test reset password
-// funktioniert das neue Passwort
-// geht das alte Passwort nicht mehr
+// test reset password - new password
 
 test('Should reset password', async () => {
   await request(app).put(`/api/v1/auth/resetpassword/${resetT}`).send({
     password: '0987654',
   });
-  // console.log(resetT);
+
   expect(200);
 });
+
+// test reset password - login with new password
 
 test('Should login existing user', async () => {
   await request(app)
@@ -175,6 +173,17 @@ test('Should login existing user', async () => {
       password: '0987654',
     })
     .expect(200);
+});
+
+// test reset password with old password does not work
+test('Should login existing user', async () => {
+  await request(app)
+    .post('/api/v1/auth/login')
+    .send({
+      email: 'testit12@gmx.de',
+      password: '123456',
+    })
+    .expect(401);
 });
 
 // test logout user
