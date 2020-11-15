@@ -167,7 +167,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   // Get reset token
   const resetToken = user.getResetPasswordToken();
 
-  console.log(resetToken);
+  //console.log(resetToken);
 
   await user.save({ validateBeforeSave: false });
 
@@ -213,7 +213,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     .update(req.params.resetToken)
     .digest('hex');
 
-  console.log(resetPasswordToken);
+  //console.log(resetPasswordToken);
 
   const user = await User.findOne({
     where: {
