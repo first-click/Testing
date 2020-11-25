@@ -1,6 +1,5 @@
 const request = require('supertest');
 const crypto = require('crypto');
-//const jwt = require('jsonwebtoken');
 var redis = require('redis');
 var JWTR = require('jwt-redis').default;
 var redisClient = redis.createClient();
@@ -12,7 +11,6 @@ const User = sequelize.models.user;
 const dotenv = require('dotenv');
 const { userOne, setUpDatabase } = require('./fixtures/db');
 const sendMailMock = jest.fn().mockReturnValue('mock worked');
-//const sendMailMock = jest.fn((mailOptions, callback) => callback());
 jest.mock('nodemailer');
 
 const nodemailer = require('nodemailer');
@@ -31,7 +29,6 @@ let resetT;
 beforeAll(setUpDatabase);
 
 //test login user
-
 test('Should login existing user', async () => {
   const response = await request(app)
     .post('/api/v1/auth/login')
@@ -64,7 +61,6 @@ test('Should not login with bad credentials', async () => {
 });
 
 test('Should get current logged in user ', async () => {
-  // console.log(token.token);
   await request(app)
     .get('/api/v1/auth/me')
     .set('Authorization', `Bearer ${token}`)
@@ -89,7 +85,6 @@ test('Should update user', async () => {
     });
 
   const user = await User.findByPk(userOne.id);
-  // console.log(user);
 
   //Assertions about the user
   expect(user.username).toBe('jon10ee');
@@ -116,7 +111,6 @@ test('Should update password', async () => {
 
 // test update password
 // user kann sich mit altem password nicht einloggen
-
 test('Should login existing user', async () => {
   await request(app)
     .post('/api/v1/auth/login')
@@ -129,7 +123,6 @@ test('Should login existing user', async () => {
 
 // test update password
 // user can login with new password
-
 test('Should login existing user', async () => {
   await request(app)
     .post('/api/v1/auth/login')
@@ -141,7 +134,6 @@ test('Should login existing user', async () => {
 });
 
 // test get reset token - forgot password
-
 test('Should get resetToken - forgot password', async () => {
   const response = await request(app).post('/api/v1/auth/forgotpassword').send({
     email: 'testit12@gmx.de',
@@ -154,7 +146,6 @@ test('Should get resetToken - forgot password', async () => {
 });
 
 // test reset password - new password
-
 test('Should reset password', async () => {
   await request(app).put(`/api/v1/auth/resetpassword/${resetT}`).send({
     password: '0987654',
@@ -164,7 +155,6 @@ test('Should reset password', async () => {
 });
 
 // test reset password - login with new password
-
 test('Should login existing user', async () => {
   await request(app)
     .post('/api/v1/auth/login')
@@ -187,24 +177,24 @@ test('Should login existing user', async () => {
 });
 
 // test logout user
-// diesen test mit Julian durchsprechen, wenn logout steht
+test('Should logout user', async () => {
+  await request(app)
+    .get('/api/v1/auth/logout')
+    .set('Authorization', `Bearer ${token}`)
+    .expect({
+      success: true,
+      data: {},
+    });
 
-// ich kann nichts mehr machen, weil ich ausgeloggt bin
-
-// test('Should logout user', async () => {
-//   await request(app)
-//     .get('/api/v1/auth/logout')
-//     .set('Authorization', `Bearer ${token}`)
-//     .expect({
-//       success: true,
-//       data: '',
-//     });
-//   token = '';
-//   expect(token).toBe('');
-// });
+  // After logout getting user data with same token should be impossible
+  await request(app)
+    .get('/api/v1/auth/me')
+    .set('Authorization', `Bearer ${token}`)
+    .send()
+    .expect(401);
+});
 
 //test register user
-
 test('Should register a new user', async () => {
   const response = await request(app).post('/api/v1/auth/register').send({
     username: 'testitson22',
