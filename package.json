@@ -8,7 +8,8 @@
     "server": "nodemon server",
     "debug": "nodemon server",
     "dev": "nodemon server",
-    "test": "jest --watch --runInBand --detectOpenHandles"
+    "test": "jest --watch --runInBand --detectOpenHandles",
+    "test1": "jest --watch --coverage --runInBand --detectOpenHandles"
   },
   "jest": {
     "testEnvironment": "node"

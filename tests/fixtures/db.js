@@ -1,5 +1,3 @@
-//"test": "jest --watch --coverage --runInBand --detectOpenHandles"
-
 const { sequelize } = require('../../models');
 const User = sequelize.models.user;
 
