@@ -7,7 +7,7 @@ const {
   deleteUser,
 } = require('../controllers/users');
 
-const router = express.({ mergeParams: true });
+const router = express({ mergeParams: true });
 
 const { protect, authorize } = require('../middleware/auth');
 
