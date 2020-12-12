@@ -70,7 +70,7 @@ test('Should get current logged in user ', async () => {
   const decoded = jwtr.decode(token, process.env.JWT_SECRET);
   const user = await User.findByPk(decoded.id);
 
-  expect(user.username).toBe('testit11');
+  expect(user.name).toBe('testit11');
   expect(user.email).toBe('testit11@gmx.de');
 });
 
@@ -80,16 +80,16 @@ test('Should update user', async () => {
     .put(`/api/v1/auth/updatedetails/${userOne.id}`)
     .set('Authorization', `Bearer ${token}`)
     .send({
-      username: 'jon10ee',
+      name: 'jon10ee',
       email: 'jon10eetest@gmx.de',
     });
 
   const user = await User.findByPk(userOne.id);
 
   //Assertions about the user
-  expect(user.username).toBe('jon10ee');
+  expect(user.name).toBe('jon10ee');
   expect(user.email).toBe('jon10eetest@gmx.de');
-  expect(user.username).not.toBe('testit11');
+  expect(user.name).not.toBe('testit11');
   expect(user.email).not.toBe('testit11@gmx.de');
 });
 
@@ -197,7 +197,7 @@ test('Should logout user', async () => {
 //test register user
 test('Should register a new user', async () => {
   const response = await request(app).post('/api/v1/auth/register').send({
-    username: 'testitson22',
+    name: 'testitson22',
     email: 'testitson22@gmx.de',
     password: '123456',
     role: 'user',
@@ -210,7 +210,7 @@ test('Should register a new user', async () => {
   expect(response.body.token).not.toBe(null);
 
   //Assertions about the user
-  expect(user.username).toBe('testitson22');
+  expect(user.name).toBe('testitson22');
   expect(user.email).toBe('testitson22@gmx.de');
   expect(user.password).not.toBe('123456');
   expect(user.role).toBe('user');

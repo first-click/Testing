@@ -3,7 +3,7 @@ const User = sequelize.models.user;
 
 const userOne = {
   id: 1,
-  username: 'testit11',
+  name: 'testit11',
   email: 'testit11@gmx.de',
   password: '123456',
   role: 'user',
@@ -11,7 +11,7 @@ const userOne = {
 
 const userTwo = {
   id: 2,
-  username: 'testit12',
+  name: 'testit12',
   email: 'testit12@gmx.de',
   password: '123456',
   role: 'admin',

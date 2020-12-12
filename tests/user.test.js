@@ -27,8 +27,8 @@ test('Should get all Users', async () => {
     .get('/api/v1/users')
     .set('Authorization', `Bearer ${token}`)
     .expect(200);
-  expect(response.body[0].username).toBe('testit11');
-  expect(response.body[1].username).toBe('testit12');
+  expect(response.body[0].name).toBe('testit11');
+  expect(response.body[1].name).toBe('testit12');
 });
 
 test('Should get a single User', async () => {
@@ -36,7 +36,7 @@ test('Should get a single User', async () => {
     .get('/api/v1/users/1')
     .set('Authorization', `Bearer ${token}`)
     .expect(200);
-  expect(response.body.username).toBe('testit11');
+  expect(response.body.name).toBe('testit11');
 });
 
 //@desc Create new user
@@ -46,13 +46,13 @@ test('Should create a new User', async () => {
     .post('/api/v1/users')
     .set('Authorization', `Bearer ${token}`)
     .send({
-      username: 'user3',
+      name: 'user3',
       email: 'user3@gmx.de',
       password: '123456',
       role: 'admin',
     })
     .expect(200);
-  expect(response.body.username).toEqual('user3');
+  expect(response.body.name).toEqual('user3');
   id = response.body.id;
 });
 
@@ -63,7 +63,7 @@ test('Should update a User', async () => {
     .put(`/api/v1/users/${id}`)
     .set('Authorization', `Bearer ${token}`)
     .send({
-      username: 'user4',
+      name: 'user4',
       email: 'user4@gmx.de',
       password: '123456',
     })

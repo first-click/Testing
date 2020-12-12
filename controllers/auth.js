@@ -14,11 +14,11 @@ const User = sequelize.models.user;
 //@access Public
 
 exports.register = asyncHandler(async (req, res) => {
-  const { username, email, password, role } = req.body;
+  const { name, email, password, role } = req.body;
 
   // Insert into table
   const user = await User.create({
-    username,
+    name,
     email,
     password,
     role,
@@ -115,12 +115,12 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 //@access Private
 
 exports.updateDetails = asyncHandler(async (req, res, next) => {
-  const { username, email } = req.body;
+  const { name, email } = req.body;
   //console.log(typeof req.user.id);
   //console.log(typeof req.params.id);
   const user = await User.update(
     {
-      username: username,
+      name: name,
       email: email,
     },
     { where: { id: req.user.id.toString() } }

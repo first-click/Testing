@@ -23,9 +23,9 @@ exports.getUser = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.createUser = asyncHandler(async (req, res) => {
   // Insert into table
-  const { username, email, password, role } = req.body;
+  const { name, email, password, role } = req.body;
   const user = await User.create({
-    username,
+    name,
     email,
     password,
     role,
@@ -38,11 +38,11 @@ exports.createUser = asyncHandler(async (req, res) => {
 //@route PUT /api/v1/users/:id
 //@access Private/Admin
 exports.updateUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
   // update a user
   const user = await User.update(
     {
-      username: username,
+      name: name,
       email: email,
     },
     { where: { id: req.params.id } }
