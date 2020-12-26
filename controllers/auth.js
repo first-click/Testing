@@ -222,7 +222,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     },
   });
   if (!user) {
-    return next(new ErrorResponse('Invalide token', 400));
+    return next(new ErrorResponse('Invalid token', 400));
   }
 
   user.password = user.beforeSave(password);

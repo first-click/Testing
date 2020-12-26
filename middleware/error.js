@@ -7,7 +7,7 @@ const errorHandler = (err, req, res, next) => {
 
   // Postgres bad ObjectId
   if (err.name == 'CastError') {
-    const message = `Resource not foud with id of ${err.value}`;
+    const message = `Resource not found with id of ${err.value}`;
     error = new ErrorResponse(message, 404);
   }
 
