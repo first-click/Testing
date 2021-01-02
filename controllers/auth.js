@@ -13,18 +13,26 @@ const User = sequelize.models.user;
 //@route Post /api/v1/auth/register
 //@access Public
 
-exports.register = asyncHandler(async (req, res) => {
+exports.register = asyncHandler(async (req, res, next) => {
   const { name, email, password, role } = req.body;
 
-  // Insert into table
-  const user = await User.create({
-    name,
-    email,
-    password,
-    role,
+  //Check for user
+  const userExists = await User.findOne({
+    where: { email: email },
   });
+  if (userExists) {
+    return next(new ErrorResponse('User already exists', 401));
+  } else {
+    // Insert into table
+    const user = await User.create({
+      name,
+      email,
+      password,
+      role,
+    });
 
-  sendTokenResponse(user, 200, res);
+    sendTokenResponse(user, 200, res);
+  }
 });
 
 //@desc Login user
