@@ -30,7 +30,7 @@ exports.register = asyncHandler(async (req, res, next) => {
       password,
       role,
     });
-
+    
     sendTokenResponse(user, 200, res);
   }
 });
@@ -108,7 +108,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 exports.getMe = asyncHandler(async (req, res, next) => {
   const user = await User.findByPk(req.user.id, {
     attributes: {
-      exclude: ['password', 'resetPasswordToken', 'resetPasswordExpire'],
+      exclude: ['password', 'reset_password_token', 'reset_password_expire'],
     },
   });
 

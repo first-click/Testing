@@ -5,15 +5,15 @@ const bcrypt = require('bcryptjs');
 //const jwt = require('jsonwebtoken');
 var redis = require('redis');
 var JWTR = require('jwt-redis').default;
+
 var redisClient = redis.createClient();
 var jwtr = new JWTR(redisClient);
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    // static associate(models) {
-    //   // Shop hasMany Coffees
-    //   Shop.hasMany(models.Coffee);
-    // }
+    static associate(models) {
+      User.hasOne(models.job);
+    }
   }
   User.init(
     {
@@ -42,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
         enum: ['user', 'publisher'],
         default: 'user',
       },
-      resetPasswordToken: DataTypes.STRING,
-      resetPasswordExpire: DataTypes.DATE,
+      reset_password_token: DataTypes.STRING,
+      reset_password_expire: DataTypes.DATE,
     },
     {
       hooks: {
@@ -52,10 +52,11 @@ module.exports = (sequelize, DataTypes) => {
           user.password = bcrypt.hashSync(user.password, salt);
         },
       },
-
       sequelize,
       modelName: 'user',
-    }
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+    },
   );
   User.prototype.beforeSave = function (password) {
     const salt = bcrypt.genSaltSync();
@@ -84,13 +85,13 @@ module.exports = (sequelize, DataTypes) => {
     const resetToken = crypto.randomBytes(20).toString('hex');
 
     // Hash token and set to resetPasswordToken field
-    this.resetPasswordToken = crypto
+    this.reset_password_token = crypto
       .createHash('sha256')
       .update(resetToken)
       .digest('hex');
 
     // Set expire
-    this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+    this.reset_password_expire = Date.now() + 10 * 60 * 1000;
 
     return resetToken;
   };
