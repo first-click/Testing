@@ -8,7 +8,7 @@ var JWTR = require('jwt-redis').default;
 var redisClient = redis.createClient();
 var jwtr = new JWTR(redisClient);
 
-const User = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     // static associate(models) {
     //   // Shop hasMany Coffees
@@ -97,5 +97,3 @@ const User = (sequelize, DataTypes) => {
 
   return User;
 };
-
-module.exports = User;
