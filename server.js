@@ -1,5 +1,6 @@
 const app = require('./app');
 const dotenv = require('dotenv');
+require('./utils/logOrigin');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
