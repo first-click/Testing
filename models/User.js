@@ -12,7 +12,8 @@ var jwtr = new JWTR(redisClient);
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.hasOne(models.job);
+      User.hasOne(models.profile);
+      User.hasMany(models.computer);
     }
   }
   User.init(
