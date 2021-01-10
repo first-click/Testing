@@ -53,10 +53,9 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       sequelize,
+      ...sequelize.options,
       modelName: 'user',
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-    },
+    }
   );
   User.prototype.beforeSave = function (password) {
     const salt = bcrypt.genSaltSync();
