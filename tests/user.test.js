@@ -8,7 +8,7 @@ const { userOne, userTwo, setUpDatabase } = require('./fixtures/db');
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 let token;
-let id;
+let user_id;
 beforeAll(setUpDatabase);
 
 test('Should login existing user', async () => {
@@ -53,14 +53,14 @@ test('Should create a new User', async () => {
     })
     .expect(200);
   expect(response.body.name).toEqual('user3');
-  id = response.body.id;
+  user_id = response.body.user_id;
 });
 
 //@desc Update a user
-//@route PUT /api/v1/users/:id
+//@route PUT /api/v1/users/:user_id
 test('Should update a User', async () => {
   const response = await request(app)
-    .put(`/api/v1/users/${id}`)
+    .put(`/api/v1/users/${user_id}`)
     .set('Authorization', `Bearer ${token}`)
     .send({
       name: 'user4',
@@ -72,10 +72,10 @@ test('Should update a User', async () => {
 });
 
 //@desc Delete a user
-//@route DELETE /api/v1/users/:id
+//@route DELETE /api/v1/users/:user_id
 test('Should delete a User', async () => {
   const response = await request(app)
-    .delete(`/api/v1/users/${id}`)
+    .delete(`/api/v1/users/${user_id}`)
     .set('Authorization', `Bearer ${token}`)
     .send()
     .expect(200);

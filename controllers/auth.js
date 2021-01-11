@@ -30,7 +30,7 @@ exports.register = asyncHandler(async (req, res, next) => {
       password,
       role,
     });
-    
+
     sendTokenResponse(user, 200, res);
   }
 });
@@ -50,7 +50,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   //Check for user
   const user = await User.findOne({
     where: { email: email },
-    attributes: ['id', 'password', 'email'],
+    attributes: ['user_id', 'password', 'email'],
   });
 
   if (!user) {
@@ -106,7 +106,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 //@access Private
 
 exports.getMe = asyncHandler(async (req, res, next) => {
-  const user = await User.findByPk(req.user.id, {
+  const user = await User.findByPk(req.user.user_id, {
     attributes: {
       exclude: ['password', 'reset_password_token', 'reset_password_expire'],
     },
@@ -119,7 +119,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Update user details
-//@route PUT /api/v1/auth/updatedetails/:id
+//@route PUT /api/v1/auth/updatedetails/:user_id
 //@access Private
 
 exports.updateDetails = asyncHandler(async (req, res, next) => {
@@ -131,7 +131,7 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
       name: name,
       email: email,
     },
-    { where: { id: req.user.id.toString() } }
+    { where: { user_id: req.user.user_id.toString() } }
   );
 
   res.status(200).json({
@@ -141,12 +141,12 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Update password
-//@route PUT /api/v1/auth/updatepassword/:id
+//@route PUT /api/v1/auth/updatepassword/:user_id
 //@access Private
 
 exports.updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({
-    where: { id: req.params.id },
+    where: { user_id: req.params.user_id },
   });
 
   // Check current password

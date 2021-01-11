@@ -13,13 +13,13 @@ module.exports = {
    */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('users', {
-      id: {
+      user_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      username: {
+      name: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false,
@@ -34,6 +34,7 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false,
+        validate: { isEmail: true },
       },
       password: {
         type: Sequelize.STRING,
@@ -44,13 +45,13 @@ module.exports = {
         enum: ['user', 'publisher'],
         default: 'user',
       },
-      resetPasswordToken: Sequelize.STRING,
-      resetPasswordExpire: Sequelize.DATE,
-      createdAt: {
+      reset_password_token: Sequelize.STRING,
+      reset_password_expire: Sequelize.DATE,
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },

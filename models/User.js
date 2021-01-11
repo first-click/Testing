@@ -10,20 +10,23 @@ var redisClient = redis.createClient();
 var jwtr = new JWTR(redisClient);
 
 module.exports = (sequelize, DataTypes) => {
-  // console.log(sequelize.options);
   class User extends Model {
     static associate(models) {
       User.hasOne(models.profile);
       User.hasMany(models.computer);
       User.belongsToMany(models.department, {
         through: 'users_departments',
-        // as: 'departments',
-        // foreignKey: 'id',
       });
     }
   }
   User.init(
     {
+      user_id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       name: {
         type: DataTypes.STRING,
         unique: true,
@@ -39,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
+        validate: { isEmail: true },
       },
       password: {
         type: DataTypes.STRING,
@@ -53,14 +57,14 @@ module.exports = (sequelize, DataTypes) => {
       reset_password_expire: DataTypes.DATE,
     },
     {
+      sequelize,
+      ...sequelize.options,
       hooks: {
         beforeCreate: (user) => {
           const salt = bcrypt.genSaltSync();
           user.password = bcrypt.hashSync(user.password, salt);
         },
       },
-      sequelize,
-      ...sequelize.options,
       // createdAt: 'created_at',
       // updatedAt: 'updated_at',
       modelName: 'user',
@@ -79,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.prototype.getSignedJwtToken = function () {
     // Create a token
-    return jwtr.sign({ id: this.id }, process.env.JWT_SECRET, {
+    return jwtr.sign({ user_id: this.user_id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
     });
   };

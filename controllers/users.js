@@ -11,10 +11,10 @@ exports.getUsers = asyncHandler(async (req, res) => {
 });
 
 //@desc get single user
-//@route GET /api/v1/users/:id
+//@route GET /api/v1/users/:user_id
 //@access Private/Admin
 exports.getUser = asyncHandler(async (req, res) => {
-  const user = await User.findByPk(req.params.id);
+  const user = await User.findByPk(req.params.user_id);
   res.json(user);
 });
 
@@ -35,7 +35,7 @@ exports.createUser = asyncHandler(async (req, res) => {
 });
 
 //@desc Update a user
-//@route PUT /api/v1/users/:id
+//@route PUT /api/v1/users/:user_id
 //@access Private/Admin
 exports.updateUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -45,18 +45,18 @@ exports.updateUser = asyncHandler(async (req, res) => {
       name: name,
       email: email,
     },
-    { where: { id: req.params.id } }
+    { where: { user_id: req.params.user_id } }
   );
 
   res.json(user);
 });
 
 //@desc Delete a user
-//@route DELETE /api/v1/users/:id
+//@route DELETE /api/v1/users/:user_id
 //@access Private/Admin
 exports.deleteUser = asyncHandler(async (req, res) => {
   // Delete user
-  const user = await User.destroy({ where: { id: req.params.id } });
+  const user = await User.destroy({ where: { user_id: req.params.user_id } });
   res.status(200).json({
     success: true,
     data: {},

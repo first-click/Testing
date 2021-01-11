@@ -2,7 +2,7 @@ const { sequelize } = require('../../models');
 const User = sequelize.models.user;
 
 const userOne = {
-  id: 1,
+  user_id: 1,
   name: 'testit11',
   email: 'testit11@gmx.de',
   password: '123456',
@@ -10,7 +10,7 @@ const userOne = {
 };
 
 const userTwo = {
-  id: 2,
+  user_id: 2,
   name: 'testit12',
   email: 'testit12@gmx.de',
   password: '123456',
