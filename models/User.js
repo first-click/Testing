@@ -10,10 +10,16 @@ var redisClient = redis.createClient();
 var jwtr = new JWTR(redisClient);
 
 module.exports = (sequelize, DataTypes) => {
+  // console.log(sequelize.options);
   class User extends Model {
     static associate(models) {
       User.hasOne(models.profile);
       User.hasMany(models.computer);
+      User.belongsToMany(models.department, {
+        through: 'users_departments',
+        // as: 'departments',
+        // foreignKey: 'id',
+      });
     }
   }
   User.init(
@@ -55,6 +61,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       sequelize,
       ...sequelize.options,
+      // createdAt: 'created_at',
+      // updatedAt: 'updated_at',
       modelName: 'user',
     }
   );

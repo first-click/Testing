@@ -38,10 +38,37 @@ module.exports = {
         onDelete: 'SET NULL',
       }
     );
+    await queryInterface.createTable('users_departments', {
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      id: {
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      department_id: {
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'departments',
+          key: 'department_id',
+        },
+      },
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn('profiles', 'user_id');
     await queryInterface.removeColumn('computers', 'user_id');
+    await queryInterface.dropTable('users_departments');
   },
 };
