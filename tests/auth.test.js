@@ -39,7 +39,7 @@ test('Should login existing user', async () => {
     .expect(200);
   const decoded = jwtr.decode(response.body.token, process.env.JWT_SECRET);
 
-  const user = await User.findByPk(decoded.id);
+  const user = await User.findByPk(decoded.user_id);
 
   expect(user.email).toBe('testit11@gmx.de');
   expect(user.password).not.toBe('123456');
@@ -68,7 +68,7 @@ test('Should get current logged in user ', async () => {
     .expect(200);
 
   const decoded = jwtr.decode(token, process.env.JWT_SECRET);
-  const user = await User.findByPk(decoded.id);
+  const user = await User.findByPk(decoded.user_id);
 
   expect(user.name).toBe('testit11');
   expect(user.email).toBe('testit11@gmx.de');
@@ -77,14 +77,14 @@ test('Should get current logged in user ', async () => {
 // test update user
 test('Should update user', async () => {
   await request(app)
-    .put(`/api/v1/auth/updatedetails/${userOne.id}`)
+    .put(`/api/v1/auth/updatedetails/${userOne.user_id}`)
     .set('Authorization', `Bearer ${token}`)
     .send({
       name: 'jon10ee',
       email: 'jon10eetest@gmx.de',
     });
 
-  const user = await User.findByPk(userOne.id);
+  const user = await User.findByPk(userOne.user_id);
 
   //Assertions about the user
   expect(user.name).toBe('jon10ee');
@@ -96,7 +96,7 @@ test('Should update user', async () => {
 // test update password
 test('Should update password', async () => {
   await request(app)
-    .put(`/api/v1/auth/updatepassword/${userOne.id}`)
+    .put(`/api/v1/auth/updatepassword/${userOne.user_id}`)
     .set('Authorization', `Bearer ${token}`)
     .send({
       email: userOne.email,
@@ -104,7 +104,7 @@ test('Should update password', async () => {
       newPassword: '09876543',
     });
 
-  const user = await User.findByPk(userOne.id);
+  const user = await User.findByPk(userOne.user_id);
 
   expect(user.password).not.toBe('09876543');
 });
@@ -202,9 +202,8 @@ test('Should register a new user', async () => {
     password: '123456',
     role: 'user',
   });
-
   const decoded = jwtr.decode(response.body.token, process.env.JWT_SECRET);
-  const user = await User.findByPk(decoded.id);
+  const user = await User.findByPk(decoded.user_id);
 
   //Assertion about the token
   expect(response.body.token).not.toBe(null);

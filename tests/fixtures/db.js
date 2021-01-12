@@ -18,7 +18,7 @@ const userTwo = {
 };
 
 const setUpDatabase = async () => {
-  await User.destroy({ truncate: true });
+  await User.destroy({ truncate: true, cascade: true });
   await User.create(userOne);
   await User.create(userTwo);
 };

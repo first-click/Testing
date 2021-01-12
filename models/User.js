@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       role: {
         type: DataTypes.STRING,
-        enum: ['user', 'publisher'],
+        enum: ['user', 'publisher', 'admin'],
         default: 'user',
       },
       reset_password_token: DataTypes.STRING,

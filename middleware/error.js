@@ -5,7 +5,7 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message;
 
-  console.log(error);
+  // console.log(error);
 
   // Postgres bad ObjectId
   if (err.name == 'CastError') {

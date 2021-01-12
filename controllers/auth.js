@@ -196,8 +196,8 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     res.status(200).json({ success: true, data: 'email sent', resetToken });
   } catch (err) {
     //console.log(err);
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
+    user.reset_password_token = undefined;
+    user.reset_password_expire = undefined;
 
     await user.save({ validateBeforeSave: false });
     return next(new ErrorResponse('Email could not be send', 500));
@@ -216,7 +216,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   const { password } = req.body;
   // Get hashed token
 
-  const resetPasswordToken = crypto
+  const reset_password_token = crypto
     .createHash('sha256')
     .update(req.params.resetToken)
     .digest('hex');
@@ -225,7 +225,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   const user = await User.findOne({
     where: {
-      resetPasswordToken,
+      reset_password_token,
       //  resetPasswordExpire: { $gte: Date.now() },
     },
   });
@@ -234,8 +234,8 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   }
 
   user.password = user.beforeSave(password);
-  user.resetPasswordToken = null;
-  user.resetPasswordExpire = null;
+  user.reset_password_token = null;
+  user.reset_password_expire = null;
   await user.save();
 
   sendTokenResponse(user, 200, res);
