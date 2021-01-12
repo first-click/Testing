@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       User.hasOne(models.profile);
-      User.hasMany(models.computer);
+      User.hasMany(models.computer, {
+        foreignKey: 'user_id',
+      });
       User.belongsToMany(models.department, {
         through: 'users_departments',
       });
