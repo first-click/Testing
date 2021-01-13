@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         // der targetKey müsste hier nicht definiert werden
         targetKey: 'user_id',  // default = user_id = PK in der user-Tabelle
         // der foreignKey muss definiert werden
+        // "der foreignKey im Model computer heißt 'user_id'"
         foreignKey: 'user_id', // default = computer.user_user_id 
       });
     }
