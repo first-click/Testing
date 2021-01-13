@@ -2,23 +2,26 @@ const { sequelize } = require('../models');
 const asyncHandler = require('../middleware/async');
 const Computer = sequelize.models.computer;
 
-//@desc get all computers
+//@desc Get all computers
 //@route GET /api/v1/computers
 //@access Private/Admin
 exports.getComputers = asyncHandler(async (req, res) => {
-  const computers = await Computer.findAll();
+  const computers = await Computer.findAll({ include: 'user' });
   res.json(computers);
 });
 
-//@desc get single computer
+//@desc Get a single computer
 //@route GET /api/v1/computers/:computer_id
 //@access Private/Admin
 exports.getComputer = asyncHandler(async (req, res) => {
-  const computer = await Computer.findByPk(req.params.computer_id);
+  const computer = await Computer.findByPk(req.params.computer_id, {
+    include: 'user',
+  });
+  console.log(await computer.getUser());
   res.json(computer);
 });
 
-//@desc Create new computer
+//@desc Create a new computer
 //@route POST /api/v1/computers
 //@access Private/Admin
 exports.createComputer = asyncHandler(async (req, res) => {

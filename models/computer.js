@@ -9,8 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Computer.belongsTo(models.user, {
-        targetKey: 'user_id',
-        foreignKey: 'computer_id',
+        // der targetKey müsste hier nicht definiert werden
+        targetKey: 'user_id',  // default = user_id = PK in der user-Tabelle
+        // der foreignKey muss definiert werden
+        foreignKey: 'user_id', // default = computer.user_user_id 
       });
     }
   }
