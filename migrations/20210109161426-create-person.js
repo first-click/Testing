@@ -1,16 +1,16 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    /**
-     * @typedef {import('sequelize').Sequelize} Sequelize
-     * @typedef {import('sequelize').QueryInterface} QueryInterface
-     */
+  /**
+   * @typedef {import('sequelize').Sequelize} Sequelize
+   * @typedef {import('sequelize').QueryInterface} QueryInterface
+   */
 
-    /**
-     * @param {QueryInterface} queryInterface
-     * @param {Sequelize} Sequelize
-     * @returns
-     */
+  /**
+   * @param {QueryInterface} queryInterface
+   * @param {Sequelize} Sequelize
+   * @returns
+   */
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('people', {
       person_id: {
         allowNull: false,

@@ -1,6 +1,7 @@
 const { sequelize } = require('../models');
 const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
+const Person = sequelize.models.person;
 
 //@desc Get all users
 //@route GET /api/v1/users
@@ -15,10 +16,17 @@ exports.getUsers = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.getUser = asyncHandler(async (req, res) => {
   const user = await User.findByPk(req.params.user_id, {
-    include: 'computers',
+    include: ['computers', 'person'],
   });
-  console.log(await user.getComputers());
-  res.json(user);
+  // console.log(await user.getComputers());
+
+  const person = await user.createPerson({
+    person_first_name: 'Julian',
+    person_last_name: 'Leweling',
+  });
+  console.log(person);
+
+  res.json(person);
 });
 
 //@desc Create new user
@@ -33,7 +41,6 @@ exports.createUser = asyncHandler(async (req, res) => {
     password,
     role,
   });
-
   res.json(user);
 });
 
