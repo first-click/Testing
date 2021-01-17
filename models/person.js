@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Person.belongsTo(models.user, {
         targetKey: 'user_id',
+        // foreignKey: 'user_id', // = person.user_id
         foreignKey: 'user_id', // = person.user_id
         // default wäre person.user_user_id
       });

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasOne(models.person, {
         // sourceKey: 'user_id',
-        foreignKey: 'user_id',
+        foreignKey: { name: 'user_id', unique: true },
       });
       User.hasMany(models.computer, {
         foreignKey: 'user_id',

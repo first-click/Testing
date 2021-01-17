@@ -10,7 +10,8 @@
     "dev": "nodemon server",
     "test": "jest --watch --runInBand --detectOpenHandles",
     "test1": "jest --watch --coverage --runInBand --detectOpenHandles",
-    "coverage": "jest --coverage --watchAll"
+    "coverage": "jest --coverage --watchAll",
+    "initialize-seed": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:undo:all && sequelize db:seed:all"
   },
   "jest": {
     "testEnvironment": "node"

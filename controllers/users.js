@@ -26,7 +26,7 @@ exports.getUser = asyncHandler(async (req, res) => {
   });
   console.log(person);
 
-  res.json(person);
+  res.json(user);
 });
 
 //@desc Create new user
