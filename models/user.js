@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.belongsToMany(models.department, {
         through: 'users_departments',
+        foreignKey: 'user_id',
       });
     }
   }

@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Department.belongsToMany(models.user, {
         through: 'users_departments',
+        foreignKey: 'department_id',
         // as: 'users',
         // foreignKey: 'department_id',
       });
@@ -17,10 +18,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   Department.init(
     {
+      department_id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       address: DataTypes.STRING,
     },
     {
       sequelize,
+      ...sequelize.options,
       modelName: 'department',
     }
   );

@@ -13,7 +13,7 @@ module.exports = {
    */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn(
-      'people', // name of Source model
+      'persons', // name of Source model
       'user_id', // name of the key we're adding
       {
         type: Sequelize.INTEGER,
@@ -42,7 +42,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('people', 'user_id');
+    await queryInterface.removeColumn('persons', 'user_id');
     await queryInterface.removeColumn('computers', 'user_id');
   },
 };

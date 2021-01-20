@@ -16,6 +16,7 @@ module.exports = {
       'departments',
       [
         {
+          department_id: 1,
           address: 'Headquarters',
           created_at: new Date(),
           updated_at: new Date(),

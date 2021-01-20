@@ -1,16 +1,11 @@
 'use strict';
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Person extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       Person.belongsTo(models.user, {
         targetKey: 'user_id',
-        // foreignKey: 'user_id', // = person.user_id
         foreignKey: 'user_id', // = person.user_id
         // default wäre person.user_user_id
       });
@@ -25,6 +20,17 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      user_id: {
+        allowNull: false,
+        references: {
+          model: 'user',
+          key: 'user_id',
+        },
+        unique: true, // Muss unique sein. Dieser Eintrag führt
+        // aber nicht zu einem validation error. Der kommt von
+        // der DB
+        type: DataTypes.INTEGER,
+      },
       person_first_name: {
         type: DataTypes.STRING,
       },
@@ -36,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       ...sequelize.options,
       modelName: 'person',
+      tableName: 'persons', // anstatt people
     }
   );
   return Person;

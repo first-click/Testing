@@ -16,8 +16,8 @@ module.exports = {
       'users',
       [
         {
-          name: 'John Doe',
-          email: false,
+          name: 'JohnDoe187',
+          email: 'johnD187@outlook.com',
           password: 'secret',
           role: 'admin',
           created_at: new Date(),
