@@ -6,7 +6,7 @@ var redisClient = redis.createClient();
 var jwtr = new JWTR(redisClient);
 
 const app = require('../app');
-const { sequelize } = require('../models');
+const { sequelize } = require('../database/models');
 const User = sequelize.models.user;
 const dotenv = require('dotenv');
 const { userOne, setUpDatabase } = require('./fixtures/db');

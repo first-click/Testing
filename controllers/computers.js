@@ -1,4 +1,4 @@
-const { sequelize } = require('../models');
+const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const Computer = sequelize.models.computer;
 

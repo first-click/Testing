@@ -5,7 +5,7 @@ var redisClient = redis.createClient();
 var jwtr = new JWTR(redisClient);
 const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
-const { sequelize } = require('../models');
+const { sequelize } = require('../database/models');
 const User = sequelize.models.user;
 
 // Protect routes

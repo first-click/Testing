@@ -5,7 +5,7 @@ var redisClient = redis.createClient();
 var jwtr = new JWTR(redisClient);
 const ErrorResponse = require('../utils/errorResponse');
 const sendEmail = require('../utils/sendEmail');
-const { sequelize } = require('../models');
+const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
 

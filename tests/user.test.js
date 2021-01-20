@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../app');
 const dotenv = require('dotenv');
-const { sequelize } = require('../models');
+const { sequelize } = require('../database/models');
 const User = sequelize.models.user;
 const { userOne, userTwo, setUpDatabase } = require('./fixtures/db');
 

@@ -1,0 +1,36 @@
+{
+  "development": {
+    "username": "JL",
+    "password": null,
+    "database": "firstclick_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "underscored": true,
+    "timestamps": "true",
+    "createdAt": "created_at",
+    "updatedAt": "updated_at"
+  },
+  "test": {
+    "username": "JL",
+    "password": null,
+    "database": "firstclick_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "logging": false,
+    "underscored": true,
+    "timestamps": "true",
+    "createdAt": "created_at",
+    "updatedAt": "updated_at"
+  },
+  "production": {
+    "username": "JL",
+    "password": null,
+    "database": "firstclick_prod",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "underscored": true,
+    "timestamps": "true",
+    "createdAt": "created_at",
+    "updatedAt": "updated_at"
+  }
+}
