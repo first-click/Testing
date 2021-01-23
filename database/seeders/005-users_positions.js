@@ -1,5 +1,4 @@
 'use strict';
-
 module.exports = {
   /**
    * @typedef {import('sequelize').Sequelize} Sequelize
@@ -13,13 +12,11 @@ module.exports = {
    */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      'users',
+      'users_positions',
       [
         {
-          name: 'JohnDoe187',
-          email: 'johnD187@outlook.com',
-          password: 'secret',
-          role: 'admin',
+          user_id: 1,
+          position_id: 1,
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -38,7 +35,6 @@ module.exports = {
    * @returns
    */
   down: async (queryInterface, Sequelize) => {
-    // await queryInterface.bulkDelete('users', null, {});
-    await queryInterface. bulkDelete('users', null, {});
+    await queryInterface.bulkDelete('users_positions', null, {});
   },
 };

@@ -12,16 +12,7 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('departments', {
-      department_id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      address: {
-        type: Sequelize.STRING,
-      },
+    await queryInterface.createTable('users_positions', {
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -30,9 +21,25 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      user_id: {
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'user_id',
+        },
+      },
+      position_id: {
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'positions',
+          key: 'position_id',
+        },
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('departments');
+    await queryInterface.dropTable('users_positions');
   },
 };

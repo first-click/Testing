@@ -16,7 +16,7 @@ exports.getUsers = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.getUser = asyncHandler(async (req, res) => {
   const user = await User.findByPk(req.params.user_id, {
-    include: ['computers', 'person', 'departments'],
+    include: ['computers', 'person', 'positions'],
     // include: { all: true },
   });
   // console.log(await user.getComputers());

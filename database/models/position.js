@@ -1,24 +1,24 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Department extends Model {
+  class Position extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Department.belongsToMany(models.user, {
-        through: 'users_departments',
-        foreignKey: 'department_id',
+      Position.belongsToMany(models.user, {
+        through: 'users_positions',
+        foreignKey: 'position_id',
         // as: 'users',
-        // foreignKey: 'department_id',
+        // foreignKey: 'position_id',
       });
     }
   }
-  Department.init(
+  Position.init(
     {
-      department_id: {
+      position_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -29,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'department',
+      modelName: 'position',
     }
   );
-  return Department;
+  return Position;
 };

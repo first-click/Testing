@@ -19,8 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.computer, {
         foreignKey: 'user_id',
       });
-      User.belongsToMany(models.department, {
-        through: 'users_departments',
+      User.belongsToMany(models.position, {
+        through: 'users_positions',
         foreignKey: 'user_id',
       });
     }
@@ -56,8 +56,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       role: {
         type: DataTypes.STRING,
-        enum: ['user', 'publisher', 'admin'],
-        default: 'user',
+        defaultValue: 'user',
+        validate: {
+          isIn: ['user', 'publisher', 'admin'],
+        },
       },
       reset_password_token: DataTypes.STRING,
       reset_password_expire: DataTypes.DATE,

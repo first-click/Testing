@@ -1,4 +1,11 @@
 'use strict';
+const bcrypt = require('bcryptjs');
+
+const hashedPassword = (password) => {
+  const salt = bcrypt.genSaltSync();
+  return bcrypt.hashSync(password, salt);
+};
+
 module.exports = {
   /**
    * @typedef {import('sequelize').Sequelize} Sequelize
@@ -12,11 +19,13 @@ module.exports = {
    */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      'users_departments',
+      'users',
       [
         {
-          user_id: 1,
-          department_id: 1,
+          name: 'JohnDoe187',
+          email: 'johnD187@outlook.com',
+          password: hashedPassword('secret'),
+          role: 'admin',
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -35,6 +44,7 @@ module.exports = {
    * @returns
    */
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('users_departments', null, {});
+    // await queryInterface.bulkDelete('users', null, {});
+    await queryInterface.bulkDelete('users', null, {});
   },
 };
