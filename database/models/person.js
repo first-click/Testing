@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id', // = person.user_id
         // default wäre person.user_user_id
       });
+      Person.belongsToMany(models.position, {
+        through: 'persons_positions',
+        foreignKey: 'person_id',
+      });
     }
   }
 

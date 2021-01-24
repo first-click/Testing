@@ -12,7 +12,7 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('users_positions', {
+    await queryInterface.createTable('persons_positions', {
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -21,12 +21,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      user_id: {
+      person_id: {
         primaryKey: true,
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
-          key: 'user_id',
+          model: 'persons',
+          key: 'person_id',
         },
       },
       position_id: {
@@ -40,6 +40,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('users_positions');
+    await queryInterface.dropTable('persons_positions');
   },
 };

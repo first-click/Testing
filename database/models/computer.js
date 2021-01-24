@@ -8,12 +8,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Computer.belongsTo(models.user, {
+      Computer.belongsTo(models.person, {
         // der targetKey müsste hier nicht definiert werden
-        targetKey: 'user_id', // default = user_id = PK in der user-Tabelle
+        targetKey: 'person_id', // default = person_id = PK in der user-Tabelle
         // der foreignKey muss definiert werden
-        // "der foreignKey im Model computer heißt 'user_id'"
-        foreignKey: 'user_id', // default = computer.user_user_id
+        // "der foreignKey im Model computer heißt 'person_id'"
+        foreignKey: 'person_id', // default = computer.person_person_id
       });
     }
   }

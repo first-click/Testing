@@ -19,10 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.computer, {
         foreignKey: 'user_id',
       });
-      User.belongsToMany(models.position, {
-        through: 'users_positions',
-        foreignKey: 'user_id',
-      });
     }
   }
   User.init(

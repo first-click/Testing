@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class UserPosition extends Model {
+  class PersonPosition extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {}
   }
 
-  UserPosition.init(
+  PersonPosition.init(
     {
-      user_id: {
+      person_id: {
         primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
-          model: 'users',
-          key: 'user_id',
+          model: 'persons',
+          key: 'person_id',
         },
       },
       position_id: {
@@ -33,9 +33,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'user_position',
-      tableName: 'users_positions', // anstatt people
+      modelName: 'person_position',
+      tableName: 'persons_positions', // anstatt people
     }
   );
-  return UserPosition;
+  return PersonPosition;
 };

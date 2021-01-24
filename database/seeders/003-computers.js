@@ -16,7 +16,7 @@ module.exports = {
       'computers',
       [
         {
-          user_id: 1,
+          person_id: 1,
           serial_number: 'XNN-1927',
           created_at: new Date(),
           updated_at: new Date(),
