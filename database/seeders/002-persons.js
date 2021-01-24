@@ -16,6 +16,7 @@ module.exports = {
       'persons',
       [
         {
+          company_id: 1,
           user_id: 1,
           person_first_name: 'Julian',
           person_last_name: 'Leweling',

@@ -12,6 +12,10 @@ var jwtr = new JWTR(redisClient);
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
+      User.belongsTo(models.company, {
+        targetKey: 'company_id',
+        foreignKey: 'company_id',
+      });
       User.hasOne(models.person, {
         // sourceKey: 'user_id',
         foreignKey: { name: 'user_id', unique: true },
@@ -29,7 +33,15 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      company_id: {
+        references: {
+          model: 'company',
+          key: 'company_id',
+        },
+        type: DataTypes.INTEGER,
+      },
       name: {
+        //sollte username heißen
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,

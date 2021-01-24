@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id', // = person.user_id
         // default wäre person.user_user_id
       });
+      Person.belongsTo(models.company, {
+        targetKey: 'company_id',
+        foreignKey: 'company_id',
+      });
       Person.belongsToMany(models.position, {
         through: 'persons_positions',
         foreignKey: 'person_id',
@@ -25,14 +29,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       user_id: {
-        allowNull: false,
         references: {
           model: 'user',
           key: 'user_id',
         },
         unique: true, // Muss unique sein. Dieser Eintrag führt
-        // aber nicht zu einem validation error. Der kommt von
-        // der DB
+        // aber nicht zu einem validation error. Der kommt von der DB.
+        type: DataTypes.INTEGER,
+      },
+      company_id: {
+        references: {
+          model: 'company',
+          key: 'company_id',
+        },
         type: DataTypes.INTEGER,
       },
       person_first_name: {

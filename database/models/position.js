@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         // as: 'users',
         // foreignKey: 'position_id',
       });
+      Position.belongsTo(models.company, {
+        targetKey: 'company_id',
+        foreignKey: 'company_id',
+      });
     }
   }
   Position.init(
@@ -22,6 +26,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      company_id: {
+        references: {
+          model: 'company',
+          key: 'company_id',
+        },
         type: DataTypes.INTEGER,
       },
       address: DataTypes.STRING,

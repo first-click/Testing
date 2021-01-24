@@ -16,6 +16,7 @@ module.exports = {
       'positions',
       [
         {
+          company_id: 1,
           position_id: 1,
           address: 'Headquarters',
           created_at: new Date(),
