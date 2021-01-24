@@ -17,13 +17,10 @@ module.exports = {
       'company_id', // name of the key we're adding
       {
         type: Sequelize.INTEGER,
-        unique: true, // Foreign Key muss auch unique sein
         references: {
           model: 'companies', // name of Target model
           key: 'company_id', // key in Target model that we're referencing
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       }
     );
     await queryInterface.addColumn(
@@ -36,8 +33,6 @@ module.exports = {
           model: 'users', // name of Target model
           key: 'user_id', // key in Target model that we're referencing
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       }
     );
     await queryInterface.addColumn(
@@ -45,13 +40,10 @@ module.exports = {
       'company_id', // name of the key we're adding
       {
         type: Sequelize.INTEGER,
-        unique: true, // Foreign Key muss auch unique sein
         references: {
           model: 'companies', // name of Target model
           key: 'company_id', // key in Target model that we're referencing
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       }
     );
     await queryInterface.addColumn(
@@ -64,8 +56,6 @@ module.exports = {
           model: 'companies', // name of Target model
           key: 'company_id', // key in Target model that we're referencing
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       }
     );
     await queryInterface.addColumn(
@@ -77,14 +67,15 @@ module.exports = {
           model: 'persons', // name of Target model
           key: 'person_id', // key in Target model that we're referencing
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       }
     );
   },
 
   down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeColumn('users', 'company_id');
     await queryInterface.removeColumn('persons', 'user_id');
+    await queryInterface.removeColumn('persons', 'company_id');
+    await queryInterface.removeColumn('positions', 'company_id');
     await queryInterface.removeColumn('computers', 'person_id');
   },
 };

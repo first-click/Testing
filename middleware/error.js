@@ -22,6 +22,7 @@ const errorHandler = (err, req, res, next) => {
   // Object.values merken !!!
   // Sequelize validation error
   if (err.name === 'validationError') {
+    console.log(err);
     const message = Object.values(err.errors).map((val) => val.message);
     error = new ErrorResponse(message, 400);
   }

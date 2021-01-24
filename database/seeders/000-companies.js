@@ -20,6 +20,16 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          company_name: 'Astro Dynamics',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          company_name: 'Realtekk',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {}
     );
