@@ -51,7 +51,6 @@ module.exports = {
       'company_id', // name of the key we're adding
       {
         type: Sequelize.INTEGER,
-        unique: true, // Foreign Key muss auch unique sein
         references: {
           model: 'companies', // name of Target model
           key: 'company_id', // key in Target model that we're referencing

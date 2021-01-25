@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         type: DataTypes.INTEGER,
       },
-      address: DataTypes.STRING,
+      title: DataTypes.STRING,
+      area: DataTypes.STRING,
     },
     {
       sequelize,

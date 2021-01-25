@@ -19,7 +19,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      address: {
+      title: {
+        type: Sequelize.STRING,
+      },
+      area: {
         type: Sequelize.STRING,
       },
       created_at: {
