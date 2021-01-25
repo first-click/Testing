@@ -12,36 +12,54 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('companies', {
-      company_id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      company_name: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-        validate: {
-          len: {
-            args: [1, 20],
-            msg: 'please use the right length',
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.createTable(
+        'companies',
+        {
+          company_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+          },
+          company_name: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: false,
+            validate: {
+              len: {
+                args: [1, 20],
+                msg: 'please use the right length',
+              },
+            },
+          },
+          created_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          updated_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
           },
         },
-      },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-    });
+        { transaction }
+      );
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('companies');
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.dropTable('companies');
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
 };

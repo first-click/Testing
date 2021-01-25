@@ -12,34 +12,52 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('persons_positions', {
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      person_id: {
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'persons',
-          key: 'person_id',
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.createTable(
+        'persons_positions',
+        {
+          created_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          updated_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          person_id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            references: {
+              model: 'persons',
+              key: 'person_id',
+            },
+          },
+          position_id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            references: {
+              model: 'positions',
+              key: 'position_id',
+            },
+          },
         },
-      },
-      position_id: {
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'positions',
-          key: 'position_id',
-        },
-      },
-    });
+        { transaction }
+      );
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('persons_positions');
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.dropTable('persons_positions', { transaction });
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
 };

@@ -8,6 +8,28 @@ const hashedPassword = (password) => {
 
 function generateDataPoint({ id }) {
   let companyId = faker.helpers.randomize([1, 2, 3]);
+  let role = 'user';
+  switch (id) {
+    case 1: {
+      companyId = 1;
+      role = 'admin';
+      break;
+    }
+    case 2: {
+      companyId = 2;
+      role = 'admin';
+      break;
+    }
+    case 3: {
+      companyId = 3;
+      role = 'admin';
+      break;
+    }
+    default: {
+      role = 'user';
+    }
+  }
+
   let firstName = faker.name.firstName();
   let lastName = faker.name.lastName();
   let title = faker.name.jobTitle();
@@ -19,7 +41,7 @@ function generateDataPoint({ id }) {
       name: faker.internet.userName(firstName, lastName),
       email: faker.internet.email(firstName, lastName),
       password: hashedPassword('secret'),
-      role: 'admin',
+      role: role,
       created_at: date,
       updated_at: date,
     },
@@ -47,28 +69,6 @@ function generateDataPoint({ id }) {
   };
 }
 
-function createUser() {
-  let firstName = faker.name.firstName();
-  let lastName = faker.name.lastName();
-  return {
-    company_id: faker.helpers.randomize([1, 2, 3]),
-    name: faker.internet.userName(firstName, lastName),
-    email: faker.internet.email(firstName, lastName),
-    password: hashedPassword('secret'),
-    role: 'admin',
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
-}
-
-function createUsers(amount) {
-  let users = [];
-  for (let i = 0; i < amount; i++) {
-    users.push(createUser());
-  }
-  return users;
-}
-
 function generateData(amount) {
   let data = [];
   for (let i = 0; i < amount; i++) {
@@ -80,6 +80,5 @@ function generateData(amount) {
 
 // module.exports = function generateData() {};
 module.exports = {
-  createUsers,
   generateData,
 };

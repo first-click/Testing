@@ -12,27 +12,45 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('computers', {
-      computer_id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      serial_number: {
-        type: Sequelize.STRING,
-      },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-    });
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.createTable(
+        'computers',
+        {
+          computer_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+          },
+          serial_number: {
+            type: Sequelize.STRING,
+          },
+          created_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          updated_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+        },
+        { transaction }
+      );
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('computers');
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.dropTable('computers', { transaction });
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
 };

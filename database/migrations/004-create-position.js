@@ -12,30 +12,48 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('positions', {
-      position_id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      title: {
-        type: Sequelize.STRING,
-      },
-      area: {
-        type: Sequelize.STRING,
-      },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-    });
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.createTable(
+        'positions',
+        {
+          position_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+          },
+          title: {
+            type: Sequelize.STRING,
+          },
+          area: {
+            type: Sequelize.STRING,
+          },
+          created_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          updated_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+        },
+        { transaction }
+      );
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('positions');
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.dropTable('positions', { transaction });
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
 };

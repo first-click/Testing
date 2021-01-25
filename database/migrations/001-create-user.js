@@ -12,55 +12,73 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('users', {
-      user_id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      name: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-        validate: {
-          len: {
-            args: [1, 20],
-            msg: 'please use the right length',
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.createTable(
+        'users',
+        {
+          user_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+          },
+          name: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: false,
+            validate: {
+              len: {
+                args: [1, 20],
+                msg: 'please use the right length',
+              },
+            },
+          },
+          email: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: false,
+            validate: { isEmail: true },
+          },
+          password: {
+            type: Sequelize.STRING,
+            allowNull: false,
+          },
+          role: {
+            type: Sequelize.STRING,
+            validate: {
+              isIn: ['user', 'admin', 'publisher'],
+            },
+            defaultValue: 'user',
+          },
+          reset_password_token: Sequelize.STRING,
+          reset_password_expire: Sequelize.DATE,
+          created_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          updated_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
           },
         },
-      },
-      email: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-        validate: { isEmail: true },
-      },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      role: {
-        type: Sequelize.STRING,
-        validate: {
-          isIn: ['user', 'admin', 'publisher'],
-        },
-        defaultValue: 'user',
-      },
-      reset_password_token: Sequelize.STRING,
-      reset_password_expire: Sequelize.DATE,
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-    });
+        { transaction }
+      );
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('users');
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.dropTable('users', { transaction });
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
   },
 };
