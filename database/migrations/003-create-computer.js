@@ -23,9 +23,7 @@ module.exports = {
             autoIncrement: true,
             primaryKey: true,
           },
-          serial_number: {
-            type: Sequelize.STRING,
-          },
+          serial_number: Sequelize.STRING,
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,

@@ -22,12 +22,8 @@ module.exports = {
             autoIncrement: true,
             primaryKey: true,
           },
-          person_first_name: {
-            type: Sequelize.STRING,
-          },
-          person_last_name: {
-            type: Sequelize.STRING,
-          },
+          person_first_name: Sequelize.STRING,
+          person_last_name: Sequelize.STRING,
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,

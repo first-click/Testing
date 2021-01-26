@@ -7,6 +7,7 @@ const hashedPassword = (password) => {
 };
 
 function generateDataPoint({ id }) {
+  faker.seed(id); // Auskommentieren für Random-Werte
   let companyId = faker.helpers.randomize([1, 2, 3]);
   let role = 'user';
   switch (id) {
@@ -33,7 +34,9 @@ function generateDataPoint({ id }) {
   let firstName = faker.name.firstName();
   let lastName = faker.name.lastName();
   let title = faker.name.jobTitle();
-  let area = faker.name.jobArea();
+  let department = faker.name.jobArea();
+  let departmentShort = department.split('').slice(0, 3).join('').toUpperCase();
+
   let date = new Date();
   return {
     user: {
@@ -56,7 +59,8 @@ function generateDataPoint({ id }) {
     position: {
       company_id: companyId,
       title: title,
-      area: area,
+      department: department,
+      department_short: departmentShort,
       created_at: date,
       updated_at: date,
     },
@@ -78,7 +82,6 @@ function generateData(amount) {
   return data;
 }
 
-// module.exports = function generateData() {};
 module.exports = {
   generateData,
 };

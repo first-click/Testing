@@ -17,14 +17,6 @@ module.exports = {
       await queryInterface.createTable(
         'persons_positions',
         {
-          created_at: {
-            type: Sequelize.DATE,
-            allowNull: false,
-          },
-          updated_at: {
-            type: Sequelize.DATE,
-            allowNull: false,
-          },
           person_id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -40,6 +32,14 @@ module.exports = {
               model: 'positions',
               key: 'position_id',
             },
+          },
+          created_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          updated_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
           },
         },
         { transaction }

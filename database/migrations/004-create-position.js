@@ -23,12 +23,9 @@ module.exports = {
             autoIncrement: true,
             primaryKey: true,
           },
-          title: {
-            type: Sequelize.STRING,
-          },
-          area: {
-            type: Sequelize.STRING,
-          },
+          title: Sequelize.STRING,
+          department: Sequelize.STRING,
+          department_short: Sequelize.STRING,
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,

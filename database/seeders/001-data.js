@@ -45,7 +45,6 @@ module.exports = {
    * @returns
    */
   down: async (queryInterface, Sequelize) => {
-    console.log('running 001-data.js DOWN');
     await queryInterface.bulkDelete('users', null, {});
     await queryInterface.bulkDelete('persons', null, {});
     await queryInterface.bulkDelete('positions', null, {});
