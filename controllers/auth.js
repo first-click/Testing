@@ -15,7 +15,6 @@ const User = sequelize.models.user;
 
 exports.register = asyncHandler(async (req, res, next) => {
   const { name, email, password, role } = req.body;
-
   //Check for user
   const userExists = await User.findOne({
     where: { email: email },

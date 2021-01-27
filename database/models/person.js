@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
         through: 'persons_positions',
         foreignKey: 'person_id',
       });
+      Person.hasMany(models.computer, {
+        foreignKey: 'person_id',
+      });
     }
   }
 

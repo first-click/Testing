@@ -15,8 +15,8 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.addIndex('users', ['company_id', 'user_id'], {
-        unique: true,
         transaction,
+        // logging: console.log,
       });
       await transaction.commit();
     } catch (err) {
@@ -30,6 +30,7 @@ module.exports = {
     try {
       await queryInterface.removeIndex('users', 'users_company_id_user_id', {
         transaction,
+        // logging: console.log,
       });
       await transaction.commit();
     } catch (err) {

@@ -47,7 +47,7 @@ module.exports = {
           role: {
             type: Sequelize.STRING,
             validate: {
-              isIn: ['user', 'admin', 'publisher'],
+              isIn: [['user', 'admin', 'publisher']],
             },
             defaultValue: 'user',
           },

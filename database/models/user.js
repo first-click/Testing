@@ -20,9 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         // sourceKey: 'user_id',
         foreignKey: { name: 'user_id', unique: true },
       });
-      User.hasMany(models.computer, {
-        foreignKey: 'user_id',
-      });
     }
   }
   User.init(
@@ -66,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: 'user',
         validate: {
-          isIn: ['user', 'publisher', 'admin'],
+          isIn: [['user', 'admin', 'publisher']],
         },
       },
       reset_password_token: DataTypes.STRING,
