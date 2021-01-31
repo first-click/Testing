@@ -6,13 +6,13 @@ module.exports = (sequelize, DataTypes) => {
   class Company extends Model {
     static associate(models) {
       Company.hasMany(models.user, {
-        foreignKey: 'user_id',
+        foreignKey: 'company_id',
       });
       Company.hasMany(models.person, {
-        foreignKey: 'person_id',
+        foreignKey: 'company_id',
       });
       Company.hasMany(models.position, {
-        foreignKey: 'position_id',
+        foreignKey: 'company_id',
       });
     }
   }

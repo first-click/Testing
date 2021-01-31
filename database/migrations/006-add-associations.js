@@ -28,19 +28,6 @@ module.exports = {
       );
       await queryInterface.addColumn(
         'persons', // name of Source model
-        'user_id', // name of the key we're adding
-        {
-          type: Sequelize.INTEGER,
-          unique: true, // Foreign Key muss auch unique sein
-          references: {
-            model: 'users', // name of Target model
-            key: 'user_id', // key in Target model that we're referencing
-          },
-        },
-        { transaction }
-      );
-      await queryInterface.addColumn(
-        'persons', // name of Source model
         'company_id', // name of the key we're adding
         {
           type: Sequelize.INTEGER,
@@ -59,6 +46,19 @@ module.exports = {
           references: {
             model: 'companies', // name of Target model
             key: 'company_id', // key in Target model that we're referencing
+          },
+        },
+        { transaction }
+      );
+      await queryInterface.addColumn(
+        'persons', // name of Source model
+        'user_id', // name of the key we're adding
+        {
+          type: Sequelize.INTEGER,
+          unique: true, // Foreign Key muss auch unique sein
+          references: {
+            model: 'users', // name of Target model
+            key: 'user_id', // key in Target model that we're referencing
           },
         },
         { transaction }

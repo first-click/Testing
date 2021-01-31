@@ -31,7 +31,7 @@ exports.getPosition = asyncHandler(async (req, res, next) => {
     // include: 'company', // optional: load corresponding company data
     // logging: console.log,
     // benchmark: true,
-    // include: ['person'],
+    include: ['company', 'persons'],
   });
   if (!position) {
     return next(new ErrorResponse('Position does not exist', 401));

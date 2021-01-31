@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         // default wäre person.user_user_id
       });
       Person.belongsTo(models.company, {
+        // targetKey: 'company_id',
+        // foreignKey: 'company_id',
         targetKey: 'company_id',
         foreignKey: 'company_id',
       });
@@ -62,6 +64,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       ...sequelize.options,
       modelName: 'person',
+      name: { singular: 'person', plural: 'persons' },
       tableName: 'persons', // anstatt people
     }
   );

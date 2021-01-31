@@ -77,6 +77,7 @@ function generateData(amount) {
   let data = [];
   for (let i = 0; i < amount; i++) {
     let id = i + 1;
+    process.stdout.write('Generating data point # ' + id + '\r');
     data.push(generateDataPoint({ id }));
   }
   return data;

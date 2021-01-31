@@ -18,6 +18,10 @@ module.exports = {
         transaction,
         // logging: console.log,
       });
+      await queryInterface.addIndex('persons', ['company_id'], {
+        transaction,
+        // logging: console.log,
+      });
       await queryInterface.addIndex('positions', ['company_id'], {
         transaction,
         // logging: console.log,
@@ -33,6 +37,10 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.removeIndex('users', 'users_company_id_user_id', {
+        transaction,
+        // logging: console.log,
+      });
+      await queryInterface.removeIndex('persons', 'positions_company_id', {
         transaction,
         // logging: console.log,
       });

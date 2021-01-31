@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'company_id',
       });
       User.hasOne(models.person, {
-        // sourceKey: 'user_id',
         foreignKey: { name: 'user_id', unique: true },
       });
     }
