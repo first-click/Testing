@@ -7,8 +7,13 @@ const Person = sequelize.models.person;
 //@route GET /api/v1/users
 //@access Private/Admin
 exports.getUsers = asyncHandler(async (req, res) => {
-  const users = await User.findAll({ include: 'computers' });
-  res.json(users);
+  const users = await User.findAll({ 
+    // include: 'computers'
+   });
+  res.status(200).json({
+    success: true,
+    data: users,
+  });
 });
 
 //@desc Get single user
@@ -16,18 +21,14 @@ exports.getUsers = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.getUser = asyncHandler(async (req, res) => {
   const user = await User.findByPk(req.params.user_id, {
-    include: ['computers', 'person', 'positions'],
+    include: ['person'],
     // include: { all: true },
   });
-  // console.log(await user.getComputers());
 
-  const person = await user.createPerson({
-    person_first_name: 'Julian',
-    person_last_name: 'Leweling',
+  res.status(200).json({
+    success: true,
+    data: user,
   });
-  console.log(person);
-
-  res.json(user);
 });
 
 //@desc Create new user
@@ -41,9 +42,12 @@ exports.createUser = asyncHandler(async (req, res) => {
     email,
     password,
     role,
-    company_id
+    company_id,
   });
-  res.json(user);
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
 });
 
 //@desc Update a user
@@ -59,8 +63,10 @@ exports.updateUser = asyncHandler(async (req, res) => {
     },
     { where: { user_id: req.params.user_id } }
   );
-
-  res.json(user);
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
 });
 
 //@desc Delete a user

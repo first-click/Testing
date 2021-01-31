@@ -9,10 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Position.belongsToMany(models.person, {
-        through: 'persons_positions',
+        through: models.person_position,
+        // through: 'persons_positions',
         foreignKey: 'position_id',
         // as: 'users',
         // foreignKey: 'position_id',
+      });
+      Position.hasMany(models.person_position, {
+        foreignKey: 'position_id',
       });
       Position.belongsTo(models.company, {
         targetKey: 'company_id',
@@ -29,15 +33,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       company_id: {
+        allowNull: false,
         references: {
           model: 'company',
           key: 'company_id',
         },
         type: DataTypes.INTEGER,
       },
-      title: DataTypes.STRING,
-      department: DataTypes.STRING,
-      department_short: DataTypes.STRING,
+      // TO DO: Also do Validation in Migration
+      title: { allowNull: false, type: DataTypes.STRING },
+      department: { allowNull: false, type: DataTypes.STRING },
+      department_short: { allowNull: false, type: DataTypes.STRING },
     },
     {
       sequelize,

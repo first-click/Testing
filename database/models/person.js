@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'company_id',
       });
       Person.belongsToMany(models.position, {
-        through: 'persons_positions',
+        through: models.person_position,
+        // through: 'persons_positions',
+        foreignKey: 'person_id',
+      });
+      Person.hasMany(models.person_position, {
         foreignKey: 'person_id',
       });
       Person.hasMany(models.computer, {

@@ -24,6 +24,8 @@ module.exports = {
               model: 'persons',
               key: 'person_id',
             },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
           },
           position_id: {
             type: Sequelize.INTEGER,
@@ -32,6 +34,8 @@ module.exports = {
               model: 'positions',
               key: 'position_id',
             },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
           },
           created_at: {
             type: Sequelize.DATE,
