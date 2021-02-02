@@ -16,6 +16,7 @@ exports.getPersonsPositions = asyncHandler(async (req, res) => {
       // },
     }
   );
+  console.log(edges)
   res.status(200).json({
     success: true,
     data: edges,

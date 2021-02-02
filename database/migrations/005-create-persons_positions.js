@@ -17,9 +17,13 @@ module.exports = {
       await queryInterface.createTable(
         'persons_positions',
         {
-          person_id: {
+          person_position_id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
+          },
+          person_id: {
+            type: Sequelize.INTEGER,
+            // primaryKey: true,
             references: {
               model: 'persons',
               key: 'person_id',
@@ -29,7 +33,7 @@ module.exports = {
           },
           position_id: {
             type: Sequelize.INTEGER,
-            primaryKey: true,
+            // primaryKey: true,
             references: {
               model: 'positions',
               key: 'position_id',

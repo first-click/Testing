@@ -10,14 +10,12 @@ module.exports = (sequelize, DataTypes) => {
         // default wäre person.user_user_id
       });
       Person.belongsTo(models.company, {
-        // targetKey: 'company_id',
-        // foreignKey: 'company_id',
         targetKey: 'company_id',
         foreignKey: 'company_id',
       });
       Person.belongsToMany(models.position, {
         through: models.person_position,
-        // through: 'persons_positions',
+        // uniqueKey: 'person_position_id',
         foreignKey: 'person_id',
       });
       Person.hasMany(models.person_position, {

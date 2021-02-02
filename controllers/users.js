@@ -7,9 +7,9 @@ const Person = sequelize.models.person;
 //@route GET /api/v1/users
 //@access Private/Admin
 exports.getUsers = asyncHandler(async (req, res) => {
-  const users = await User.findAll({ 
+  const users = await User.findAll({
     // include: 'computers'
-   });
+  });
   res.status(200).json({
     success: true,
     data: users,
@@ -61,11 +61,11 @@ exports.updateUser = asyncHandler(async (req, res) => {
       name: name,
       email: email,
     },
-    { where: { user_id: req.params.user_id } }
+    { where: { user_id: req.params.user_id }, returning: true, plain: true }
   );
   res.status(200).json({
     success: true,
-    data: user,
+    data: user[1],
   });
 });
 

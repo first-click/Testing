@@ -65,6 +65,7 @@ function generateDataPoint({ id }) {
       updated_at: date,
     },
     person_position: {
+      person_position_id: id,
       person_id: id,
       position_id: id,
       created_at: date,

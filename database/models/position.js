@@ -10,10 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Position.belongsToMany(models.person, {
         through: models.person_position,
-        // through: 'persons_positions',
+        // uniqueKey: 'person_position_id',
         foreignKey: 'position_id',
-        // as: 'users',
-        // foreignKey: 'position_id',
       });
       Position.hasMany(models.person_position, {
         foreignKey: 'position_id',

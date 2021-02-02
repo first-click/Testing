@@ -78,11 +78,16 @@ exports.updatePosition = asyncHandler(async (req, res) => {
       department,
       department_short,
     },
-    { where: { position_id: req.params.position_id } }
+    {
+      where: { position_id: req.params.position_id },
+      returning: true,
+      plain: true,
+    }
   );
+
   res.status(200).json({
     success: true,
-    data: position,
+    data: position[1],
   });
 });
 

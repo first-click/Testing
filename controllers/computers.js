@@ -6,9 +6,10 @@ const Computer = sequelize.models.computer;
 //@route GET /api/v1/computers
 //@access Private/Admin
 exports.getComputers = asyncHandler(async (req, res) => {
-  const computers = await Computer.findAll(
+  const computers = await Computer
+    .findAll
     // { include: 'person' }
-    );
+    ();
   res.json(computers);
 });
 
@@ -17,9 +18,10 @@ exports.getComputers = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.getComputer = asyncHandler(async (req, res) => {
   const computer = await Computer.findByPk(req.params.computer_id, {
-    include: 'person',
+    include: { model: sequelize.models.person, as: 'owner' },
   });
   console.log(await computer.getPerson());
+  computer.get;
   res.json(computer);
 });
 
