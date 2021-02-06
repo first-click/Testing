@@ -47,6 +47,7 @@ function generateDataPoint({ id }) {
       role: role,
       created_at: date,
       updated_at: date,
+      junk: 'junk',
     },
     person: {
       company_id: companyId,
@@ -55,6 +56,7 @@ function generateDataPoint({ id }) {
       person_last_name: lastName,
       created_at: date,
       updated_at: date,
+      junk: 'junk',
     },
     position: {
       company_id: companyId,
@@ -63,6 +65,7 @@ function generateDataPoint({ id }) {
       department_short: departmentShort,
       created_at: date,
       updated_at: date,
+      junk: 'junk',
     },
     person_position: {
       person_position_id: id,
@@ -70,6 +73,7 @@ function generateDataPoint({ id }) {
       position_id: id,
       created_at: date,
       updated_at: date,
+      junk: 'junk',
     },
   };
 }

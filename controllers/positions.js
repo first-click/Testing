@@ -8,14 +8,13 @@ const Position = sequelize.models.position;
 //@access Private/Admin
 exports.getPositions = asyncHandler(async (req, res) => {
   const { company_id } = req.user;
-  const positions = await Position.findAll(
-    // { include: 'person' }
-    {
-      where: {
-        company_id,
-      },
-    }
-  );
+  const positions = await Position.findAll({
+    include: 'persons',
+    where: {
+      company_id,
+    },
+    //limit: 50,
+  });
   res.status(200).json({
     success: true,
     data: positions,

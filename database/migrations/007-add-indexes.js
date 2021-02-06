@@ -36,15 +36,15 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.removeIndex('users', 'users_company_id_user_id', {
+      await queryInterface.removeIndex('users', ['company_id', 'user_id'], {
         transaction,
         // logging: console.log,
       });
-      await queryInterface.removeIndex('persons', 'positions_company_id', {
+      await queryInterface.removeIndex('persons', ['company_id'], {
         transaction,
         // logging: console.log,
       });
-      await queryInterface.removeIndex('positions', 'positions_company_id', {
+      await queryInterface.removeIndex('positions', ['company_id'], {
         transaction,
         // logging: console.log,
       });
