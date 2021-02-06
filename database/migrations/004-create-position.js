@@ -34,7 +34,7 @@ module.exports = {
             type: Sequelize.DATE,
             allowNull: false,
           },
-          junk: Sequelize.CHAR(1000),
+          // junk: Sequelize.CHAR(1000),
         },
         { transaction }
       );

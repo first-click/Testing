@@ -21,8 +21,14 @@ exports.getCompanies = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.getCompany = asyncHandler(async (req, res, next) => {
   const company = await Company.findByPk(req.params.company_id, {
-    include: ['persons', 'users'], // problematische Suche
-    // include: ['persons', 'users', 'positions'], // breakt die App!
+    // include: ['persons', 'positions'], // problematische Suche
+    where: {
+      $company_id$: {
+        [sequelize.Sequelize.Op.eq]: req.params.company_id,
+      },
+    },
+    // include: ['persons', 'positions'],
+    include: ['persons'],
   });
   // console.log(await company.getUsers())
   if (!company) {
