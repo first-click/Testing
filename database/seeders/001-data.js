@@ -15,7 +15,7 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    const data = generateData(500);
+    const data = generateData(2000);
     const users = data.map((entry) => entry.user);
     const persons = data.map((entry) => entry.person);
     const positions = data.map((entry) => entry.position);

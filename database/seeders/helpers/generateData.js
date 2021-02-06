@@ -83,7 +83,20 @@ function generateData(amount) {
   for (let i = 0; i < amount; i++) {
     let id = i + 1;
     process.stdout.write('Generating data point # ' + id + '\r');
-    data.push(generateDataPoint({ id }));
+    let newEntry = generateDataPoint({ id });
+    // Edit duplicates generated from Faker.js
+    if (data.some((entry) => entry.user.name === newEntry.user.name)) {
+      newEntry.user.name = newEntry.user.name.concat(['_dup_', id.toString()]);
+    }
+    if (data.some((entry) => entry.user.email === newEntry.user.email)) {
+      newEntry.user.email = ''.concat([
+        'dup_',
+        id.toString(),
+        '_',
+        newEntry.user.email,
+      ]);
+    }
+    data.push(newEntry);
   }
   return data;
 }
