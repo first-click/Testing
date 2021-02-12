@@ -20,16 +20,21 @@ exports.getCompanies = asyncHandler(async (req, res) => {
 //@route GET /api/v1/companies/:company_id
 //@access Private/Admin
 exports.getCompany = asyncHandler(async (req, res, next) => {
-  const company = await Company.findByPk(req.params.company_id, {
-    include: ['persons', 'users', 'positions'],
-  });
-  // console.log(await company.getUsers())
+  // const company = await Company.findByPk(req.params.company_id, {
+  //   include: ['persons', 'users', 'positions'],
+  // });
+  const company = await Company.findByPk(req.params.company_id);
+
+  const users = await company.getUsers();
+  const persons = await company.getPersons();
+  const positions = await company.getPositions();
+
   if (!company) {
     return next(new ErrorResponse('Company does not exist', 401));
   }
   res.status(200).json({
     success: true,
-    data: company,
+    data: { company, persons, users },
   });
 });
 

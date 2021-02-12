@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'company_id',
         foreignKey: 'company_id',
       });
+
       Person.belongsToMany(models.position, {
         through: models.person_position,
         // uniqueKey: 'person_position_id',

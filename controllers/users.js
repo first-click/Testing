@@ -16,20 +16,63 @@ exports.getUsers = asyncHandler(async (req, res) => {
   });
 });
 
+//@desc search Post
+//@route GET /api/v1/posts
+//@access Public
+exports.getP = asyncHandler(async (req, res) => {
+  const post = await sequelize.query(
+    `
+SELECT *
+FROM ${Post.tableName}
+WHERE _search @@ plainto_tsquery('english', :query);
+`,
+    {
+      model: Post,
+      replacements: { query: 'one1' },
+    }
+  );
+  res.json(post);
+});
 //@desc Get single user
 //@route GET /api/v1/users/:user_id
 //@access Private/Admin
 exports.getUser = asyncHandler(async (req, res) => {
-  const user = await User.findByPk(req.params.user_id, {
-    include: ['person'],
-    // include: { all: true },
-  });
+  const user = await sequelize.query(`
+  WITH RECURSIVE u AS (
+    SELECT company_id
+    FROM  users
+    WHERE  company_id = 1
+    UNION ALL
+    SELECT company_id
+            FROM   users
+            WHERE  company_id = 1)
+    
+     
+ SELECT company_id
+ FROM   u
+ WHERE  company_id = 1;
+  `);
 
   res.status(200).json({
     success: true,
     data: user,
   });
 });
+
+// //@desc Get single user
+// //@route GET /api/v1/users/:user_id
+// //@access Private/Admin
+// exports.getUser = asyncHandler(async (req, res) => {
+//   const user = await User.findByPk(req.params.user_id, {
+//     include: ['person'],
+//     // include: { all: true },
+//   });
+
+//   res.status(200).json({
+//     success: true,
+//     data: user,
+//   });
+// });
 
 //@desc Create new user
 //@route POST /api/v1/users

@@ -64,6 +64,7 @@ module.exports = {
         },
         { transaction }
       );
+
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -82,3 +83,24 @@ module.exports = {
     }
   },
 };
+
+// module.exports = {
+//   up: async (queryIntereface) => {
+//      const transaction = await queryInterface.sequelize.transaction();
+
+//      try {
+//        await queryInterface.createTable('Todos', {
+//          // columns...
+//        }, { transaction });
+//        await queryInterface.addIndex('Todos', ['author_id', 'title'], { transaction }));
+
+//        await transaction.commit();
+//      } catch (err) {
+//        await transaction.rollback();
+//        throw err;
+//      }
+//    },
+
+//    down: async (queryInterface) {
+
+//      etc...

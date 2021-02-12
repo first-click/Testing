@@ -15,11 +15,12 @@ module.exports = {
    * @returns
    */
   up: async (queryInterface, Sequelize) => {
-    const data = generateData(50);
+    const data = generateData(10);
     const users = data.map((entry) => entry.user);
     const persons = data.map((entry) => entry.person);
     const positions = data.map((entry) => entry.position);
     const persons_positions = data.map((entry) => entry.person_position);
+    let date = new Date();
 
     try {
       await queryInterface.bulkInsert('users', users, {});
@@ -28,6 +29,145 @@ module.exports = {
       await queryInterface.bulkInsert(
         'persons_positions',
         persons_positions,
+        {}
+      );
+      await queryInterface.bulkInsert(
+        'employees',
+        [
+          {
+            employee_id: 1,
+            manager_id: null,
+            name: 'Amy',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 2,
+            manager_id: 1,
+            name: 'Bob',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 3,
+            manager_id: 1,
+            name: 'Nancy',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 4,
+            manager_id: 1,
+            name: 'George',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 5,
+            manager_id: 2,
+            name: 'Rachel',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 6,
+            manager_id: 2,
+            name: 'Georgia',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 7,
+            manager_id: 3,
+            name: 'Kevin',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 8,
+            manager_id: 4,
+            name: 'Leonard',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 9,
+            manager_id: 4,
+            name: 'William',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 10,
+            manager_id: 5,
+            name: 'David',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 11,
+            manager_id: 5,
+            name: 'Lydia',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 12,
+            manager_id: 5,
+            name: 'Mary',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 13,
+            manager_id: 6,
+            name: 'Lisa',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 14,
+            manager_id: 6,
+            name: 'Scott',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 15,
+            manager_id: 8,
+            name: 'Tim',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 16,
+            manager_id: 9,
+            name: 'Dorothy',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 17,
+            manager_id: 9,
+            name: 'Sarah',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 18,
+            manager_id: 9,
+            name: 'Rebecca',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            employee_id: 19,
+            manager_id: 9,
+            name: 'Larry',
+            created_at: date,
+            updated_at: date,
+          },
+        ],
         {}
       );
     } catch (err) {
@@ -49,5 +189,6 @@ module.exports = {
     await queryInterface.bulkDelete('persons', null, {});
     await queryInterface.bulkDelete('positions', null, {});
     await queryInterface.bulkDelete('persons_positions', null, {});
+    await queryInterface.bulkDelete('employees', null, {});
   },
 };

@@ -19,8 +19,8 @@ router.route('/').get(protect, getCompanies).post(protect, createCompany);
 
 router
   .route('/:company_id')
-  .put(protect, updateCompany)
-  .get(protect, getCompany)
-  .delete(protect, deleteCompany);
+  .put(updateCompany)
+  .get(getCompany)
+  .delete(deleteCompany);
 
 module.exports = router;
