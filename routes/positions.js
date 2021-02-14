@@ -15,7 +15,8 @@ const { protect } = require('../middleware/auth');
 // router.use(protect);
 // router.use(authorize('admin'));
 
-router.route('/').get(protect, getPositions).post(protect, createPosition);
+//router.route('/').get(protect, getPositions).post(protect, createPosition);
+router.route('/').get(getPositions);
 
 router
   .route('/:position_id')

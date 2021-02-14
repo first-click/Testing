@@ -32,7 +32,7 @@ const Employee = sequelize.models.employee;
 exports.getEmployees = asyncHandler(async (req, res) => {
   const result = await Employee.findAll({
     where: {
-      manager_id: 1,
+      manager_id: 2,
     },
     include: [
       {
@@ -45,7 +45,7 @@ exports.getEmployees = asyncHandler(async (req, res) => {
   let test = Object.assign({}, result);
 
   //Object.assign({}, result)
-  res.send(test);
+  res.send(result);
 });
 
 //@desc Get all positions
