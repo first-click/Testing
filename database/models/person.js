@@ -4,11 +4,17 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Person extends Model {
     static associate(models) {
+      Person.hasMany(models.person, {
+        onDelete: 'CASCADE',
+        foreignKey: 'manager_id',
+        as: 'children',
+      });
       Person.belongsTo(models.user, {
         targetKey: 'user_id',
         foreignKey: 'user_id', // = person.user_id
         // default wäre person.user_user_id
       });
+
       Person.belongsTo(models.company, {
         targetKey: 'company_id',
         foreignKey: 'company_id',
@@ -36,13 +42,19 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      manager_id: {
+        references: {
+          model: 'person',
+          key: 'person_id',
+        },
+        type: DataTypes.INTEGER,
+      },
       user_id: {
         references: {
           model: 'user',
           key: 'user_id',
         },
-        unique: true, // Muss unique sein. Dieser Eintrag führt
-        // aber nicht zu einem validation error. Der kommt von der DB.
+        unique: true,
         type: DataTypes.INTEGER,
       },
       company_id: {
