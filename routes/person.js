@@ -1,5 +1,5 @@
 const express = require('express');
-const { getEmployees } = require('../controllers/employees');
+const { getPersons } = require('../controllers/persons');
 
 const router = express({ mergeParams: true });
 //const { protect } = require('../middleware/auth');
@@ -9,6 +9,6 @@ const router = express({ mergeParams: true });
 // router.use(protect);
 // router.use(authorize('admin'));
 
-router.route('/').get(getEmployees);
+router.route('/').get(getPersons);
 
 module.exports = router;

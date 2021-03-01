@@ -4,16 +4,22 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Posting extends Model {
     static associate(models) {
-      Posting.hasMany(models.user, {
-        foreignKey: 'user_id',
+      Posting.belongsToMany(models.user, {
+        through: models.posting_user,
+        foreignKey: 'posting_id',
+      });
+      Posting.belongsToMany(models.person, {
+        through: models.posting_person,
+        foreignKey: 'posting_id',
       });
       Posting.belongsTo(models.company, {
-        targetKey: 'company_id',
         foreignKey: 'company_id',
       });
       Posting.belongsTo(models.position, {
-        targetKey: 'postion_id',
         foreignKey: 'position_id',
+      });
+      Posting.hasOne(models.address, {
+        foreignKey: 'posting_id',
       });
     }
   }
@@ -25,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+
       company_id: {
         allowNull: false,
         references: {
@@ -33,11 +40,32 @@ module.exports = (sequelize, DataTypes) => {
         },
         type: DataTypes.INTEGER,
       },
+
+      position_id: {
+        allowNull: false,
+        references: {
+          model: 'position',
+          key: 'position_id',
+        },
+        type: DataTypes.INTEGER,
+      },
+      address_id: {
+        allowNull: false,
+        references: {
+          model: 'address',
+          key: 'address_id',
+        },
+        type: DataTypes.INTEGER,
+      },
       posting_role: {
         allowNull: false,
         type: DataTypes.ENUM(['creator', 'editor', 'reader', 'applicant']),
       },
-      posting_date: {
+      posting_startdate: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      posting_enddate: {
         allowNull: false,
         type: DataTypes.DATE,
       },

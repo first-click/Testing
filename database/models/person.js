@@ -10,25 +10,23 @@ module.exports = (sequelize, DataTypes) => {
         as: 'children',
       });
       Person.belongsTo(models.user, {
-        targetKey: 'user_id',
-        foreignKey: 'user_id', // = person.user_id
-        // default wäre person.user_user_id
+        foreignKey: 'user_id',
       });
 
       Person.belongsTo(models.company, {
-        targetKey: 'company_id',
         foreignKey: 'company_id',
       });
 
       Person.belongsToMany(models.position, {
         through: models.person_position,
-        // uniqueKey: 'person_position_id',
         foreignKey: 'person_id',
       });
-      Person.hasMany(models.person_position, {
+      Person.belongsToMany(models.posting, {
+        through: models.posting_person,
         foreignKey: 'person_id',
       });
-      Person.hasMany(models.computer, {
+      Person.belongsToMany(models.address, {
+        through: models.person_address,
         foreignKey: 'person_id',
       });
     }
