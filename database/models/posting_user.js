@@ -49,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       ...sequelize.options,
       modelName: 'posting_user',
       name: { singular: 'posting_user', plural: 'postings_users' },
+      tableName: 'postings_users',
     }
   );
   return PostingUser;

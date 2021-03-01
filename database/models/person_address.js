@@ -2,34 +2,28 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class PersonPosition extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class PersonAddress extends Model {
     static associate(models) {
-      PersonPosition.belongsTo(models.person, {
+      PersonAddress.belongsTo(models.person, {
         targetKey: 'person_id',
         foreignKey: 'person_id',
       });
-      PersonPosition.belongsTo(models.position, {
-        targetKey: 'position_id',
-        foreignKey: 'position_id',
+      PersonAddress.belongsTo(models.address, {
+        targetKey: 'address_id',
+        foreignKey: 'address_id',
       });
     }
   }
 
-  PersonPosition.init(
+  PersonAddress.init(
     {
-      person_position_id: {
+      person_address_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
       person_id: {
-        // primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
           model: 'person',
@@ -38,12 +32,11 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      position_id: {
-        // primaryKey: true,
+      address_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'position',
-          key: 'position_id',
+          model: 'address',
+          key: 'address_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -52,9 +45,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'person_position',
-      name: { singular: 'person_position', plural: 'persons_positions' },
-      tableName: 'persons_positions',
+      modelName: 'person_address',
+      name: { singular: 'person_address', plural: 'persons_addresses' },
+      tableName: 'persons_addresses',
     }
   );
   return PersonPosition;

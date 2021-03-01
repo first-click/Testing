@@ -6,10 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Posting.belongsToMany(models.user, {
         through: models.posting_user,
+        targetKey: 'posting_id',
         foreignKey: 'posting_id',
       });
       Posting.belongsToMany(models.person, {
         through: models.posting_person,
+        targetKey: 'posting_id',
         foreignKey: 'posting_id',
       });
       Posting.belongsTo(models.company, {
@@ -53,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: {
           model: 'address',
-          key: 'address_id',
+          key: 'posting_id',
         },
         type: DataTypes.INTEGER,
       },
@@ -106,6 +108,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       ...sequelize.options,
       modelName: 'posting',
+      name: { singular: 'posting', plural: 'postings' },
+      tableName: 'postings',
     }
   );
   return Posting;

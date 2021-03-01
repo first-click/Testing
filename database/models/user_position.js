@@ -3,17 +3,12 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class PersonPosition extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      PersonPosition.belongsTo(models.person, {
-        targetKey: 'person_id',
-        foreignKey: 'person_id',
+      UserPosition.belongsTo(models.user, {
+        targetKey: 'user_id',
+        foreignKey: 'user_id',
       });
-      PersonPosition.belongsTo(models.position, {
+      UserPosition.belongsTo(models.position, {
         targetKey: 'position_id',
         foreignKey: 'position_id',
       });
@@ -22,18 +17,17 @@ module.exports = (sequelize, DataTypes) => {
 
   PersonPosition.init(
     {
-      person_position_id: {
+      user_position_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      person_id: {
-        // primaryKey: true,
+      user_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'person',
-          key: 'person_id',
+          model: 'user',
+          key: 'user_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -52,10 +46,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'person_position',
-      name: { singular: 'person_position', plural: 'persons_positions' },
-      tableName: 'persons_positions',
+      modelName: 'user_position',
+      name: { singular: 'user_position', plural: 'users_positions' },
+      tableName: 'users_positions',
     }
   );
-  return PersonPosition;
+  return UserPosition;
 };
