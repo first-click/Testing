@@ -59,10 +59,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         type: DataTypes.INTEGER,
       },
-      posting_role: {
-        allowNull: false,
-        type: DataTypes.ENUM(['creator', 'editor', 'reader', 'applicant']),
-      },
+
       posting_startdate: {
         allowNull: false,
         type: DataTypes.DATE,
