@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         type: DataTypes.INTEGER,
       },
-      // TO DO: Also do Validation in Migration
+
       title: { allowNull: false, type: DataTypes.STRING },
       department: { allowNull: false, type: DataTypes.STRING },
       department_short: { allowNull: false, type: DataTypes.STRING },

@@ -11,6 +11,7 @@
     "test": "jest --watch --runInBand --detectOpenHandles",
     "test1": "jest --watch --coverage --runInBand --detectOpenHandles",
     "coverage": "jest --coverage --watchAll",
+    "initialize-migration": "sequelize db:migrate:undo:all && sequelize db:migrate",
     "initialize-seed": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:undo:all && sequelize db:seed:all",
     "rollback": "sequelize db:migrate:undo:all"
   },

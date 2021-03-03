@@ -5,17 +5,13 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Company extends Model {
     static associate(models) {
-      Company.belongsToMany(models.user, {
-        foreignKey: 'company_id',
-      });
-      Posting.belongsToMany(models.user, {
-        through: models.posting_user,
-        foreignKey: 'user_id',
-      });
       Company.hasMany(models.person, {
         foreignKey: 'company_id',
       });
       Company.hasMany(models.position, {
+        foreignKey: 'company_id',
+      });
+      Company.hasMany(models.posting, {
         foreignKey: 'company_id',
       });
     }
@@ -28,28 +24,33 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      position_id: {
+        allowNull: false,
+        references: {
+          model: 'position',
+          key: 'position_id',
+        },
+        type: DataTypes.INTEGER,
+      },
+      postinng_id: {
+        allowNull: false,
+        references: {
+          model: 'posting',
+          key: 'posting_id',
+        },
+        type: DataTypes.INTEGER,
+      },
       company_name: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
-        validate: {
-          len: {
-            args: [1, 20],
-            msg: 'please use the right length',
-          },
-        },
       },
     },
     {
       sequelize,
       ...sequelize.options,
-      hooks: {
-        // beforeCreate: (user) => {
-        //   const salt = bcrypt.genSaltSync();
-        //   user.password = bcrypt.hashSync(user.password, salt);
-        // },
-      },
       modelName: 'company',
+      name: { singular: 'company', plural: 'companies' },
       tableName: 'companies',
     }
   );

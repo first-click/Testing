@@ -4,11 +4,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Posting extends Model {
     static associate(models) {
-      Posting.belongsToMany(models.user, {
-        through: models.posting_user,
-        targetKey: 'posting_id',
-        foreignKey: 'posting_id',
-      });
       Posting.belongsToMany(models.person, {
         through: models.posting_person,
         targetKey: 'posting_id',
@@ -19,9 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       });
       Posting.belongsTo(models.position, {
         foreignKey: 'position_id',
-      });
-      Posting.hasOne(models.address, {
-        foreignKey: 'posting_id',
       });
     }
   }
@@ -51,14 +43,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         type: DataTypes.INTEGER,
       },
-      address_id: {
-        allowNull: false,
-        references: {
-          model: 'address',
-          key: 'posting_id',
-        },
-        type: DataTypes.INTEGER,
-      },
+      // address_id: {
+      //   allowNull: false,
+      //   references: {
+      //     model: 'address',
+      //     key: 'posting_id',
+      //   },
+      //   type: DataTypes.INTEGER,
+      // },
 
       posting_startdate: {
         allowNull: false,

@@ -14,15 +14,30 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.addColumn(
-        'employees',
-        'manager_id',
+      await queryInterface.createTable(
+        'roles',
         {
-          type: Sequelize.INTEGER,
+          role_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+          },
+          posting_role: {
+            type: DataTypes.STRING,
+            defaultValue: 'reader',
+            validate: {
+              isIn: [['creator', 'editor', 'reader', 'applicant']],
+            },
+          },
 
-          references: {
-            model: 'employees',
-            key: 'employee_id',
+          created_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          updated_at: {
+            type: Sequelize.DATE,
+            allowNull: false,
           },
         },
         { transaction }
@@ -33,14 +48,10 @@ module.exports = {
       throw err;
     }
   },
-
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.removeColumn('employees', 'manager_id', {
-        transaction,
-      });
-
+      await queryInterface.dropTable('roles', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

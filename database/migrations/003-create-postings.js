@@ -15,44 +15,56 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'users',
+        'postings',
         {
-          user_id: {
+          posting_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
           },
-          name: {
-            type: Sequelize.STRING,
-            unique: true,
+
+          posting_startdate: {
             allowNull: false,
-            validate: {
-              len: {
-                args: [1, 20],
-                msg: 'please use the right length',
-              },
-            },
+            type: Sequelize.DATE,
           },
-          email: {
-            type: Sequelize.STRING,
-            unique: true,
+          posting_enddate: {
             allowNull: false,
-            validate: { isEmail: true },
+            type: Sequelize.DATE,
           },
-          password: {
-            type: Sequelize.STRING,
+          posting_description: {
             allowNull: false,
-          },
-          role: {
             type: Sequelize.STRING,
-            validate: {
-              isIn: [['user', 'admin', 'publisher']],
-            },
-            defaultValue: 'user',
           },
-          reset_password_token: Sequelize.STRING,
-          reset_password_expire: Sequelize.DATE,
+          posting_benefits: {
+            allowNull: false,
+            type: Sequelize.STRING,
+          },
+          posting_qualifications: {
+            allowNull: false,
+            type: Sequelize.STRING,
+          },
+          posting_working_hours: {
+            allowNull: false,
+            type: Sequelize.NUMBER,
+          },
+          posting_contact_person: {
+            allowNull: false,
+            type: Sequelize.STRING,
+          },
+          posting_contact_email: {
+            allowNull: false,
+            type: Sequelize.STRING,
+          },
+          posting_contact_phonenumber: {
+            allowNull: false,
+            type: Sequelize.NUMBER,
+          },
+          posting_salary: {
+            allowNull: false,
+            type: Sequelize.NUMBER,
+          },
+
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -64,18 +76,16 @@ module.exports = {
         },
         { transaction }
       );
-
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
       throw err;
     }
   },
-
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('users', { transaction });
+      await queryInterface.dropTable('postings', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -83,24 +93,3 @@ module.exports = {
     }
   },
 };
-
-// module.exports = {
-//   up: async (queryIntereface) => {
-//      const transaction = await queryInterface.sequelize.transaction();
-
-//      try {
-//        await queryInterface.createTable('Todos', {
-//          // columns...
-//        }, { transaction });
-//        await queryInterface.addIndex('Todos', ['author_id', 'title'], { transaction }));
-
-//        await transaction.commit();
-//      } catch (err) {
-//        await transaction.rollback();
-//        throw err;
-//      }
-//    },
-
-//    down: async (queryInterface) {
-
-//      etc...
