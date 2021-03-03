@@ -14,12 +14,12 @@ module.exports = (sequelize, DataTypes) => {
 
       Person.belongsToMany(models.position, {
         through: models.person_position,
-        targetKey: 'person_id',
+
         foreignKey: 'person_id',
       });
       Person.belongsToMany(models.posting, {
         through: models.posting_person,
-        targetKey: 'person_id',
+
         foreignKey: 'person_id',
       });
     }

@@ -5,11 +5,9 @@ module.exports = (sequelize, DataTypes) => {
   class PostingPerson extends Model {
     static associate(models) {
       PostingPerson.belongsTo(models.posting, {
-        targetKey: 'posting_id',
         foreignKey: 'posting_id',
       });
       PostingPerson.belongsTo(models.person, {
-        targetKey: 'person_id',
         foreignKey: 'person_id',
       });
     }

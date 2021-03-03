@@ -24,7 +24,7 @@ module.exports = {
             primaryKey: true,
           },
           posting_role: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             defaultValue: 'reader',
             validate: {
               isIn: [['creator', 'editor', 'reader', 'applicant']],

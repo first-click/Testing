@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Posting.belongsToMany(models.person, {
         through: models.posting_person,
-        targetKey: 'posting_id',
+
         foreignKey: 'posting_id',
       });
       Posting.belongsTo(models.company, {

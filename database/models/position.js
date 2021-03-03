@@ -10,21 +10,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Position.belongsToMany(models.person, {
         through: models.person_position,
-        targetKey: 'position_id',
-        foreignKey: 'position_id',
-      });
-      Position.belongsToMany(models.user, {
-        through: models.user_position,
-        targetKey: 'position_id',
+
         foreignKey: 'position_id',
       });
 
       Position.belongsTo(models.company, {
-        targetKey: 'company_id',
         foreignKey: 'company_id',
       });
       Position.belongsTo(models.posting, {
-        targetKey: 'posting_id',
         foreignKey: 'posting_id',
       });
     }

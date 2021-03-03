@@ -7,9 +7,7 @@ const Person = sequelize.models.person;
 //@route GET /api/v1/users
 //@access Private/Admin
 exports.getUsers = asyncHandler(async (req, res) => {
-  const users = await User.findAll({
-    // include: 'computers'
-  });
+  const users = await User.findAll({});
   res.status(200).json({
     success: true,
     data: users,

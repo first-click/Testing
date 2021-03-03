@@ -2,20 +2,23 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class PersonPosition extends Model {
+  class Person_position extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
-      PersonPosition.belongsTo(models.person, {
-        targetKey: 'person_id',
+      Person_position.belongsTo(models.person, {
         foreignKey: 'person_id',
       });
-      PersonPosition.belongsTo(models.position, {
-        targetKey: 'position_id',
+      Person_position.belongsTo(models.position, {
         foreignKey: 'position_id',
       });
     }
   }
 
-  PersonPosition.init(
+  Person_position.init(
     {
       person_position_id: {
         allowNull: false,
@@ -52,5 +55,5 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'persons_positions',
     }
   );
-  return PersonPosition;
+  return Person_position;
 };
