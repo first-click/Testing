@@ -46,7 +46,7 @@ module.exports = {
           },
           posting_working_hours: {
             allowNull: false,
-            type: Sequelize.NUMBER,
+            type: Sequelize.INTEGER,
           },
           posting_contact_person: {
             allowNull: false,
@@ -58,11 +58,11 @@ module.exports = {
           },
           posting_contact_phonenumber: {
             allowNull: false,
-            type: Sequelize.NUMBER,
+            type: Sequelize.INTEGER,
           },
           posting_salary: {
             allowNull: false,
-            type: Sequelize.NUMBER,
+            type: Sequelize.INTEGER,
           },
 
           created_at: {

@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       posting_working_hours: {
         allowNull: false,
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       posting_contact_person: {
         allowNull: false,
@@ -86,11 +86,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       posting_contact_phonenumber: {
         allowNull: false,
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       posting_salary: {
         allowNull: false,
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
     },
     {
