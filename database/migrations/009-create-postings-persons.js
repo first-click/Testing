@@ -15,9 +15,9 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'postings_positions',
+        'postings_persons',
         {
-          posting_position_id: {
+          posting_person_id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
           },
@@ -31,12 +31,12 @@ module.exports = {
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
           },
-          position_id: {
+          person_id: {
             type: Sequelize.INTEGER,
             // primaryKey: true,
             references: {
-              model: 'positions',
-              key: 'position_id',
+              model: 'persons',
+              key: 'person_id',
             },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
@@ -61,7 +61,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('postings_positions', { transaction });
+      await queryInterface.dropTable('postings_persons', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

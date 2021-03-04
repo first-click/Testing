@@ -51,18 +51,7 @@ module.exports = {
         },
         { transaction }
       );
-      await queryInterface.addColumn(
-        'positions', // name of Source model
-        'posting_id', // name of the key we're adding
-        {
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'postings', // name of Target model
-            key: 'posting_id', // key in Target model that we're referencing
-          },
-        },
-        { transaction }
-      );
+
       await queryInterface.addColumn(
         'postings', // name of Source model
         'company_id', // name of the key we're adding

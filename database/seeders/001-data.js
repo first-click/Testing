@@ -21,10 +21,10 @@ module.exports = {
     const persons = data.map((entry) => entry.person);
     const postings = data.map((entry) => entry.posting);
     const positions = data.map((entry) => entry.position);
-    const roles = data.map((entry) => entry.role);
-    const postings_positions = data.map((entry) => entry.posting_position);
+    // const roles = data.map((entry) => entry.role);
+    const postings_persons = data.map((entry) => entry.posting_person);
     const persons_positions = data.map((entry) => entry.person_position);
-    let date = new Date();
+    // const roles_persons = data.map((entry) => entry.roles_persons);
 
     try {
       await queryInterface.bulkInsert('users', users, {});
@@ -32,17 +32,14 @@ module.exports = {
       await queryInterface.bulkInsert('persons', persons, {});
       await queryInterface.bulkInsert('postings', postings, {});
       await queryInterface.bulkInsert('positions', positions, {});
-      await queryInterface.bulkInsert('roles', roles, {});
+      // await queryInterface.bulkInsert('roles', roles, {});
       await queryInterface.bulkInsert(
         'persons_positions',
         persons_positions,
         {}
       );
-      await queryInterface.bulkInsert(
-        'postings_positions',
-        postings_positions,
-        {}
-      );
+      await queryInterface.bulkInsert('postings_persons', postings_persons, {});
+      // await queryInterface.bulkInsert('roles_persons', roles_persons, {});
     } catch (err) {
       console.log(err);
     }
@@ -65,6 +62,7 @@ module.exports = {
     await queryInterface.bulkDelete('positions', null, {});
     await queryInterface.bulkDelete('roles', null, {});
     await queryInterface.bulkDelete('persons_positions', null, {});
-    await queryInterface.bulkDelete('postings_positions', null, {});
+    await queryInterface.bulkDelete('postings_persons', null, {});
+    await queryInterface.bulkDelete('roles_persons', null, {});
   },
 };

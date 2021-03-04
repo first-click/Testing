@@ -24,22 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      position_id: {
-        allowNull: false,
-        references: {
-          model: 'position',
-          key: 'position_id',
-        },
-        type: DataTypes.INTEGER,
-      },
-      postinng_id: {
-        allowNull: false,
-        references: {
-          model: 'posting',
-          key: 'posting_id',
-        },
-        type: DataTypes.INTEGER,
-      },
+
       company_name: {
         type: DataTypes.STRING,
         unique: true,

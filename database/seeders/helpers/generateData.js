@@ -39,7 +39,10 @@ function generateDataPoint({ id }) {
   let postingDescription = faker.lorem.sentence();
   let postingBenefits = faker.lorem.sentence();
   let postingQualifications = faker.lorem.sentence();
-  let postingWorkingHours = faker.random.numnber();
+  let postingWorkingHours = faker.random.number({
+    min: 10,
+    max: 40,
+  });
   let postingContactPerson = faker.name.firstName() + faker.name.lastName();
   let postingContactPhonenumber = faker.phone.phoneNumber();
   let postingSalary = faker.finance.amount();
@@ -72,11 +75,10 @@ function generateDataPoint({ id }) {
     },
     posting: {
       company_id: companyId,
-
+      position_id: id,
       posting_startdate: date,
       posting_enddate: date,
       posting_description: postingDescription,
-
       posting_benefits: postingBenefits,
       posting_qualifications: postingQualifications,
       posting_working_hours: postingWorkingHours,

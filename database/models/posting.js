@@ -9,10 +9,12 @@ module.exports = (sequelize, DataTypes) => {
 
         foreignKey: 'posting_id',
       });
+
       Posting.belongsTo(models.company, {
         foreignKey: 'company_id',
       });
       Posting.belongsTo(models.position, {
+        targetKey: 'position_id',
         foreignKey: 'position_id',
       });
     }

@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
       Position.belongsTo(models.company, {
         foreignKey: 'company_id',
       });
-      Position.belongsTo(models.posting, {
-        foreignKey: 'posting_id',
+      Position.hasMany(models.posting, {
+        foreignKey: 'position_id',
       });
     }
   }
