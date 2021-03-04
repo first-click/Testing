@@ -58,7 +58,7 @@ module.exports = {
           },
           posting_contact_phonenumber: {
             allowNull: false,
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
           },
           posting_salary: {
             allowNull: false,

@@ -39,13 +39,10 @@ function generateDataPoint({ id }) {
   let postingDescription = faker.lorem.sentence();
   let postingBenefits = faker.lorem.sentence();
   let postingQualifications = faker.lorem.sentence();
-  let postingWorkingHours = faker.random.number({
-    min: 10,
-    max: 40,
-  });
+  let postingWorkingHours = 10;
   let postingContactPerson = faker.name.firstName() + faker.name.lastName();
   let postingContactPhonenumber = faker.phone.phoneNumber();
-  let postingSalary = faker.finance.amount();
+  let postingSalary = 1000;
 
   let date = new Date();
   return {

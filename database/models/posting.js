@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'company_id',
       });
       Posting.belongsTo(models.position, {
-        targetKey: 'position_id',
         foreignKey: 'position_id',
       });
     }
@@ -88,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       posting_contact_phonenumber: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
       posting_salary: {
         allowNull: false,
