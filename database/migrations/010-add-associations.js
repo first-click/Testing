@@ -94,9 +94,7 @@ module.exports = {
       await queryInterface.removeColumn('positions', 'company_id', {
         transaction,
       });
-      await queryInterface.removeColumn('positions', 'posting_id', {
-        transaction,
-      });
+
       await queryInterface.removeColumn('postings', 'company_id', {
         transaction,
       });
