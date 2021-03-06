@@ -18,7 +18,7 @@ exports.getPersons = asyncHandler(async (req, res) => {
 //@route GET /api/v1/persons/:person_id
 //@access Private/Admin
 exports.getPerson = asyncHandler(async (req, res) => {
-  const person = await Persons.findByPk(req.params.person_id);
+  const person = await Person.findByPk(req.params.person_id);
 
   res.status(200).json({
     success: true,

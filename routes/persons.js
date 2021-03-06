@@ -14,7 +14,7 @@ const { protect, authorize } = require('../middleware/auth');
 //router.use(protect);
 //router.use(authorize('admin'));
 
-router.route('/').get(getPerson).post(createPerson);
+router.route('/').get(getPersons).post(createPerson);
 
 router
   .route('/:person_id')
