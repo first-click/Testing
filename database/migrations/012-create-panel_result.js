@@ -15,34 +15,69 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'users',
+        'panel_results',
         {
-          user_id: {
+          panel_result_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
           },
-          name: {
+          panel_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'panels',
+              key: 'panel_id',
+            },
+            allowNull: false,
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+          },
+          interviewer_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'users',
+              key: 'user_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+          },
+          applicant_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'users',
+              key: 'user_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+          },
+          panel_panel_item_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'panel_panel_items',
+              key: 'panel_panel_item_id',
+            },
+            allowNull: false,
+            onUpdate: 'CASCADE',
+            onDelete: 'RESTRICT',
+          },
+          scale: {
             type: Sequelize.STRING,
-            unique: true,
             allowNull: false,
           },
-          email: {
-            type: Sequelize.STRING,
-            unique: true,
-            allowNull: false,
-          },
-          password: {
+          type: {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          role: {
+          value_number: {
             type: Sequelize.STRING,
-            defaultValue: 'user',
           },
-          reset_password_token: Sequelize.STRING,
-          reset_password_expire: Sequelize.DATE,
+          value_string: {
+            type: Sequelize.STRING,
+          },
+          comment: {
+            type: Sequelize.STRING,
+          },
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -51,7 +86,6 @@ module.exports = {
             type: Sequelize.DATE,
             allowNull: false,
           },
-          // junk: Sequelize.CHAR(1000),
         },
         { transaction }
       );
@@ -65,7 +99,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('users', { transaction });
+      await queryInterface.dropTable('panel_results', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

@@ -9,11 +9,12 @@ const Position = sequelize.models.position;
 exports.getPositions = asyncHandler(async (req, res) => {
   const { company_id } = req.user;
   const positions = await Position.findAll({
-    include: 'persons',
+    // include: 'persons',
     where: {
       company_id,
     },
     //limit: 50,
+    limit: 5,
   });
   res.status(200).json({
     success: true,

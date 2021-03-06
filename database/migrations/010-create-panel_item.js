@@ -15,34 +15,48 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'users',
+        'panel_items',
         {
-          user_id: {
+          panel_item_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
           },
+          company_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'companies',
+              key: 'company_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+            allowNull: false,
+          },
+          creator_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'users',
+              key: 'user_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+          },
           name: {
             type: Sequelize.STRING,
-            unique: true,
             allowNull: false,
           },
-          email: {
+          description: {
             type: Sequelize.STRING,
-            unique: true,
-            allowNull: false,
           },
-          password: {
+          scale: {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          role: {
+          type: {
             type: Sequelize.STRING,
-            defaultValue: 'user',
+            allowNull: false,
           },
-          reset_password_token: Sequelize.STRING,
-          reset_password_expire: Sequelize.DATE,
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -51,7 +65,6 @@ module.exports = {
             type: Sequelize.DATE,
             allowNull: false,
           },
-          // junk: Sequelize.CHAR(1000),
         },
         { transaction }
       );
@@ -65,7 +78,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('users', { transaction });
+      await queryInterface.dropTable('panel_items', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

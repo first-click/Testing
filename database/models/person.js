@@ -40,6 +40,8 @@ module.exports = (sequelize, DataTypes) => {
           model: 'user',
           key: 'user_id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         unique: true, // Muss unique sein. Dieser Eintrag führt
         // aber nicht zu einem validation error. Der kommt von der DB.
         type: DataTypes.INTEGER,
@@ -49,6 +51,8 @@ module.exports = (sequelize, DataTypes) => {
           model: 'company',
           key: 'company_id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         type: DataTypes.INTEGER,
       },
       person_first_name: {

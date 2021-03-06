@@ -25,6 +25,15 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      person_id: {
+        references: {
+          model: 'persons',
+          key: 'person_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+        type: DataTypes.INTEGER,
+      },
       serial_number: DataTypes.STRING,
     },
     {

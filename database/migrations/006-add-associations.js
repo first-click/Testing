@@ -23,6 +23,8 @@ module.exports = {
             model: 'companies', // name of Target model
             key: 'company_id', // key in Target model that we're referencing
           },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
         },
         { transaction }
       );
@@ -35,6 +37,8 @@ module.exports = {
             model: 'companies', // name of Target model
             key: 'company_id', // key in Target model that we're referencing
           },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
         },
         { transaction }
       );
@@ -47,6 +51,8 @@ module.exports = {
             model: 'companies', // name of Target model
             key: 'company_id', // key in Target model that we're referencing
           },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
         },
         { transaction }
       );
@@ -60,6 +66,8 @@ module.exports = {
             model: 'users', // name of Target model
             key: 'user_id', // key in Target model that we're referencing
           },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
         },
         { transaction }
       );
@@ -72,6 +80,8 @@ module.exports = {
             model: 'persons', // name of Target model
             key: 'person_id', // key in Target model that we're referencing
           },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
         },
         { transaction }
       );

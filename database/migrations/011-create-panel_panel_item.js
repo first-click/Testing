@@ -15,34 +15,59 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'users',
+        'panel_panel_items',
         {
-          user_id: {
+          panel_panel_item_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
           },
+          panel_item_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'panel_items',
+              key: 'panel_item_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+            // allowNull: false,
+          },
+          panel_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'panels',
+              key: 'panel_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+            allowNull: false,
+          },
+          // company_id: {
+          //   type: Sequelize.INTEGER,
+          //   references: {
+          //     model: 'company',
+          //     key: 'company_id',
+          //   },
+          // },
+
+          // Werte werden kopiert. Damit kann das PanelItem für zukünftige Panels
+          // verändert oder gelöscht werden
           name: {
             type: Sequelize.STRING,
-            unique: true,
             allowNull: false,
           },
-          email: {
+          description: {
             type: Sequelize.STRING,
-            unique: true,
-            allowNull: false,
           },
-          password: {
+          scale: {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          role: {
+          type: {
             type: Sequelize.STRING,
-            defaultValue: 'user',
+            allowNull: false,
           },
-          reset_password_token: Sequelize.STRING,
-          reset_password_expire: Sequelize.DATE,
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -51,7 +76,6 @@ module.exports = {
             type: Sequelize.DATE,
             allowNull: false,
           },
-          // junk: Sequelize.CHAR(1000),
         },
         { transaction }
       );
@@ -65,7 +89,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('users', { transaction });
+      await queryInterface.dropTable('panel_panel_items', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

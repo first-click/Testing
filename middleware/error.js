@@ -2,10 +2,9 @@ const ErrorResponse = require('../utils/errorResponse');
 
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
-
   error.message = err.message;
 
-  // console.log(error);
+  // console.log(error.message);
 
   // Postgres bad ObjectId
   if (err.name == 'CastError') {
@@ -26,6 +25,14 @@ const errorHandler = (err, req, res, next) => {
     const message = Object.values(err.errors).map((val) => val.message);
     error = new ErrorResponse(message, 400);
   }
+
+  if (err.name === 'SequelizeUniqueConstraintError') {
+    console.log(err);
+    // const message = Object.values(err.errors).map((val) => val.message);
+    error = new ErrorResponse('Object already exists', 400);
+  }
+
+  // console.log(err.name);
 
   res.status(error.statusCode || 500).json({
     success: false,

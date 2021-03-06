@@ -7,11 +7,11 @@ const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const { sequelize } = require('../database/models');
 const User = sequelize.models.user;
+const Person = sequelize.models.person;
 
 // Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
-
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
@@ -19,6 +19,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     // Set token from Bearer token in header
     token = req.headers.authorization.split(' ')[1];
     // Set token from cookie
+    // console.log('token', token);
   }
   // else if (req.cookies.token) {
   //   token = req.cookies.token;
@@ -26,15 +27,19 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   // Make sure token exists
   if (!token) {
+    // console.log('no token');
     return next(new ErrorResponse('Not authorized to access this route', 401));
   }
 
   try {
     // Verify token
     const decoded = await jwtr.verify(token, process.env.JWT_SECRET);
+    // console.log('decoded', decoded);
     req.user = await User.findByPk(decoded.user_id);
+    // console.log('req.user', req.user);
     next();
   } catch (err) {
+    // console.log('err', err);
     return next(new ErrorResponse('Not authorized to access this route', 401));
   }
 });

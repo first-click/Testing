@@ -15,34 +15,35 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'users',
+        'panel_stakeholders',
         {
-          user_id: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            autoIncrement: true,
+          // composite primary key
+          panel_id: {
             primaryKey: true,
-          },
-          name: {
-            type: Sequelize.STRING,
-            unique: true,
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'panels',
+              key: 'panel_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
             allowNull: false,
           },
-          email: {
-            type: Sequelize.STRING,
-            unique: true,
+          user_id: {
+            primaryKey: true,
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'users',
+              key: 'user_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
             allowNull: false,
           },
-          password: {
+          panel_role: {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          role: {
-            type: Sequelize.STRING,
-            defaultValue: 'user',
-          },
-          reset_password_token: Sequelize.STRING,
-          reset_password_expire: Sequelize.DATE,
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -51,7 +52,6 @@ module.exports = {
             type: Sequelize.DATE,
             allowNull: false,
           },
-          // junk: Sequelize.CHAR(1000),
         },
         { transaction }
       );
@@ -65,7 +65,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('users', { transaction });
+      await queryInterface.dropTable('panel_stakeholders', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
