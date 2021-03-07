@@ -47,7 +47,7 @@ module.exports = {
         },
         {
           role_id: 3,
-          role_pers: 'psting_reader',
+          role_pers: 'posting_reader',
           created_at: date,
           updated_at: date,
         },

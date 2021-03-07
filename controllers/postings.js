@@ -3,6 +3,7 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Posting = sequelize.models.posting;
 const Posting_person = sequelize.models.posting_person;
+const Role_person = sequelize.models.role_person;
 
 //@desc Get all postings
 //@route GET /api/v1/postings
@@ -30,7 +31,7 @@ exports.getPosting = asyncHandler(async (req, res) => {
 //@desc Create new posting
 //@route POST /api/v1/postings
 //@access Private/Admin
-exports.createPosting = asyncHandler(async (req, res) => {
+exports.createPosting = asyncHandler(async (req, res, next) => {
   const {
     person_id,
     position_id,
@@ -62,14 +63,24 @@ exports.createPosting = asyncHandler(async (req, res) => {
     posting_salary,
   });
 
-  await Posting_person.create({
-    posting_id: posting.posting_id,
-    person_id: person_id,
+  const role = await Role_person.findAll({
+    where: { person_id },
   });
-  res.status(200).json({
-    success: true,
-    data: posting,
-  });
+
+  if (role[0].dataValues.role_pers === 'posting_creator') {
+    await Posting_person.create({
+      posting_id: posting.posting_id,
+      person_id: person_id,
+    });
+    res.status(200).json({
+      success: true,
+      data: posting,
+    });
+  } else {
+    return next(
+      new ErrorResponse(`You are not authorized to create a posting`, 401)
+    );
+  }
 });
 
 //@desc Update a post
