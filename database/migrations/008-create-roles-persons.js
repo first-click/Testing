@@ -19,11 +19,13 @@ module.exports = {
         {
           role_person_id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
             primaryKey: true,
           },
           role_id: {
             type: Sequelize.INTEGER,
-            // primaryKey: true,
+            primaryKey: true,
             references: {
               model: 'roles',
               key: 'role_id',
@@ -33,13 +35,17 @@ module.exports = {
           },
           person_id: {
             type: Sequelize.INTEGER,
-            // primaryKey: true,
+            primaryKey: true,
             references: {
               model: 'persons',
               key: 'person_id',
             },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
+          },
+          role_pers: {
+            allowNull: false,
+            type: Sequelize.STRING,
           },
           created_at: {
             type: Sequelize.DATE,

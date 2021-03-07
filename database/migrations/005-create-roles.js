@@ -23,12 +23,17 @@ module.exports = {
             autoIncrement: true,
             primaryKey: true,
           },
-          posting_role: {
+          // posting_role: {
+          //   type: Sequelize.STRING,
+          //   defaultValue: 'reader',
+          //   validate: {
+          //     isIn: [['creator', 'editor', 'reader', 'applicant']],
+          //   },
+          // },
+
+          role_pers: {
+            allowNull: false,
             type: Sequelize.STRING,
-            defaultValue: 'reader',
-            validate: {
-              isIn: [['creator', 'editor', 'reader', 'applicant']],
-            },
           },
 
           created_at: {

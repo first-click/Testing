@@ -20,12 +20,16 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      posting_role: {
+      // posting_role: {
+      //   type: DataTypes.STRING,
+      //   defaultValue: 'reader',
+      //   validate: {
+      //     isIn: [['creator', 'editor', 'reader', 'applicant']],
+      //   },
+
+      role_pers: {
+        allowNull: false,
         type: DataTypes.STRING,
-        defaultValue: 'reader',
-        validate: {
-          isIn: [['creator', 'editor', 'reader', 'applicant']],
-        },
       },
     },
     {

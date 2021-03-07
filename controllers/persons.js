@@ -2,6 +2,8 @@ const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Person = sequelize.models.person;
+const Role = sequelize.models.role;
+const Role_person = sequelize.models.role_person;
 
 //@desc Get all persons
 //@route GET /api/v1/persons
@@ -31,11 +33,22 @@ exports.getPerson = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.createPerson = asyncHandler(async (req, res) => {
   // Insert into table
-  const { person_first_name, person_last_name } = req.body;
+  const { person_first_name, person_last_name, role_pers } = req.body;
   const person = await Person.create({
     person_first_name,
     person_last_name,
   });
+
+  const role = await Role.findAll({
+    where: { role_pers },
+  });
+
+  await Role_person.create({
+    role_id: role[0].dataValues.role_id,
+    person_id: person.person_id,
+    role_pers: role_pers,
+  });
+
   res.status(200).json({
     success: true,
     data: person,

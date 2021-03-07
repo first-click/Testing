@@ -2,6 +2,7 @@ const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Posting = sequelize.models.posting;
+const Posting_person = sequelize.models.posting_person;
 
 //@desc Get all postings
 //@route GET /api/v1/postings
@@ -30,8 +31,8 @@ exports.getPosting = asyncHandler(async (req, res) => {
 //@route POST /api/v1/postings
 //@access Private/Admin
 exports.createPosting = asyncHandler(async (req, res) => {
-  // Insert into table
   const {
+    person_id,
     position_id,
     company_id,
     posting_startdate,
@@ -59,6 +60,11 @@ exports.createPosting = asyncHandler(async (req, res) => {
     posting_contact_email,
     posting_contact_phonenumber,
     posting_salary,
+  });
+
+  await Posting_person.create({
+    posting_id: posting.posting_id,
+    person_id: person_id,
   });
   res.status(200).json({
     success: true,

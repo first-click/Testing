@@ -19,6 +19,8 @@ module.exports = {
         {
           person_position_id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
             primaryKey: true,
           },
           person_id: {

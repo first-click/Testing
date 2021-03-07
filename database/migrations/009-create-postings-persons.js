@@ -18,12 +18,15 @@ module.exports = {
         'postings_persons',
         {
           posting_person_id: {
-            type: Sequelize.INTEGER,
             primaryKey: true,
+            allowNull: false,
+            autoIncrement: true,
+            type: Sequelize.INTEGER,
           },
+
           posting_id: {
             type: Sequelize.INTEGER,
-            // primaryKey: true,
+            primaryKey: true,
             references: {
               model: 'postings',
               key: 'posting_id',
@@ -33,7 +36,7 @@ module.exports = {
           },
           person_id: {
             type: Sequelize.INTEGER,
-            // primaryKey: true,
+            primaryKey: true,
             references: {
               model: 'persons',
               key: 'person_id',

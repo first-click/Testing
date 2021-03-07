@@ -62,6 +62,7 @@ function generateDataPoint({ id }) {
       created_at: date,
       updated_at: date,
     },
+
     position: {
       company_id: companyId,
       title: title,
@@ -94,7 +95,6 @@ function generateDataPoint({ id }) {
       updated_at: date,
     },
     posting_person: {
-      posting_person_id: id,
       posting_id: id,
       person_id: id,
       created_at: date,

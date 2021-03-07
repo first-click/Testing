@@ -9,14 +9,17 @@ const {
 
 const router = express({ mergeParams: true });
 
-const { protect, authorize } = require('../middleware/auth');
+const { protect, authorize, authorizePosting } = require('../middleware/auth');
 
-router.route('/').get(getPostings).post(createPosting);
+router
+  .route('/')
+  .get(getPostings)
+  .post(authorizePosting('posting_creator'), createPosting);
 
 router
   .route('/:posting_id')
-  .put(updatePosting)
+  .put(authorizePosting('posting_creator', 'posting_editor'), updatePosting)
   .get(getPosting)
-  .delete(deletePosting);
+  .delete(authorizePosting('posting_creator'), deletePosting);
 
 module.exports = router;

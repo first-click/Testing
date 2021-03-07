@@ -53,3 +53,18 @@ exports.authorize = (...roles) => {
     next();
   };
 };
+
+// Grant access to posting
+exports.authorizePosting = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.role.role_pers)) {
+      return next(
+        new ErrorResponse(
+          `User role ${req.role.role_pers} is not authorized to access this route`,
+          403
+        )
+      );
+    }
+    next();
+  };
+};

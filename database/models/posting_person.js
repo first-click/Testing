@@ -16,13 +16,14 @@ module.exports = (sequelize, DataTypes) => {
   Posting_person.init(
     {
       posting_person_id: {
+        primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true,
         type: DataTypes.INTEGER,
       },
+
       posting_id: {
-        // primaryKey: true,
+        primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
           model: 'posting',
@@ -32,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       },
       person_id: {
-        // primaryKey: true,
+        primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
           model: 'person',

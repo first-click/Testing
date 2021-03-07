@@ -21,8 +21,9 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+
       role_id: {
-        // primaryKey: true,
+        primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
           model: 'role',
@@ -32,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       },
       person_id: {
-        // primaryKey: true,
+        primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
           model: 'person',
@@ -40,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+      },
+      role_pers: {
+        allowNull: false,
+        type: DataTypes.STRING,
       },
     },
     {
