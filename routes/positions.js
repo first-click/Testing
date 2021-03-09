@@ -5,6 +5,7 @@ const {
   createPosition,
   updatePosition,
   deletePosition,
+  queryPositions,
 } = require('../controllers/positions');
 
 const router = express({ mergeParams: true });
@@ -16,6 +17,7 @@ const { protect } = require('../middleware/auth');
 // router.use(authorize('admin'));
 
 router.route('/').get(protect, getPositions).post(protect, createPosition);
+router.route('/query/:encodedQueryString').get(protect, queryPositions);
 
 router
   .route('/:position_id')

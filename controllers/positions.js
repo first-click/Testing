@@ -1,4 +1,4 @@
-const { sequelize } = require('../database/models');
+const { sequelize, Sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Position = sequelize.models.position;
@@ -16,6 +16,66 @@ exports.getPositions = asyncHandler(async (req, res) => {
     //limit: 50,
     limit: 5,
   });
+  res.status(200).json({
+    success: true,
+    data: positions,
+  });
+});
+
+//@desc Query positions
+//@route GET /api/v1/positions/query/:encodedQueryString
+//@access Private/Admin
+exports.queryPositions = asyncHandler(async (req, res) => {
+  const { company_id } = req.user;
+  let queryString = Buffer.from(
+    req.params.encodedQueryString,
+    'base64'
+  ).toString('binary');
+  console.log(queryString);
+  // const positions = await Position.findAll({
+  //   // include: 'persons',
+  //   where: {
+  //     company_id,
+  //   },
+  //   //limit: 50,
+  //   limit: 5,
+  // });
+
+  const positions = await Position.findAll({
+    where: {
+      [Sequelize.Op.and]: [
+        { company_id },
+        {
+          [Sequelize.Op.or]: [
+            {
+              position_id: {
+                [Sequelize.Op.eq]: isNaN(parseInt(queryString))
+                  ? undefined
+                  : queryString,
+              },
+            },
+            {
+              title: {
+                [Sequelize.Op.like]: `%${queryString}%`,
+              },
+            },
+            {
+              department: {
+                [Sequelize.Op.like]: `%${queryString}%`,
+              },
+            },
+            {
+              department_short: {
+                [Sequelize.Op.like]: `%${queryString}%`,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    limit: 10,
+  });
+
   res.status(200).json({
     success: true,
     data: positions,
