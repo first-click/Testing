@@ -2,20 +2,20 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Role_person extends Model {
+  class Role_user extends Model {
     static associate(models) {
-      Role_person.belongsTo(models.role, {
+      Role_user.belongsTo(models.role, {
         foreignKey: 'role_id',
       });
-      Role_person.belongsTo(models.person, {
-        foreignKey: 'person_id',
+      Role_user.belongsTo(models.user, {
+        foreignKey: 'user_id',
       });
     }
   }
 
-  Role_person.init(
+  Role_user.init(
     {
-      role_person_id: {
+      role_user_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -32,17 +32,17 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      person_id: {
+      user_id: {
         primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
-          model: 'person',
-          key: 'person_id',
+          model: 'user',
+          key: 'user_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      role_pers: {
+      role_user: {
         allowNull: false,
         type: DataTypes.STRING,
       },
@@ -50,10 +50,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'role_person',
-      name: { singular: 'role_person', plural: 'roles_persons' },
-      tableName: 'roles_persons',
+      modelName: 'role_user',
+      name: { singular: 'role_user', plural: 'roles_users' },
+      tableName: 'roles_users',
     }
   );
-  return Role_person;
+  return Role_user;
 };

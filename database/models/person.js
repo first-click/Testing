@@ -17,16 +17,6 @@ module.exports = (sequelize, DataTypes) => {
 
         foreignKey: 'person_id',
       });
-      Person.belongsToMany(models.posting, {
-        through: models.posting_person,
-
-        foreignKey: 'person_id',
-      });
-      Person.belongsToMany(models.role, {
-        through: models.role_person,
-
-        foreignKey: 'person_id',
-      });
     }
   }
 

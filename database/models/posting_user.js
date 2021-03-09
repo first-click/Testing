@@ -2,20 +2,20 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Posting_person extends Model {
+  class Posting_user extends Model {
     static associate(models) {
-      Posting_person.belongsTo(models.posting, {
+      Posting_user.belongsTo(models.posting, {
         foreignKey: 'posting_id',
       });
-      Posting_person.belongsTo(models.person, {
-        foreignKey: 'person_id',
+      Posting_user.belongsTo(models.user, {
+        foreignKey: 'user_id',
       });
     }
   }
 
-  Posting_person.init(
+  Posting_user.init(
     {
-      posting_person_id: {
+      posting_user_id: {
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
@@ -32,12 +32,12 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      person_id: {
+      user_id: {
         primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
-          model: 'person',
-          key: 'person_id',
+          model: 'user',
+          key: 'user_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -46,10 +46,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'posting_person',
-      name: { singular: 'posting_person', plural: 'postings_persons' },
-      tableName: 'postings_persons',
+      modelName: 'posting_user',
+      name: { singular: 'posting_user', plural: 'postings_users' },
+      tableName: 'postings_users',
     }
   );
-  return Posting_person;
+  return Posting_user;
 };

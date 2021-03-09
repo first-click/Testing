@@ -2,14 +2,17 @@ const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Posting = sequelize.models.posting;
-const Posting_person = sequelize.models.posting_person;
-const Role_person = sequelize.models.role_person;
+const Posting_user = sequelize.models.posting_user;
 
 //@desc Get all postings
 //@route GET /api/v1/postings
 //@access Private/Admin
-exports.getPostings = asyncHandler(async (req, res) => {
+exports.getPostings = asyncHandler(async (req, res, next) => {
   const postings = await Posting.findAll({});
+  if (!postings) {
+    return next(new ErrorResponse(`Postings not found`, 404));
+  }
+
   res.status(200).json({
     success: true,
     data: postings,
@@ -19,9 +22,13 @@ exports.getPostings = asyncHandler(async (req, res) => {
 //@desc Get single post
 //@route GET /api/v1/posts/:post_id
 //@access Private/Admin
-exports.getPosting = asyncHandler(async (req, res) => {
+exports.getPosting = asyncHandler(async (req, res, next) => {
   const posting = await Posting.findByPk(req.params.posting_id);
-  console.log(posting);
+
+  if (!posting) {
+    return next(new ErrorResponse(`Posting not found`, 404));
+  }
+
   res.status(200).json({
     success: true,
     data: posting,
@@ -33,7 +40,6 @@ exports.getPosting = asyncHandler(async (req, res) => {
 //@access Private/Admin
 exports.createPosting = asyncHandler(async (req, res, next) => {
   const {
-    person_id,
     position_id,
     company_id,
     posting_startdate,
@@ -63,30 +69,25 @@ exports.createPosting = asyncHandler(async (req, res, next) => {
     posting_salary,
   });
 
-  const role = await Role_person.findAll({
-    where: { person_id },
+  const posting_user = await Posting_user.create({
+    posting_id: posting.posting_id,
+    user_id: user_id,
   });
 
-  if (role[0].dataValues.role_pers === 'posting_creator') {
-    await Posting_person.create({
-      posting_id: posting.posting_id,
-      person_id: person_id,
-    });
-    res.status(200).json({
-      success: true,
-      data: posting,
-    });
-  } else {
-    return next(
-      new ErrorResponse(`You are not authorized to create a posting`, 401)
-    );
+  if (!posting && !posting_user) {
+    return next(new ErrorResponse(`Posting could not be created`, 404));
   }
+
+  res.status(200).json({
+    success: true,
+    data: posting,
+  });
 });
 
 //@desc Update a post
 //@route PUT /api/v1/postings/:posting_id
 //@access Private/Admin
-exports.updatePosting = asyncHandler(async (req, res) => {
+exports.updatePosting = asyncHandler(async (req, res, next) => {
   const {
     posting_startdate,
     posting_enddate,
@@ -119,6 +120,10 @@ exports.updatePosting = asyncHandler(async (req, res) => {
       plain: true,
     }
   );
+
+  if (!posting) {
+    return next(new ErrorResponse(`Posting could not be updated`, 404));
+  }
   res.status(200).json({
     success: true,
     data: posting[1],
@@ -128,10 +133,14 @@ exports.updatePosting = asyncHandler(async (req, res) => {
 //@desc Delete a posting
 //@route DELETE /api/v1/postings/:posting_id
 //@access Private/Admin
-exports.deletePosting = asyncHandler(async (req, res) => {
+exports.deletePosting = asyncHandler(async (req, res, next) => {
   const posting = await Posting.destroy({
     where: { posting_id: req.params.posting_id },
   });
+
+  if (!posting) {
+    return next(new ErrorResponse(`Posting could not be deleted`, 404));
+  }
   res.status(200).json({
     success: true,
     data: {},

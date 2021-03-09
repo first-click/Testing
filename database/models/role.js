@@ -4,8 +4,8 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Role extends Model {
     static associate(models) {
-      Role.belongsToMany(models.person, {
-        through: models.role_person,
+      Role.belongsToMany(models.user, {
+        through: models.role_user,
 
         foreignKey: 'role_id',
       });
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       //     isIn: [['creator', 'editor', 'reader', 'applicant']],
       //   },
 
-      role_pers: {
+      role_user: {
         allowNull: false,
         type: DataTypes.STRING,
       },

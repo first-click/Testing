@@ -7,6 +7,7 @@ const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const { sequelize } = require('../database/models');
 const User = sequelize.models.user;
+const Role_user = sequelize.models.role_user;
 
 // Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
@@ -48,6 +49,21 @@ exports.authorize = (...roles) => {
           `User role ${req.user.role} is not authorized to access this route`,
           403
         )
+      );
+    }
+    next();
+  };
+};
+
+exports.authorizePosting = (...roles) => {
+  return async (req, res, next) => {
+    const role = await Role_user.findAll({
+      where: { user_id: req.user.user_id },
+    });
+
+    if (!roles.includes(role)) {
+      return next(
+        new ErrorResponse(`User is not authorized to create a panel`, 403)
       );
     }
     next();

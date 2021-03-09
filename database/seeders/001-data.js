@@ -21,10 +21,10 @@ module.exports = {
     const persons = data.map((entry) => entry.person);
     const positions = data.map((entry) => entry.position);
     const postings = data.map((entry) => entry.posting);
-    // const roles = data.map((entry) => entry.role);
-    const postings_persons = data.map((entry) => entry.posting_person);
+
+    const postings_users = data.map((entry) => entry.posting_user);
     const persons_positions = data.map((entry) => entry.person_position);
-    // const roles_persons = data.map((entry) => entry.roles_persons);
+
     const date = new Date();
 
     try {
@@ -35,25 +35,25 @@ module.exports = {
       await queryInterface.bulkInsert('roles', [
         {
           role_id: 1,
-          role_pers: 'posting_creator',
+          role_user: 'posting_creator',
           created_at: date,
           updated_at: date,
         },
         {
           role_id: 2,
-          role_pers: 'posting_editor',
+          role_user: 'posting_editor',
           created_at: date,
           updated_at: date,
         },
         {
           role_id: 3,
-          role_pers: 'posting_reader',
+          role_user: 'posting_reader',
           created_at: date,
           updated_at: date,
         },
         {
           role_id: 4,
-          role_pers: 'posting_applicant',
+          role_user: 'posting_applicant',
           created_at: date,
           updated_at: date,
         },
@@ -63,7 +63,7 @@ module.exports = {
         persons_positions,
         {}
       );
-      await queryInterface.bulkInsert('postings_persons', postings_persons, {});
+      await queryInterface.bulkInsert('postings_users', postings_users, {});
       // await queryInterface.bulkInsert('roles_persons', roles_persons, {});
     } catch (err) {
       console.log(err);
@@ -86,7 +86,6 @@ module.exports = {
     await queryInterface.bulkDelete('postings', null, {});
     await queryInterface.bulkDelete('roles', null, {});
     await queryInterface.bulkDelete('persons_positions', null, {});
-    await queryInterface.bulkDelete('postings_persons', null, {});
-    //await queryInterface.bulkDelete('roles_persons', null, {});
+    await queryInterface.bulkDelete('postings_users', null, {});
   },
 };

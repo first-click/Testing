@@ -8,13 +8,15 @@ const sendEmail = require('../utils/sendEmail');
 const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
+const Role = sequelize.models.role;
+const Role_user = sequelize.models.role_user;
 
 //@desc Register
 //@route Post /api/v1/auth/register
 //@access Public
 
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, role_user } = req.body;
   //Check for user
   const userExists = await User.findOne({
     where: { email: email },
@@ -31,6 +33,20 @@ exports.register = asyncHandler(async (req, res, next) => {
     });
 
     sendTokenResponse(user, 200, res);
+
+    const role_posting = await Role.findAll({
+      where: { role_user },
+    });
+
+    const role_user_posting = await Role_user.create({
+      role_id: role_posting[0].dataValues.role_id,
+      user_id: user.user_id,
+      role_user: role_user,
+    });
+
+    if (!user && !role_posting && !role_user_posting) {
+      return next(new ErrorResponse('User could not be created', 401));
+    }
   }
 });
 
@@ -111,6 +127,10 @@ exports.getMe = asyncHandler(async (req, res, next) => {
     },
   });
 
+  if (!user) {
+    return next(new ErrorResponse('No user could be found', 401));
+  }
+
   res.status(200).json({
     success: true,
     data: user,
@@ -132,6 +152,10 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
     },
     { where: { user_id: req.user.user_id.toString() } }
   );
+
+  if (!user) {
+    return next(new ErrorResponse('User could not be updated', 401));
+  }
 
   res.status(200).json({
     success: true,
@@ -156,6 +180,10 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   user.password = user.beforeSave(req.body.newPassword);
 
   await user.save();
+
+  if (!user) {
+    return next(new ErrorResponse('User cound not be found.', 401));
+  }
 
   sendTokenResponse(user, 200, res);
 });

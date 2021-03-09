@@ -94,9 +94,9 @@ function generateDataPoint({ id }) {
       created_at: date,
       updated_at: date,
     },
-    posting_person: {
+    posting_user: {
       posting_id: id,
-      person_id: id,
+      user_id: id,
       created_at: date,
       updated_at: date,
     },
