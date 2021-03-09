@@ -58,13 +58,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      role: {
-        type: DataTypes.STRING,
-        defaultValue: 'user',
-        validate: {
-          isIn: [['user', 'admin', 'publisher']],
-        },
-      },
+
       reset_password_token: DataTypes.STRING,
       reset_password_expire: DataTypes.DATE,
     },

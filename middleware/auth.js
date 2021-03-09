@@ -40,15 +40,34 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 });
 
+// // Grant access to specific roles
+// exports.authorize = (...roles) => {
+//   return (req, res, next) => {
+//     if (!roles.includes(req.user.role)) {
+//       return next(
+//         new ErrorResponse(
+//           `User role ${req.user.role} is not authorized to access this route`,
+//           403
+//         )
+//       );
+//     }
+//     next();
+//   };
+// };
+
 // Grant access to specific roles
 exports.authorize = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+  return async (req, res, next) => {
+    const role = await Role_user.findAll({
+      where: {
+        user_id: req.user.user_id,
+        role_user: 'admin' || 'publisher' || 'user',
+      },
+    });
+
+    if (!roles.includes(role[0].dataValues.role_user)) {
       return next(
-        new ErrorResponse(
-          `User role ${req.user.role} is not authorized to access this route`,
-          403
-        )
+        new ErrorResponse(`User is not authorized to access this route`, 403)
       );
     }
     next();

@@ -43,8 +43,15 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 //@access Private/Admin
 exports.createUser = asyncHandler(async (req, res, next) => {
   // Insert into table
-  const { name, email, password, role, role_user } = req.body;
-  console.log(role);
+  const {
+    name,
+    email,
+    password,
+    role,
+    user_generalrole,
+    postingrole_user,
+  } = req.body;
+
   const user = await User.create({
     name,
     email,
@@ -53,15 +60,25 @@ exports.createUser = asyncHandler(async (req, res, next) => {
   });
 
   const role_posting = await Role.findAll({
-    where: { role_user },
+    where: { role_user: postingrole_user },
   });
-  console.log(role_posting);
 
-  const role_user_posting = await Role_user.create({
-    role_id: role_posting[0].dataValues.role_id,
-    user_id: user.user_id,
-    role_user: role_user,
+  const user_role = await Role.findAll({
+    where: { role_user: user_generalrole },
   });
+
+  const role_user_posting = await Role_user.bulkCreate([
+    {
+      role_id: role_posting[0].dataValues.role_id,
+      user_id: user.user_id,
+      role_user: postingrole_user,
+    },
+    {
+      role_id: user_role[0].dataValues.role_id,
+      user_id: user.user_id,
+      role_user: user_generalrole,
+    },
+  ]);
 
   if (!user && !role_posting && !role_user_posting) {
     return next(new ErrorResponse('User could not be created', 401));

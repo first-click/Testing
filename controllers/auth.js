@@ -16,7 +16,13 @@ const Role_user = sequelize.models.role_user;
 //@access Public
 
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role, role_user } = req.body;
+  const {
+    name,
+    email,
+    password,
+    user_generalrole,
+    postingrole_user,
+  } = req.body;
   //Check for user
   const userExists = await User.findOne({
     where: { email: email },
@@ -29,20 +35,30 @@ exports.register = asyncHandler(async (req, res, next) => {
       name,
       email,
       password,
-      role,
     });
 
     sendTokenResponse(user, 200, res);
 
     const role_posting = await Role.findAll({
-      where: { role_user },
+      where: { role_user: postingrole_user },
     });
 
-    const role_user_posting = await Role_user.create({
-      role_id: role_posting[0].dataValues.role_id,
-      user_id: user.user_id,
-      role_user: role_user,
+    const user_role = await Role.findAll({
+      where: { role_user: user_generalrole },
     });
+
+    const role_user_posting = await Role_user.bulkCreate([
+      {
+        role_id: role_posting[0].dataValues.role_id,
+        user_id: user.user_id,
+        role_user: postingrole_user,
+      },
+      {
+        role_id: user_role[0].dataValues.role_id,
+        user_id: user.user_id,
+        role_user: user_generalrole,
+      },
+    ]);
 
     if (!user && !role_posting && !role_user_posting) {
       return next(new ErrorResponse('User could not be created', 401));

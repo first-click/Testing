@@ -57,6 +57,24 @@ module.exports = {
           created_at: date,
           updated_at: date,
         },
+        {
+          role_id: 5,
+          role_user: 'user',
+          created_at: date,
+          updated_at: date,
+        },
+        {
+          role_id: 6,
+          role_user: 'admin',
+          created_at: date,
+          updated_at: date,
+        },
+        {
+          role_id: 7,
+          role_user: 'publisher',
+          created_at: date,
+          updated_at: date,
+        },
       ]);
       await queryInterface.bulkInsert(
         'persons_positions',
@@ -64,7 +82,6 @@ module.exports = {
         {}
       );
       await queryInterface.bulkInsert('postings_users', postings_users, {});
-      // await queryInterface.bulkInsert('roles_persons', roles_persons, {});
     } catch (err) {
       console.log(err);
     }

@@ -9,27 +9,27 @@ const hashedPassword = (password) => {
 function generateDataPoint({ id }) {
   faker.seed(id); // Auskommentieren für Random-Werte
   let companyId = faker.helpers.randomize([1, 2, 3]);
-  let role = 'user';
-  switch (id) {
-    case 1: {
-      companyId = 1;
-      role = 'admin';
-      break;
-    }
-    case 2: {
-      companyId = 2;
-      role = 'admin';
-      break;
-    }
-    case 3: {
-      companyId = 3;
-      role = 'admin';
-      break;
-    }
-    default: {
-      role = 'user';
-    }
-  }
+  // let role = 'user';
+  // switch (id) {
+  //   case 1: {
+  //     companyId = 1;
+  //     role = 'admin';
+  //     break;
+  //   }
+  //   case 2: {
+  //     companyId = 2;
+  //     role = 'admin';
+  //     break;
+  //   }
+  //   case 3: {
+  //     companyId = 3;
+  //     role = 'admin';
+  //     break;
+  //   }
+  //   default: {
+  //     role = 'user';
+  //   }
+  // }
 
   let firstName = faker.name.firstName();
   let lastName = faker.name.lastName();
@@ -50,7 +50,7 @@ function generateDataPoint({ id }) {
       name: faker.internet.userName(firstName, lastName),
       email: faker.internet.email(firstName, lastName),
       password: hashedPassword('secret'),
-      role: role,
+
       created_at: date,
       updated_at: date,
     },
