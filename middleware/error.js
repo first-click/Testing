@@ -5,7 +5,15 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message;
 
-  // console.log(error);
+  // if ({ message: "Cannot read property 'dataValues' of undefined" }) {
+  //   const message = 'User could not be created';
+  //   error = new ErrorResponse(message, 401);
+  // }
+
+  if ((error = {})) {
+    const message = 'User could not be created';
+    error = new ErrorResponse(message, 401);
+  }
 
   // Postgres bad ObjectId
   if (err.name == 'CastError') {
@@ -22,7 +30,6 @@ const errorHandler = (err, req, res, next) => {
   // Object.values merken !!!
   // Sequelize validation error
   if (err.name === 'validationError') {
-    console.log(err);
     const message = Object.values(err.errors).map((val) => val.message);
     error = new ErrorResponse(message, 400);
   }

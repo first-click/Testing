@@ -72,14 +72,8 @@ exports.register = asyncHandler(async (req, res, next) => {
 
     return sendTokenResponse(user, 200, res);
   });
-
-  // res.status(200).json({
-  //   success: true,
-  //   data: result,
-  // });
-
-  return next(new ErrorResponse('User could not be created', 401));
 });
+
 //@desc Login user
 //@route Post /api/v1/auth/login
 //@access Public
