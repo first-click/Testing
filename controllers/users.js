@@ -42,13 +42,11 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 //@route POST /api/v1/users
 //@access Private/Admin
 exports.createUser = asyncHandler(async (req, res, next) => {
-  // Insert into table
   const {
     name,
     email,
     password,
-    role,
-    user_generalrole,
+    generalrole_user,
     postingrole_user,
   } = req.body;
 
@@ -56,31 +54,29 @@ exports.createUser = asyncHandler(async (req, res, next) => {
     name,
     email,
     password,
-    role,
   });
-
-  const role_posting = await Role.findAll({
+  const posting_role = await Role.findAll({
     where: { role_user: postingrole_user },
   });
 
-  const user_role = await Role.findAll({
-    where: { role_user: user_generalrole },
+  const general_role = await Role.findAll({
+    where: { role_user: generalrole_user },
   });
 
-  const role_user_posting = await Role_user.bulkCreate([
+  const roles = await Role_user.bulkCreate([
     {
-      role_id: role_posting[0].dataValues.role_id,
+      role_id: posting_role[0].dataValues.role_id,
       user_id: user.user_id,
-      role_user: postingrole_user,
+      role_user: posting_role[0].dataValues.role_user,
     },
     {
-      role_id: user_role[0].dataValues.role_id,
+      role_id: general_role[0].dataValues.role_id,
       user_id: user.user_id,
-      role_user: user_generalrole,
+      role_user: general_role[0].dataValues.role_user,
     },
   ]);
 
-  if (!user && !role_posting && !role_user_posting) {
+  if (!user && !posting_role && !general_role && !roles) {
     return next(new ErrorResponse('User could not be created', 401));
   }
   res.status(200).json({

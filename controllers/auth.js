@@ -20,7 +20,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     name,
     email,
     password,
-    user_generalrole,
+    generalrole_user,
     postingrole_user,
   } = req.body;
   //Check for user
@@ -30,37 +30,43 @@ exports.register = asyncHandler(async (req, res, next) => {
   if (userExists) {
     return next(new ErrorResponse('User already exists', 401));
   } else {
-    // Insert into table
-    const user = await User.create({
-      name,
-      email,
-      password,
+    const result = await sequelize.transaction(async () => {
+      const user = await User.create({
+        name,
+        email,
+        password,
+      });
+
+      const posting_role = await Role.findAll({
+        where: { role_user: postingrole_user },
+      });
+
+      const general_role = await Role.findAll({
+        where: { role_user: generalrole_user },
+      });
+
+      const roles = await Role_user.bulkCreate([
+        {
+          role_id: posting_role[0].dataValues.role_id,
+          user_id: user.user_id,
+          role_user: posting_role[0].dataValues.role_user,
+        },
+        {
+          role_id: general_role[0].dataValues.role_id,
+          user_id: user.user_id,
+          role_user: general_role[0].dataValues.role_user,
+        },
+      ]);
+
+      return sendTokenResponse(user, 200, res);
     });
 
-    sendTokenResponse(user, 200, res);
+    // res.status(200).json({
+    //   success: true,
+    //   data: result,
+    // });
 
-    const role_posting = await Role.findAll({
-      where: { role_user: postingrole_user },
-    });
-
-    const user_role = await Role.findAll({
-      where: { role_user: user_generalrole },
-    });
-
-    const role_user_posting = await Role_user.bulkCreate([
-      {
-        role_id: role_posting[0].dataValues.role_id,
-        user_id: user.user_id,
-        role_user: postingrole_user,
-      },
-      {
-        role_id: user_role[0].dataValues.role_id,
-        user_id: user.user_id,
-        role_user: user_generalrole,
-      },
-    ]);
-
-    if (!user && !role_posting && !role_user_posting) {
+    if (!result) {
       return next(new ErrorResponse('User could not be created', 401));
     }
   }
