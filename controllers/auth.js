@@ -29,53 +29,56 @@ exports.register = asyncHandler(async (req, res, next) => {
   });
   if (userExists) {
     return next(new ErrorResponse('User already exists', 401));
-  } else {
-    const result = await sequelize.transaction(async (t) => {
-      const user = await User.create(
-        {
-          name,
-          email,
-          password,
-        },
-        { transaction: t }
-      );
-
-      const posting_role = await Role.findAll({
-        where: { role_user: postingrole_user },
-      });
-
-      const general_role = await Role.findAll({
-        where: { role_user: generalrole_user },
-      });
-
-      const roles = await Role_user.bulkCreate(
-        [
-          {
-            role_id: posting_role[0].dataValues.role_id,
-            user_id: user.user_id,
-            role_user: posting_role[0].dataValues.role_user,
-          },
-          {
-            role_id: general_role[0].dataValues.role_id,
-            user_id: user.user_id,
-            role_user: general_role[0].dataValues.role_user,
-          },
-        ],
-        { transaction: t }
-      );
-
-      return sendTokenResponse(user, 200, res);
-    });
-
-    // res.status(200).json({
-    //   success: true,
-    //   data: result,
-    // });
-
-    if (!result) {
-      return next(new ErrorResponse('User could not be created', 401));
-    }
   }
+  const result = await sequelize.transaction(async (t) => {
+    const user = await User.create(
+      {
+        name,
+        email,
+        password,
+      },
+      { transaction: t }
+    );
+
+    const posting_role = await Role.findAll(
+      {
+        where: { role_user: postingrole_user },
+      },
+      { transaction: t }
+    );
+
+    const general_role = await Role.findAll(
+      {
+        where: { role_user: generalrole_user },
+      },
+      { transaction: t }
+    );
+
+    const roles = await Role_user.bulkCreate(
+      [
+        {
+          role_id: posting_role[0].dataValues.role_id,
+          user_id: user.user_id,
+          role_user: posting_role[0].dataValues.role_user,
+        },
+        {
+          role_id: general_role[0].dataValues.role_id,
+          user_id: user.user_id,
+          role_user: general_role[0].dataValues.role_user,
+        },
+      ],
+      { transaction: t }
+    );
+
+    return sendTokenResponse(user, 200, res);
+  });
+
+  // res.status(200).json({
+  //   success: true,
+  //   data: result,
+  // });
+
+  return next(new ErrorResponse('User could not be created', 401));
 });
 //@desc Login user
 //@route Post /api/v1/auth/login
