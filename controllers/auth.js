@@ -77,7 +77,6 @@ exports.register = asyncHandler(async (req, res, next) => {
     }
   }
 });
-
 //@desc Login user
 //@route Post /api/v1/auth/login
 //@access Public
