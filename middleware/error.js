@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
   // }
 
   if ((error = {})) {
-    const message = 'User could not be created';
+    const message = 'Resource could not be created';
     error = new ErrorResponse(message, 401);
   }
 
