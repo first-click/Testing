@@ -14,7 +14,12 @@ const { protect, authorize, authorizePosting } = require('../middleware/auth');
 router
   .route('/')
   .get(getPostings)
-  .post(protect, authorizePosting('posting_creator'), createPosting);
+  .post(
+    protect,
+    authorize('admin'),
+    authorizePosting('posting_creator'),
+    createPosting
+  );
 
 router
   .route('/:posting_id')

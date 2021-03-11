@@ -10,10 +10,10 @@ const errorHandler = (err, req, res, next) => {
   //   error = new ErrorResponse(message, 401);
   // }
 
-  if ((error = {})) {
-    const message = 'Resource could not be created';
-    error = new ErrorResponse(message, 401);
-  }
+  // if ((error = {})) {
+  //   const message = 'Resource could not be created';
+  //   error = new ErrorResponse(message, 401);
+  // }
 
   // Postgres bad ObjectId
   if (err.name == 'CastError') {

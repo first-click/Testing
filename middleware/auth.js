@@ -61,7 +61,7 @@ exports.authorize = (...roles) => {
     const role = await Role_user.findAll({
       where: {
         user_id: req.user.user_id,
-        role_user: 'admin' || 'publisher' || 'user',
+        role_user: ['admin', 'user', 'publisher'],
       },
     });
 
@@ -80,7 +80,7 @@ exports.authorizePosting = (...roles) => {
       where: { user_id: req.user.user_id },
     });
 
-    if (!roles.includes(role)) {
+    if (!roles.includes(role[0].dataValues.role_user)) {
       return next(
         new ErrorResponse(`User is not authorized to create a panel`, 403)
       );

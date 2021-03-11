@@ -53,34 +53,39 @@ exports.createPosting = asyncHandler(async (req, res, next) => {
     posting_contact_phonenumber,
     posting_salary,
   } = req.body;
-  const posting = await Posting.create({
-    position_id,
-    company_id,
-    posting_startdate,
-    posting_startdate,
-    posting_enddate,
-    posting_description,
-    posting_benefits,
-    posting_qualifications,
-    posting_working_hours,
-    posting_contact_person,
-    posting_contact_email,
-    posting_contact_phonenumber,
-    posting_salary,
-  });
 
-  const posting_user = await Posting_user.create({
-    posting_id: posting.posting_id,
-    user_id: user_id,
-  });
+  await sequelize.transaction(async (t) => {
+    const posting = await Posting.create(
+      {
+        position_id,
+        company_id,
+        posting_startdate,
+        posting_startdate,
+        posting_enddate,
+        posting_description,
+        posting_benefits,
+        posting_qualifications,
+        posting_working_hours,
+        posting_contact_person,
+        posting_contact_email,
+        posting_contact_phonenumber,
+        posting_salary,
+      },
+      { transaction: t }
+    );
 
-  if (!posting && !posting_user) {
-    return next(new ErrorResponse(`Posting could not be created`, 404));
-  }
+    await Posting_user.create(
+      {
+        posting_id: posting.posting_id,
+        user_id: req.user.user_id,
+      },
+      { transaction: t }
+    );
 
-  res.status(200).json({
-    success: true,
-    data: posting,
+    return res.status(200).json({
+      success: true,
+      data: posting,
+    });
   });
 });
 

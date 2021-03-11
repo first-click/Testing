@@ -30,7 +30,7 @@ exports.register = asyncHandler(async (req, res, next) => {
   if (userExists) {
     return next(new ErrorResponse('User already exists', 401));
   }
-  const result = await sequelize.transaction(async (t) => {
+  await sequelize.transaction(async (t) => {
     const user = await User.create(
       {
         name,
@@ -39,7 +39,7 @@ exports.register = asyncHandler(async (req, res, next) => {
       },
       { transaction: t }
     );
-
+    console.log(user);
     const posting_role = await Role.findAll(
       {
         where: { role_user: postingrole_user },
@@ -54,7 +54,7 @@ exports.register = asyncHandler(async (req, res, next) => {
       { transaction: t }
     );
 
-    const roles = await Role_user.bulkCreate(
+    await Role_user.bulkCreate(
       [
         {
           role_id: posting_role[0].dataValues.role_id,
