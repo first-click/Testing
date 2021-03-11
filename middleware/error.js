@@ -5,15 +5,10 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message;
 
-  // if ({ message: "Cannot read property 'dataValues' of undefined" }) {
-  //   const message = 'User could not be created';
-  //   error = new ErrorResponse(message, 401);
-  // }
-
-  // if ((error = {})) {
-  //   const message = 'Resource could not be created';
-  //   error = new ErrorResponse(message, 401);
-  // }
+  if (err.name == 'TypeError') {
+    const message = 'Resource could not be created';
+    error = new ErrorResponse(message, 401);
+  }
 
   // Postgres bad ObjectId
   if (err.name == 'CastError') {
