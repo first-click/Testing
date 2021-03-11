@@ -8,7 +8,7 @@ const hashedPassword = (password) => {
 
 function generateDataPoint({ id }) {
   faker.seed(id); // Auskommentieren für Random-Werte
-  let companyId = faker.helpers.randomize([1, 2, 3]);
+  let companyId = faker.helpers.randomize([1, 2, 3, 4]);
   let role = 'user';
   switch (id) {
     case 1: {

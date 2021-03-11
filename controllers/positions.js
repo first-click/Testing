@@ -73,7 +73,7 @@ exports.queryPositions = asyncHandler(async (req, res) => {
         },
       ],
     },
-    limit: 10,
+    // limit: 10,
   });
 
   res.status(200).json({
