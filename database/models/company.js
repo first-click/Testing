@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       Company.hasMany(models.posting, {
         foreignKey: 'company_id',
       });
+      Company.belongsToMany(models.user, {
+        through: models.company_user,
+
+        foreignKey: 'company_id',
+      });
     }
   }
   Company.init(
@@ -28,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       company_name: {
         type: DataTypes.STRING,
         unique: true,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

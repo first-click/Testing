@@ -58,14 +58,14 @@ exports.protect = asyncHandler(async (req, res, next) => {
 // Grant access to specific roles
 exports.authorize = (...roles) => {
   return async (req, res, next) => {
-    const role = await Role_user.findAll({
+    const role = await Role_user.findOne({
       where: {
         user_id: req.user.user_id,
         role_user: ['admin', 'user', 'publisher'],
       },
     });
 
-    if (!roles.includes(role[0].dataValues.role_user)) {
+    if (!roles.includes(role.role_user)) {
       return next(
         new ErrorResponse(`User is not authorized to access this route`, 403)
       );
@@ -76,11 +76,11 @@ exports.authorize = (...roles) => {
 
 exports.authorizePosting = (...roles) => {
   return async (req, res, next) => {
-    const role = await Role_user.findAll({
+    const role = await Role_user.findOne({
       where: { user_id: req.user.user_id },
     });
 
-    if (!roles.includes(role[0].dataValues.role_user)) {
+    if (!roles.includes(role.role_user)) {
       return next(
         new ErrorResponse(`User is not authorized to create a panel`, 403)
       );

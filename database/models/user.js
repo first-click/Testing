@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
 
         foreignKey: 'user_id',
       });
+      User.belongsToMany(models.company, {
+        through: models.company_user,
+
+        foreignKey: 'user_id',
+      });
     }
   }
   User.init(

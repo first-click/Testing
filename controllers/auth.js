@@ -10,6 +10,8 @@ const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
 const Role = sequelize.models.role;
 const Role_user = sequelize.models.role_user;
+const Company = sequelize.models.company;
+const Company_user = sequelize.models.company_user;
 
 //@desc Register
 //@route Post /api/v1/auth/register
@@ -22,6 +24,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     password,
     generalrole_user,
     postingrole_user,
+    company_name,
   } = req.body;
   //Check for user
   const userExists = await User.findOne({
@@ -39,15 +42,15 @@ exports.register = asyncHandler(async (req, res, next) => {
       },
       { transaction: t }
     );
-    console.log(user);
-    const posting_role = await Role.findAll(
+    // associate user with roles
+    const posting_role = await Role.findOne(
       {
         where: { role_user: postingrole_user },
       },
       { transaction: t }
     );
 
-    const general_role = await Role.findAll(
+    const general_role = await Role.findOne(
       {
         where: { role_user: generalrole_user },
       },
@@ -57,18 +60,49 @@ exports.register = asyncHandler(async (req, res, next) => {
     await Role_user.bulkCreate(
       [
         {
-          role_id: posting_role[0].dataValues.role_id,
+          role_id: posting_role.role_id,
           user_id: user.user_id,
-          role_user: posting_role[0].dataValues.role_user,
+          role_user: posting_role.role_user,
         },
         {
-          role_id: general_role[0].dataValues.role_id,
+          role_id: general_role.role_id,
           user_id: user.user_id,
-          role_user: general_role[0].dataValues.role_user,
+          role_user: general_role.role_user,
         },
       ],
       { transaction: t }
     );
+    // Check if company exists, otherwith create new company
+    const companyExists = await Company.findOne({
+      where: { company_name },
+    });
+
+    if (companyExists) {
+      await Company_user.create(
+        {
+          company_id: companyExists.company_id,
+          user_id: user.user_id,
+        },
+
+        { transaction: t }
+      );
+    } else {
+      const company = await Company.create(
+        {
+          company_name,
+        },
+        { transaction: t }
+      );
+
+      await Company_user.create(
+        {
+          company_id: company.toJSON().company_id,
+          user_id: user.user_id,
+        },
+
+        { transaction: t }
+      );
+    }
 
     return sendTokenResponse(user, 200, res);
   });
