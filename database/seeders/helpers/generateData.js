@@ -47,7 +47,7 @@ function generateDataPoint({ id }) {
   let date = new Date();
   return {
     user: {
-      name: faker.internet.userName(firstName, lastName),
+      username: faker.internet.userName(firstName, lastName),
       email: faker.internet.email(firstName, lastName),
       password: hashedPassword('secret'),
 

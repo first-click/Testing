@@ -19,7 +19,7 @@ const Company_user = sequelize.models.company_user;
 
 exports.register = asyncHandler(async (req, res, next) => {
   const {
-    name,
+    username,
     email,
     password,
     generalrole_user,
@@ -36,12 +36,13 @@ exports.register = asyncHandler(async (req, res, next) => {
   await sequelize.transaction(async (t) => {
     const user = await User.create(
       {
-        name,
+        username,
         email,
         password,
       },
       { transaction: t }
     );
+
     // associate user with roles
     const posting_role = await Role.findOne(
       {
@@ -200,12 +201,12 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 //@access Private
 
 exports.updateDetails = asyncHandler(async (req, res, next) => {
-  const { name, email } = req.body;
+  const { username, email } = req.body;
   //console.log(typeof req.user.id);
   //console.log(typeof req.params.id);
   const user = await User.update(
     {
-      name: name,
+      username: username,
       email: email,
     },
     { where: { user_id: req.user.user_id.toString() } }

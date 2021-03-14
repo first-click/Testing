@@ -5,6 +5,11 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message;
 
+  if (err.name == 'Error') {
+    const message = 'Resource could not be created';
+    error = new ErrorResponse(message, 401);
+  }
+
   if (err.name == 'TypeError') {
     const message = 'Resource could not be created';
     error = new ErrorResponse(message, 401);

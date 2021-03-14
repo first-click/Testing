@@ -43,7 +43,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 //@access Private/Admin
 exports.createUser = asyncHandler(async (req, res, next) => {
   const {
-    name,
+    username,
     email,
     password,
     generalrole_user,
@@ -51,7 +51,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
   } = req.body;
 
   const user = await User.create({
-    name,
+    username,
     email,
     password,
   });
@@ -89,11 +89,11 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 //@route PUT /api/v1/users/:user_id
 //@access Private/Admin
 exports.updateUser = asyncHandler(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
   // update a user
   const user = await User.update(
     {
-      name: name,
+      username: username,
       email: email,
     },
     { where: { user_id: req.params.user_id }, returning: true, plain: true }

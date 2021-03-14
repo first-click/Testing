@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
 
-      name: {
+      username: {
         //sollte username heißen
         type: DataTypes.STRING,
         unique: true,
