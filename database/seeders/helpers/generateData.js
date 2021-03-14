@@ -65,9 +65,9 @@ function generateDataPoint({ id }) {
 
     position: {
       company_id: companyId,
-      title: title,
-      department: department,
-      department_short: departmentShort,
+      position_title: title,
+      position_department: department,
+      position_department_short: departmentShort,
       created_at: date,
       updated_at: date,
     },

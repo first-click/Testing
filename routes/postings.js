@@ -29,6 +29,11 @@ router
     updatePosting
   )
   .get(getPosting)
-  .delete(protect, authorizePosting('posting_creator'), deletePosting);
+  .delete(
+    protect,
+    authorize('admin'),
+    authorizePosting('posting_creator'),
+    deletePosting
+  );
 
 module.exports = router;

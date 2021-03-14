@@ -39,9 +39,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
 
-      title: { allowNull: false, type: DataTypes.STRING },
-      department: { allowNull: false, type: DataTypes.STRING },
-      department_short: { allowNull: false, type: DataTypes.STRING },
+      position_title: { allowNull: false, type: DataTypes.STRING },
+      position_department: { allowNull: false, type: DataTypes.STRING },
+      position_department_short: { allowNull: false, type: DataTypes.STRING },
     },
     {
       sequelize,

@@ -81,9 +81,7 @@ exports.authorizePosting = (...roles) => {
     });
 
     if (!roles.includes(role.role_user)) {
-      return next(
-        new ErrorResponse(`User is not authorized to create a panel`, 403)
-      );
+      return next(new ErrorResponse(`User is not authorized`, 403));
     }
     next();
   };
