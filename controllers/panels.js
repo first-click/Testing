@@ -51,7 +51,7 @@ exports.createPanel = asyncHandler(async (req, res, next) => {
   if (position.company_id !== company_id) {
     return next(new ErrorResponse('Position does not exist in company', 400));
   }
-  
+
   const panel = await Panel.create({
     company_id,
     creator_id: user_id, // Creator is the logged in user
@@ -146,6 +146,24 @@ exports.createPanelItem = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: panel_item,
+  });
+});
+
+//@desc Get panel items
+//@route GET /api/v1/panels/panel_items
+//@access Private/Admin
+exports.getPanelItems = asyncHandler(async (req, res, next) => {
+  console.log('getPanelItems', req.user);
+  const { company_id, user_id } = req.user;
+  // const { position_id } = req.params;
+
+  const panel_items = await PanelItem.findAll({
+    where: { company_id },
+  });
+
+  res.status(200).json({
+    success: true,
+    data: panel_items,
   });
 });
 

@@ -1,3 +1,4 @@
+require('./utils/logOrigin');
 const express = require('express');
 
 const users = require('./routes/users');
