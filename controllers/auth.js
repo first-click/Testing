@@ -8,30 +8,112 @@ const sendEmail = require('../utils/sendEmail');
 const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
+const Role = sequelize.models.role;
+const Role_user = sequelize.models.role_user;
+const Company = sequelize.models.company;
+// const Company_user = sequelize.models.company_user;
 
 //@desc Register
 //@route Post /api/v1/auth/register
 //@access Public
 
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  const {
+    username,
+    email,
+    password,
+    generalrole_user,
+    postingrole_user,
+    company_name,
+  } = req.body;
   //Check for user
   const userExists = await User.findOne({
     where: { email: email },
   });
   if (userExists) {
     return next(new ErrorResponse('User already exists', 401));
-  } else {
-    // Insert into table
-    const user = await User.create({
-      name,
-      email,
-      password,
-      role,
+  }
+
+  await sequelize.transaction(async (t) => {
+    // Initialize company id
+    let company_id;
+
+    // Check if company exists, otherwith create new company
+    const companyExists = await Company.findOne({
+      where: { company_name },
     });
 
-    sendTokenResponse(user, 200, res);
-  }
+    if (companyExists) {
+      company_id = companyExists.company_id;
+      // alter code mit join-Tabelle
+      // await Company_user.create(
+      //   {
+      //     company_id: companyExists.company_id,
+      //     user_id: user.user_id,
+      //   },
+      //   { transaction: t }
+      // );
+    } else {
+      const newCompany = await Company.create(
+        {
+          company_name,
+        },
+        { transaction: t }
+      );
+      company_id = newCompany.company_id;
+      // await Company_user.create(
+      //   {
+      //     company_id: company.toJSON().company_id,
+      //     user_id: user.user_id,
+      //   },
+
+      //   { transaction: t }
+      // );
+    }
+
+    const user = await User.create(
+      {
+        username,
+        email,
+        password,
+        company_id,
+      },
+      { transaction: t }
+    );
+
+    // associate user with roles
+    const posting_role = await Role.findOne(
+      {
+        where: { role_user: postingrole_user },
+      },
+      { transaction: t }
+    );
+
+    const general_role = await Role.findOne(
+      {
+        where: { role_user: generalrole_user },
+      },
+      { transaction: t }
+    );
+
+    await Role_user.bulkCreate(
+      [
+        {
+          role_id: posting_role.role_id,
+          user_id: user.user_id,
+          role_user: posting_role.role_user,
+        },
+        {
+          role_id: general_role.role_id,
+          user_id: user.user_id,
+          role_user: general_role.role_user,
+        },
+      ],
+      { transaction: t }
+    );
+
+    return sendTokenResponse(user, 200, res);
+  });
 });
 
 //@desc Login user
@@ -40,7 +122,6 @@ exports.register = asyncHandler(async (req, res, next) => {
 
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-
   // Validate email & password
   if (!email || !password) {
     return next(new ErrorResponse('Please provide an email and password', 400));
@@ -52,6 +133,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     attributes: ['user_id', 'password', 'email'],
   });
 
+  // console.log(user);
   if (!user) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
@@ -111,6 +193,9 @@ exports.getMe = asyncHandler(async (req, res, next) => {
     },
   });
 
+  if (!user) {
+    return next(new ErrorResponse('No user could be found', 401));
+  }
   res.status(200).json({
     success: true,
     data: user,
@@ -122,16 +207,20 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 //@access Private
 
 exports.updateDetails = asyncHandler(async (req, res, next) => {
-  const { name, email } = req.body;
+  const { username, email } = req.body;
   //console.log(typeof req.user.id);
   //console.log(typeof req.params.id);
   const user = await User.update(
     {
-      name: name,
+      username: username,
       email: email,
     },
     { where: { user_id: req.user.user_id.toString() } }
   );
+
+  if (!user) {
+    return next(new ErrorResponse('User could not be updated', 401));
+  }
 
   res.status(200).json({
     success: true,
@@ -156,6 +245,10 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   user.password = user.beforeSave(req.body.newPassword);
 
   await user.save();
+
+  if (!user) {
+    return next(new ErrorResponse('User cound not be found.', 401));
+  }
 
   sendTokenResponse(user, 200, res);
 });

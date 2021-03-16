@@ -20,23 +20,28 @@ exports.getCompanies = asyncHandler(async (req, res) => {
 //@route GET /api/v1/companies/:company_id
 //@access Private/Admin
 exports.getCompany = asyncHandler(async (req, res, next) => {
-  const company = await Company.findByPk(req.params.company_id, {
-    // include: ['persons', 'positions'], // problematische Suche
-    where: {
-      $company_id$: {
-        [sequelize.Sequelize.Op.eq]: req.params.company_id,
-      },
-    },
-    // include: ['persons', 'positions'],
-    include: ['persons'],
-  });
-  // console.log(await company.getUsers())
+  // Merge conflict, habe meine Variante auskommentiert (JL)
+  // const company = await Company.findByPk(req.params.company_id, {
+  //   where: {
+  //     $company_id$: {
+  //       [sequelize.Sequelize.Op.eq]: req.params.company_id,
+  //     },
+  //   },
+  //   include: ['persons'],
+  // });
+
+  const company = await Company.findByPk(req.params.company_id);
+
+  const users = await company.getUsers();
+  const persons = await company.getPersons();
+  // const positions = await company.getPositions();
+
   if (!company) {
     return next(new ErrorResponse('Company does not exist', 401));
   }
   res.status(200).json({
     success: true,
-    data: company,
+    data: { company, persons, users },
   });
 });
 

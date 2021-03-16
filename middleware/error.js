@@ -4,7 +4,19 @@ const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
 
-  // console.log(error.message);
+  // prüfen & ggf. ausbauen
+  // auch checken, ob die unten genannten Postgres Errors greifen 
+
+  // auskommentiert, weil diese Bedingung auf jeden möglichen Fehler zutrifft
+  // if (err.name == 'Error') {
+  //   const message = 'Resource could not be created';
+  //   error = new ErrorResponse(message, 401);
+  // }
+
+  if (err.name == 'TypeError') {
+    const message = 'Resource could not be created';
+    error = new ErrorResponse(message, 401);
+  }
 
   // Postgres bad ObjectId
   if (err.name == 'CastError') {
@@ -21,7 +33,6 @@ const errorHandler = (err, req, res, next) => {
   // Object.values merken !!!
   // Sequelize validation error
   if (err.name === 'validationError') {
-    console.log(err);
     const message = Object.values(err.errors).map((val) => val.message);
     error = new ErrorResponse(message, 400);
   }

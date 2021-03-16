@@ -7,7 +7,7 @@ const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const { sequelize } = require('../database/models');
 const User = sequelize.models.user;
-const Person = sequelize.models.person;
+const Role_user = sequelize.models.role_user;
 
 // Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
@@ -28,6 +28,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   // console.log('token', token);
   // Make sure token exists
   if (!token) {
+    // console.log('no token');
     return next(new ErrorResponse('Not authorized to access this route', 401));
   }
 
@@ -39,6 +40,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     // console.log('req.user', req.user);
     next();
   } catch (err) {
+    // console.log('other error');
     // console.log('err', err);
     return next(new ErrorResponse('Not authorized to access this route', 401));
   }
@@ -46,14 +48,31 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
 // Grant access to specific roles
 exports.authorize = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+  return async (req, res, next) => {
+    const role = await Role_user.findOne({
+      where: {
+        user_id: req.user.user_id,
+        role_user: ['admin', 'user', 'publisher'],
+      },
+    });
+
+    if (!roles.includes(role.role_user)) {
       return next(
-        new ErrorResponse(
-          `User role ${req.user.role} is not authorized to access this route`,
-          403
-        )
+        new ErrorResponse(`User is not authorized to access this route`, 403)
       );
+    }
+    next();
+  };
+};
+
+exports.authorizePosting = (...roles) => {
+  return async (req, res, next) => {
+    const role = await Role_user.findOne({
+      where: { user_id: req.user.user_id },
+    });
+
+    if (!roles.includes(role.role_user)) {
+      return next(new ErrorResponse(`User is not authorized`, 403));
     }
     next();
   };

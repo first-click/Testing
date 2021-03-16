@@ -12,12 +12,25 @@ var jwtr = new JWTR(redisClient);
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
+      User.hasOne(models.person, {
+        foreignKey: 'user_id',
+      });
+      User.belongsToMany(models.role, {
+        through: models.role_user,
+        foreignKey: 'user_id',
+      });
+      User.belongsToMany(models.posting, {
+        through: models.posting_user,
+        foreignKey: 'user_id',
+      });
+      // User.belongsToMany(models.company, {
+      //   through: models.company_user,
+
+      //   foreignKey: 'user_id',
+      // });
       User.belongsTo(models.company, {
         targetKey: 'company_id',
         foreignKey: 'company_id',
-      });
-      User.hasOne(models.person, {
-        foreignKey: { name: 'user_id', unique: true },
       });
     }
   }
@@ -38,8 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         type: DataTypes.INTEGER,
       },
-      name: {
-        //sollte username heißen
+      username: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
@@ -60,13 +72,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      role: {
-        type: DataTypes.STRING,
-        defaultValue: 'user',
-        validate: {
-          isIn: [['user', 'admin', 'publisher']],
-        },
-      },
+
       reset_password_token: DataTypes.STRING,
       reset_password_expire: DataTypes.DATE,
     },

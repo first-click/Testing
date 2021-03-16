@@ -5,23 +5,15 @@ module.exports = (sequelize, DataTypes) => {
   class Person extends Model {
     static associate(models) {
       Person.belongsTo(models.user, {
-        targetKey: 'user_id',
-        foreignKey: 'user_id', // = person.user_id
-        // default wäre person.user_user_id
+        foreignKey: 'user_id',
       });
+
       Person.belongsTo(models.company, {
-        targetKey: 'company_id',
         foreignKey: 'company_id',
       });
+
       Person.belongsToMany(models.position, {
         through: models.person_position,
-        // uniqueKey: 'person_position_id',
-        foreignKey: 'person_id',
-      });
-      Person.hasMany(models.person_position, {
-        foreignKey: 'person_id',
-      });
-      Person.hasMany(models.computer, {
         foreignKey: 'person_id',
       });
     }
@@ -35,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+
       user_id: {
         references: {
           model: 'user',
@@ -42,8 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-        unique: true, // Muss unique sein. Dieser Eintrag führt
-        // aber nicht zu einem validation error. Der kommt von der DB.
+        unique: true,
         type: DataTypes.INTEGER,
       },
       company_id: {
@@ -53,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+        unique: true,
         type: DataTypes.INTEGER,
       },
       person_first_name: {
@@ -67,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
       ...sequelize.options,
       modelName: 'person',
       name: { singular: 'person', plural: 'persons' },
-      tableName: 'persons', // anstatt people
+      tableName: 'persons',
     }
   );
   return Person;

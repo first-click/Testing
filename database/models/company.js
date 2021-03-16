@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       Company.hasMany(models.position, {
         foreignKey: 'company_id',
       });
+      Company.hasMany(models.posting, {
+        foreignKey: 'company_id',
+      });
     }
   }
   Company.init(
@@ -24,28 +27,18 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+
       company_name: {
         type: DataTypes.STRING,
         unique: true,
-        allowNull: false,
-        validate: {
-          len: {
-            args: [1, 20],
-            msg: 'please use the right length',
-          },
-        },
+        allowNull: true,
       },
     },
     {
       sequelize,
       ...sequelize.options,
-      hooks: {
-        // beforeCreate: (user) => {
-        //   const salt = bcrypt.genSaltSync();
-        //   user.password = bcrypt.hashSync(user.password, salt);
-        // },
-      },
       modelName: 'company',
+      name: { singular: 'company', plural: 'companies' },
       tableName: 'companies',
     }
   );

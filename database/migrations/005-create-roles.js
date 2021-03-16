@@ -15,17 +15,27 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'positions',
+        'roles',
         {
-          position_id: {
+          role_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
           },
-          title: Sequelize.STRING,
-          department: Sequelize.STRING,
-          department_short: Sequelize.STRING,
+          // posting_role: {
+          //   type: Sequelize.STRING,
+          //   defaultValue: 'reader',
+          //   validate: {
+          //     isIn: [['creator', 'editor', 'reader', 'applicant']],
+          //   },
+          // },
+
+          role_user: {
+            allowNull: false,
+            type: Sequelize.STRING,
+          },
+
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -47,7 +57,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('positions', { transaction });
+      await queryInterface.dropTable('roles', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

@@ -8,7 +8,7 @@ const hashedPassword = (password) => {
 
 function generateDataPoint({ id }) {
   faker.seed(id); // Auskommentieren für Random-Werte
-  let companyId = faker.helpers.randomize([1, 2, 3, 4]);
+  let companyId = faker.helpers.randomize([1, 2, 3]);
   let role = 'user';
   switch (id) {
     case 1: {
@@ -36,15 +36,21 @@ function generateDataPoint({ id }) {
   let title = faker.name.jobTitle();
   let department = faker.name.jobArea();
   let departmentShort = department.split('').slice(0, 3).join('').toUpperCase();
+  let postingDescription = faker.lorem.sentence();
+  let postingBenefits = faker.lorem.sentence();
+  let postingQualifications = faker.lorem.sentence();
+  let postingWorkingHours = 10;
+  let postingContactPerson = faker.name.firstName() + faker.name.lastName();
+  let postingContactPhonenumber = faker.phone.phoneNumber();
+  let postingSalary = 1000;
 
   let date = new Date();
   return {
     user: {
-      company_id: companyId,
-      name: faker.internet.userName(firstName, lastName),
+      username: faker.internet.userName(firstName, lastName),
       email: faker.internet.email(firstName, lastName),
       password: hashedPassword('secret'),
-      role: role,
+      company_id: companyId,
       created_at: date,
       updated_at: date,
       // junk: 'junk',
@@ -58,11 +64,28 @@ function generateDataPoint({ id }) {
       updated_at: date,
       // junk: 'junk',
     },
+
     position: {
       company_id: companyId,
-      title: title,
-      department: department,
-      department_short: departmentShort,
+      position_title: title,
+      position_department: department,
+      position_department_short: departmentShort,
+      created_at: date,
+      updated_at: date,
+    },
+    posting: {
+      company_id: companyId,
+      position_id: id,
+      posting_startdate: date,
+      posting_enddate: date,
+      posting_description: postingDescription,
+      posting_benefits: postingBenefits,
+      posting_qualifications: postingQualifications,
+      posting_working_hours: postingWorkingHours,
+      posting_contact_person: postingContactPerson,
+      posting_contact_email: faker.internet.email(),
+      posting_contact_phonenumber: postingContactPhonenumber,
+      posting_salary: postingSalary,
       created_at: date,
       updated_at: date,
       // junk: 'junk',
@@ -75,6 +98,12 @@ function generateDataPoint({ id }) {
       updated_at: date,
       // junk: 'junk',
     },
+    posting_user: {
+      posting_id: id,
+      user_id: id,
+      created_at: date,
+      updated_at: date,
+    },
   };
 }
 
@@ -85,8 +114,11 @@ function generateData(amount) {
     process.stdout.write('Generating data point # ' + id + '\r');
     let newEntry = generateDataPoint({ id });
     // Edit duplicates generated from Faker.js
-    if (data.some((entry) => entry.user.name === newEntry.user.name)) {
-      newEntry.user.name = newEntry.user.name.concat(['_dup_', id.toString()]);
+    if (data.some((entry) => entry.user.username === newEntry.user.username)) {
+      newEntry.user.username = newEntry.user.username.concat([
+        '_dup_',
+        id.toString(),
+      ]);
     }
     if (data.some((entry) => entry.user.email === newEntry.user.email)) {
       newEntry.user.email = ''.concat([

@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Position.belongsToMany(models.person, {
         through: models.person_position,
-        // uniqueKey: 'person_position_id',
+
         foreignKey: 'position_id',
       });
-      Position.hasMany(models.person_position, {
-        foreignKey: 'position_id',
-      });
+
       Position.belongsTo(models.company, {
-        targetKey: 'company_id',
         foreignKey: 'company_id',
+      });
+      Position.hasMany(models.posting, {
+        foreignKey: 'position_id',
       });
     }
   }
@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         type: DataTypes.INTEGER,
       },
-      // TO DO: Also do Validation in Migration
-      title: { allowNull: false, type: DataTypes.STRING },
-      department: { allowNull: false, type: DataTypes.STRING },
-      department_short: { allowNull: false, type: DataTypes.STRING },
+
+      position_title: { allowNull: false, type: DataTypes.STRING },
+      position_department: { allowNull: false, type: DataTypes.STRING },
+      position_department_short: { allowNull: false, type: DataTypes.STRING },
     },
     {
       sequelize,

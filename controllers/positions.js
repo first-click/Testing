@@ -6,7 +6,7 @@ const Position = sequelize.models.position;
 //@desc Get all positions
 //@route GET /api/v1/positions
 //@access Private/Admin
-exports.getPositions = asyncHandler(async (req, res) => {
+exports.getPositions = asyncHandler(async (req, res, next) => {
   const { company_id } = req.user;
   const positions = await Position.findAll({
     // include: 'persons',
@@ -31,15 +31,7 @@ exports.queryPositions = asyncHandler(async (req, res) => {
     req.params.encodedQueryString,
     'base64'
   ).toString('binary');
-  console.log(queryString);
-  // const positions = await Position.findAll({
-  //   // include: 'persons',
-  //   where: {
-  //     company_id,
-  //   },
-  //   //limit: 50,
-  //   limit: 5,
-  // });
+  //console.log(queryString);
 
   const positions = await Position.findAll({
     where: {
@@ -76,6 +68,20 @@ exports.queryPositions = asyncHandler(async (req, res) => {
     // limit: 10,
   });
 
+  // Petras Version
+
+  // const positions = await Position.findAll(
+  //   // { include: 'person' }
+  //   {
+  //     where: {
+  //       company_id,
+  //     },
+  //   }
+  // );
+
+  if (!postions) {
+    return next(new ErrorResponse('Positions could not be found', 401));
+  }
   res.status(200).json({
     success: true,
     data: positions,
@@ -108,7 +114,7 @@ exports.getPosition = asyncHandler(async (req, res, next) => {
 //@desc Create a new position
 //@route POST /api/v1/positions
 //@access Private/Admin
-exports.createPosition = asyncHandler(async (req, res) => {
+exports.createPosition = asyncHandler(async (req, res, next) => {
   // Insert into table
   const { company_id } = req.user; // man kann nur in der eigenen Company positions createn
   const { title, department, department_short } = req.body;
@@ -118,6 +124,10 @@ exports.createPosition = asyncHandler(async (req, res) => {
     department_short,
     company_id,
   });
+
+  if (!position) {
+    return next(new ErrorResponse('Position couls not be created', 401));
+  }
   res.status(200).json({
     success: true,
     data: position,
@@ -127,7 +137,7 @@ exports.createPosition = asyncHandler(async (req, res) => {
 //@desc Update a position
 //@route PUT /api/v1/positions/:position_id
 //@access Private/Admin
-exports.updatePosition = asyncHandler(async (req, res) => {
+exports.updatePosition = asyncHandler(async (req, res, next) => {
   const { company_id } = req.user;
   const { title, department, department_short } = req.body;
 
@@ -144,7 +154,9 @@ exports.updatePosition = asyncHandler(async (req, res) => {
       plain: true,
     }
   );
-
+  if (!position) {
+    return next(new ErrorResponse('Position could not be updated', 401));
+  }
   res.status(200).json({
     success: true,
     data: position[1],

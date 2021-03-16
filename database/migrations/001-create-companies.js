@@ -15,34 +15,25 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'users',
+        'companies',
         {
-          user_id: {
+          company_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
           },
-          name: {
+          company_name: {
             type: Sequelize.STRING,
             unique: true,
-            allowNull: false,
+            allowNull: true,
+            validate: {
+              len: {
+                args: [1, 20],
+                msg: 'please use the right length',
+              },
+            },
           },
-          email: {
-            type: Sequelize.STRING,
-            unique: true,
-            allowNull: false,
-          },
-          password: {
-            type: Sequelize.STRING,
-            allowNull: false,
-          },
-          role: {
-            type: Sequelize.STRING,
-            defaultValue: 'user',
-          },
-          reset_password_token: Sequelize.STRING,
-          reset_password_expire: Sequelize.DATE,
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -65,7 +56,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('users', { transaction });
+      await queryInterface.dropTable('companies');
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

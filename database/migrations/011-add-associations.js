@@ -28,6 +28,7 @@ module.exports = {
         },
         { transaction }
       );
+
       await queryInterface.addColumn(
         'persons', // name of Source model
         'company_id', // name of the key we're adding
@@ -42,6 +43,7 @@ module.exports = {
         },
         { transaction }
       );
+
       await queryInterface.addColumn(
         'positions', // name of Source model
         'company_id', // name of the key we're adding
@@ -56,32 +58,48 @@ module.exports = {
         },
         { transaction }
       );
+
       await queryInterface.addColumn(
-        'persons', // name of Source model
-        'user_id', // name of the key we're adding
+        'postings', // name of Source model
+        'company_id', // name of the key we're adding
         {
           type: Sequelize.INTEGER,
-          unique: true, // Foreign Key muss auch unique sein
           references: {
-            model: 'users', // name of Target model
-            key: 'user_id', // key in Target model that we're referencing
+            model: 'companies', // name of Target model
+            key: 'company_id', // key in Target model that we're referencing
           },
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
         },
         { transaction }
       );
+
       await queryInterface.addColumn(
-        'computers', // name of Source model
-        'person_id', // name of the key we're adding
+        'postings', // name of Source model
+        'position_id', // name of the key we're adding
         {
           type: Sequelize.INTEGER,
           references: {
-            model: 'persons', // name of Target model
-            key: 'person_id', // key in Target model that we're referencing
+            model: 'positions', // name of Target model
+            key: 'position_id', // key in Target model that we're referencing
           },
           onUpdate: 'CASCADE',
           onDelete: 'SET NULL',
+        },
+        { transaction }
+      );
+
+      await queryInterface.addColumn(
+        'persons', // name of Source model
+        'user_id', // name of the key we're adding
+        {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'users', // name of Target model
+            key: 'user_id', // key in Target model that we're referencing
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
         },
         { transaction }
       );
@@ -95,17 +113,24 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.removeColumn('users', 'company_id', { transaction });
-      await queryInterface.removeColumn('persons', 'user_id', { transaction });
+      await queryInterface.removeColumn('users', 'company_id', {
+        transaction,
+      });
       await queryInterface.removeColumn('persons', 'company_id', {
         transaction,
       });
       await queryInterface.removeColumn('positions', 'company_id', {
         transaction,
       });
-      await queryInterface.removeColumn('computers', 'person_id', {
+
+      await queryInterface.removeColumn('postings', 'company_id', {
         transaction,
       });
+      await queryInterface.removeColumn('postings', 'position_id', {
+        transaction,
+      });
+      await queryInterface.removeColumn('persons', 'user_id', { transaction });
+
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
