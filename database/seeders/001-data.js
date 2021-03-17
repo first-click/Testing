@@ -138,6 +138,6 @@ module.exports = {
     await queryInterface.bulkDelete('roles', null, {});
     await queryInterface.bulkDelete('persons_positions', null, {});
     await queryInterface.bulkDelete('postings_users', null, {});
-    //  await queryInterface.bulkDelete('roles_users', null, {});
+    await queryInterface.bulkDelete('roles_users', null, {});
   },
 };

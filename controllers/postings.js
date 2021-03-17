@@ -61,16 +61,27 @@ exports.createPosting = asyncHandler(async (req, res, next) => {
   } = req.body;
 
   await sequelize.transaction(async (t) => {
-    const position = await Position.create({
-      position_title,
-      position_department,
-      position_department_short,
-      company_id,
+    let position_id;
+
+    const positionExists = await Position.findOne({
+      where: { position_title },
     });
+    if (positionExists) {
+      position_id = positionExists.position_id;
+    } else {
+      const position = await Position.create({
+        position_title,
+        position_department,
+        position_department_short,
+        company_id,
+      });
+
+      position_id = position.position_id;
+    }
 
     const posting = await Posting.create(
       {
-        position_id: position.position_id,
+        position_id: position_id,
         company_id,
         posting_startdate,
         posting_startdate,
@@ -123,8 +134,6 @@ exports.updatePosting = asyncHandler(async (req, res, next) => {
     posting_contact_phonenumber,
     posting_salary,
   } = req.body;
-
-  const company = await Company.findByPk(company_id);
 
   const position = await Position.update(
     { position_title, position_department, position_department_short },
