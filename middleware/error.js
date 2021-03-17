@@ -3,9 +3,9 @@ const ErrorResponse = require('../utils/errorResponse');
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
-
+  console.log(err);
   // prüfen & ggf. ausbauen
-  // auch checken, ob die unten genannten Postgres Errors greifen 
+  // auch checken, ob die unten genannten Postgres Errors greifen
 
   // auskommentiert, weil diese Bedingung auf jeden möglichen Fehler zutrifft
   // if (err.name == 'Error') {

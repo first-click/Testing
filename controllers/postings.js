@@ -42,7 +42,7 @@ exports.getPosting = asyncHandler(async (req, res, next) => {
 //@route POST /api/v1/postings
 //@access Private/Admin
 exports.createPosting = asyncHandler(async (req, res, next) => {
-  const company_id = req.user;
+  const company_id = req.user.company_id;
 
   const {
     position_title,
@@ -107,8 +107,8 @@ exports.createPosting = asyncHandler(async (req, res, next) => {
 //@route PUT /api/v1/postings/:posting_id
 //@access Private/Admin
 exports.updatePosting = asyncHandler(async (req, res, next) => {
+  const company_id = req.user.company_id;
   const {
-    company_name,
     position_title,
     position_department,
     position_department_short,
@@ -124,13 +124,11 @@ exports.updatePosting = asyncHandler(async (req, res, next) => {
     posting_salary,
   } = req.body;
 
-  const company = await Company.findOne({
-    company_name,
-  });
+  const company = await Company.findByPk(company_id);
 
   const position = await Position.update(
     { position_title, position_department, position_department_short },
-    { where: { position_title, company_id: company.company_id } }
+    { where: { position_title, company_id: company_id } }
   );
 
   // update a posting
