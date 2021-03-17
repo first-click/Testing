@@ -81,44 +81,40 @@ module.exports = {
         persons_positions,
         {}
       );
-      // await queryInterface.bulkInsert(
-      //   'roles_users',
-      //   [
-      //     {
-      //       role_user_id: 1,
-      //       role_id: 1,
-      //       user_id: 1,
-      //       role_user: 'posting_creator',
-      //       created_at: date,
-      //       updated_at: date,
-      //     },
-      //     {
-      //       role_user_id: 2,
-      //       role_id: 6,
-      //       user_id: 1,
-      //       role_user: 'admin',
-      //       created_at: date,
-      //       updated_at: date,
-      //     },
-      //     {
-      //       role_user_id: 3,
-      //       role_id: 1,
-      //       user_id: 2,
-      //       role_user: 'posting_creator',
-      //       created_at: date,
-      //       updated_at: date,
-      //     },
-      //     {
-      //       role_user_id: 4,
-      //       role_id: 6,
-      //       user_id: 2,
-      //       role_user: 'admin',
-      //       created_at: date,
-      //       updated_at: date,
-      //     },
-      //   ],
-      //   {}
-      // );
+      await queryInterface.bulkInsert(
+        'roles_users',
+        [
+          {
+            role_id: 1,
+            user_id: 1,
+            role_user: 'posting_creator',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            role_id: 6,
+            user_id: 1,
+            role_user: 'admin',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            role_id: 1,
+            user_id: 2,
+            role_user: 'posting_creator',
+            created_at: date,
+            updated_at: date,
+          },
+          {
+            role_id: 6,
+            user_id: 2,
+            role_user: 'admin',
+            created_at: date,
+            updated_at: date,
+          },
+        ],
+        {}
+      );
       await queryInterface.bulkInsert('postings_users', postings_users, {});
     } catch (err) {
       console.log(err);
