@@ -42,14 +42,9 @@ exports.getPosting = asyncHandler(async (req, res, next) => {
 //@route POST /api/v1/postings
 //@access Private/Admin
 exports.createPosting = asyncHandler(async (req, res, next) => {
-  // Empfehlung: hol dir die company_id aus req.user
-  // damit entfallen alle Checks und ein User kann nur für
-  // die eigene Firma ein Posting anlegen
-  // habs mal implementiert und die geänderten Zeilen auskommentiert
   const company_id = req.user;
 
   const {
-    company_name,
     position_title,
     position_department,
     position_department_short,
@@ -66,37 +61,16 @@ exports.createPosting = asyncHandler(async (req, res, next) => {
   } = req.body;
 
   await sequelize.transaction(async (t) => {
-    // // Check if company exists and user is part of the company
-    // const company = await Company.findOne({
-    //   where: { company_name },
-    //   raw: true,
-    // });
-
-    // const company_user = await Company_user.findOne({
-    //   where: {
-    //     company_id: company.company_id,
-    //     user_id: req.user.user_id,
-    //   },
-    //   raw: true,
-    // });
-
-    // create position and posting
-
-    // JL: check entfällt wegen der Nutzung von req.user
-    // if (company_user.company_id === company.company_id) {
-
     const position = await Position.create({
       position_title,
       position_department,
       position_department_short,
-      // company_id: company.company_id,
       company_id,
     });
 
     const posting = await Posting.create(
       {
         position_id: position.position_id,
-        // company_id: company.company_id,
         company_id,
         posting_startdate,
         posting_startdate,

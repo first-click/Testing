@@ -45,14 +45,6 @@ exports.register = asyncHandler(async (req, res, next) => {
 
     if (companyExists) {
       company_id = companyExists.company_id;
-      // alter code mit join-Tabelle
-      // await Company_user.create(
-      //   {
-      //     company_id: companyExists.company_id,
-      //     user_id: user.user_id,
-      //   },
-      //   { transaction: t }
-      // );
     } else {
       const newCompany = await Company.create(
         {
@@ -61,14 +53,6 @@ exports.register = asyncHandler(async (req, res, next) => {
         { transaction: t }
       );
       company_id = newCompany.company_id;
-      // await Company_user.create(
-      //   {
-      //     company_id: company.toJSON().company_id,
-      //     user_id: user.user_id,
-      //   },
-
-      //   { transaction: t }
-      // );
     }
 
     const user = await User.create(
@@ -85,6 +69,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     const posting_role = await Role.findOne(
       {
         where: { role_user: postingrole_user },
+        raw: true,
       },
       { transaction: t }
     );
@@ -92,6 +77,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     const general_role = await Role.findOne(
       {
         where: { role_user: generalrole_user },
+        raw: true,
       },
       { transaction: t }
     );
