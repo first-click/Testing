@@ -69,7 +69,6 @@ exports.register = asyncHandler(async (req, res, next) => {
     const posting_role = await Role.findOne(
       {
         where: { role_user: postingrole_user },
-        // raw: true,
       },
       { transaction: t }
     );
@@ -77,7 +76,6 @@ exports.register = asyncHandler(async (req, res, next) => {
     const general_role = await Role.findOne(
       {
         where: { role_user: generalrole_user },
-        //  raw: true,
       },
       { transaction: t }
     );
