@@ -31,18 +31,29 @@ function generateDataPoint({ id }) {
     }
   }
 
+  var benefits = [];
+
+  for (var i = 0; i < 5; i++) benefits.push(faker.lorem.word());
+
+  console.log(benefits);
+
   let firstName = faker.name.firstName();
   let lastName = faker.name.lastName();
   let title = faker.name.jobTitle();
   let department = faker.name.jobArea();
   let departmentShort = department.split('').slice(0, 3).join('').toUpperCase();
   let postingDescription = faker.lorem.sentence();
-  let postingBenefits = faker.lorem.sentence();
+  let postingBenefits = benefits;
   let postingQualifications = faker.lorem.sentence();
   let postingWorkingHours = 10;
   let postingContactPerson = faker.name.firstName() + faker.name.lastName();
   let postingContactPhonenumber = faker.phone.phoneNumber();
   let postingSalary = 1000;
+  let street = faker.address.streetName();
+  let streetNumber = 5;
+  let postalCode = faker.address.zipCode();
+  let city = faker.address.city();
+  let country = faker.address.country();
 
   let date = new Date();
   return {
@@ -62,7 +73,6 @@ function generateDataPoint({ id }) {
       person_last_name: lastName,
       created_at: date,
       updated_at: date,
-      // junk: 'junk',
     },
 
     position: {
@@ -88,15 +98,38 @@ function generateDataPoint({ id }) {
       posting_salary: postingSalary,
       created_at: date,
       updated_at: date,
-      // junk: 'junk',
     },
+
+    address: {
+      address_street: street,
+      address_street_number: streetNumber,
+      address_postal_code: postalCode,
+      address_city: city,
+      address_country: country,
+      created_at: date,
+      updated_at: date,
+    },
+    address_company: {
+      address_comany_id: id,
+      address_id: id,
+      company_id: id,
+      created_at: date,
+      updated_at: date,
+    },
+    address_person: {
+      address_person_id: id,
+      address_id: id,
+      person_id: id,
+      created_at: date,
+      updated_at: date,
+    },
+
     person_position: {
       person_position_id: id,
       person_id: id,
       position_id: id,
       created_at: date,
       updated_at: date,
-      // junk: 'junk',
     },
     posting_user: {
       posting_id: id,

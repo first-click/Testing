@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
         through: models.person_position,
         foreignKey: 'person_id',
       });
+
+      Person.belongsToMany(models.address, {
+        through: models.address_person,
+        foreignKey: 'person_id',
+      });
     }
   }
 
@@ -53,6 +58,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       person_last_name: {
         type: DataTypes.STRING,
+      },
+      person_fullName: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return `${this.person_first_name} ${this.person_last_name}`;
+        },
+        set(value) {
+          throw new Error('Do not try to set the `fullName` value!');
+        },
       },
     },
     {

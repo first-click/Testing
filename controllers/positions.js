@@ -47,17 +47,17 @@ exports.queryPositions = asyncHandler(async (req, res) => {
               },
             },
             {
-              title: {
+              position_title: {
                 [Sequelize.Op.like]: `%${queryString}%`,
               },
             },
             {
-              department: {
+              position_department: {
                 [Sequelize.Op.like]: `%${queryString}%`,
               },
             },
             {
-              department_short: {
+              position_department_short: {
                 [Sequelize.Op.like]: `%${queryString}%`,
               },
             },
@@ -79,7 +79,7 @@ exports.queryPositions = asyncHandler(async (req, res) => {
   //   }
   // );
 
-  if (!postions) {
+  if (!positions) {
     return next(new ErrorResponse('Positions could not be found', 401));
   }
   res.status(200).json({

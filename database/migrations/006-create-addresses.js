@@ -15,54 +15,40 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'postings',
+        'addresses',
         {
-          posting_id: {
-            type: Sequelize.INTEGER,
+          address_id: {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
+            type: Sequelize.INTEGER,
           },
 
-          posting_startdate: {
-            allowNull: false,
-            type: Sequelize.DATE,
-          },
-          posting_enddate: {
-            allowNull: false,
-            type: Sequelize.DATE,
-          },
-          posting_description: {
-            allowNull: false,
+          address_street: {
             type: Sequelize.STRING,
+            unique: true,
+            allowNull: true,
           },
-          posting_benefits: {
-            allowNull: false,
-            type: Sequelize.ARRAY(Sequelize.TEXT),
-          },
-          posting_qualifications: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_working_hours: {
-            allowNull: false,
+          address_street_number: {
             type: Sequelize.INTEGER,
+            unique: true,
+            allowNull: true,
           },
-          posting_contact_person: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_contact_email: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_contact_phonenumber: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_salary: {
-            allowNull: false,
+          address_postal_code: {
             type: Sequelize.INTEGER,
+            unique: true,
+            allowNull: true,
+          },
+          address_city: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: true,
+          },
+
+          address_country: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: true,
           },
 
           created_at: {
@@ -85,7 +71,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('postings', { transaction });
+      await queryInterface.dropTable('addresses', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
