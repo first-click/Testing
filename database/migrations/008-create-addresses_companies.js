@@ -15,54 +15,34 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'postings',
+        'addresses_companies',
         {
-          posting_id: {
-            type: Sequelize.INTEGER,
+          address_company_id: {
+            primaryKey: true,
             allowNull: false,
             autoIncrement: true,
+            type: Sequelize.INTEGER,
+          },
+          address_id: {
             primaryKey: true,
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'address',
+              key: 'address_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
           },
 
-          posting_startdate: {
-            allowNull: false,
-            type: Sequelize.DATE,
-          },
-          posting_enddate: {
-            allowNull: false,
-            type: Sequelize.DATE,
-          },
-          posting_description: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_benefits: {
-            allowNull: false,
-            type: Sequelize.ARRAY(Sequelize.TEXT),
-          },
-          posting_qualifications: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_working_hours: {
-            allowNull: false,
+          company_id: {
+            primaryKey: true,
             type: Sequelize.INTEGER,
-          },
-          posting_contact_person: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_contact_email: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_contact_phonenumber: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_salary: {
-            allowNull: false,
-            type: Sequelize.INTEGER,
+            references: {
+              model: 'company',
+              key: 'company_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
           },
 
           created_at: {
@@ -85,7 +65,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('postings', { transaction });
+      await queryInterface.dropTable('addresses_companies', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

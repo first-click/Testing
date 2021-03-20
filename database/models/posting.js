@@ -44,14 +44,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         type: DataTypes.INTEGER,
       },
-      // address_id: {
-      //   allowNull: false,
-      //   references: {
-      //     model: 'address',
-      //     key: 'posting_id',
-      //   },
-      //   type: DataTypes.INTEGER,
-      // },
 
       posting_startdate: {
         allowNull: false,
@@ -67,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       posting_benefits: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.ARRAY(DataTypes.TEXT),
       },
       posting_qualifications: {
         allowNull: false,

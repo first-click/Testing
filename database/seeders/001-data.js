@@ -21,7 +21,10 @@ module.exports = {
     const persons = data.map((entry) => entry.person);
     const positions = data.map((entry) => entry.position);
     const postings = data.map((entry) => entry.posting);
+    const addresses = data.map((entry) => entry.address);
 
+    const addresses_companies = data.map((entry) => entry.address_company);
+    const addresses_persons = data.map((entry) => entry.address_person);
     const postings_users = data.map((entry) => entry.posting_user);
     const persons_positions = data.map((entry) => entry.person_position);
 
@@ -32,6 +35,7 @@ module.exports = {
       await queryInterface.bulkInsert('persons', persons, {});
       await queryInterface.bulkInsert('positions', positions, {});
       await queryInterface.bulkInsert('postings', postings, {});
+      await queryInterface.bulkInsert('addresses', addresses, {});
       await queryInterface.bulkInsert('roles', [
         {
           role_id: 1,
@@ -76,6 +80,16 @@ module.exports = {
           updated_at: date,
         },
       ]);
+      await queryInterface.bulkInsert(
+        'addresses_companies',
+        addresses_companies,
+        {}
+      );
+      await queryInterface.bulkInsert(
+        'addresses_persons',
+        addresses_persons,
+        {}
+      );
       await queryInterface.bulkInsert(
         'persons_positions',
         persons_positions,

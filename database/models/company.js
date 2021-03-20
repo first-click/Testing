@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       Company.hasMany(models.posting, {
         foreignKey: 'company_id',
       });
+      Company.belongsToMany(models.address, {
+        through: models.address_company,
+        foreignKey: 'company_id',
+      });
     }
   }
   Company.init(
