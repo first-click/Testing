@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'address_copmany',
+      modelName: 'address_company',
       name: { singular: 'address_company', plural: 'addresses_companies' },
       tableName: 'addresses_companies',
     }

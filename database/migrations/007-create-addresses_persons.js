@@ -27,7 +27,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
             references: {
-              model: 'address',
+              model: 'addresses',
               key: 'address_id',
             },
             onUpdate: 'CASCADE',
@@ -38,7 +38,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
             references: {
-              model: 'person',
+              model: 'persons',
               key: 'person_id',
             },
             onUpdate: 'CASCADE',
