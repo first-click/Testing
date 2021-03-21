@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
       Posting.belongsTo(models.position, {
         foreignKey: 'position_id',
       });
+      Posting.hasMany(models.benefit, {
+        foreignKey: 'benefit_id',
+      });
     }
   }
   Posting.init(
@@ -57,10 +60,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      posting_benefits: {
-        allowNull: false,
-        type: DataTypes.ARRAY(DataTypes.TEXT),
-      },
+
       posting_qualifications: {
         allowNull: false,
         type: DataTypes.STRING,

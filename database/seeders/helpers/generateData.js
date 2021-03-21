@@ -31,16 +31,12 @@ function generateDataPoint({ id }) {
     }
   }
 
-  let benefits = [];
-  for (var i = 0; i < 5; i++) benefits.push(faker.lorem.word());
-
   let firstName = faker.name.firstName();
   let lastName = faker.name.lastName();
   let title = faker.name.jobTitle();
   let department = faker.name.jobArea();
   let departmentShort = department.split('').slice(0, 3).join('').toUpperCase();
   let postingDescription = faker.lorem.sentence();
-  let postingBenefits = benefits;
   let postingQualifications = faker.lorem.sentence();
   let postingWorkingHours = 10;
   let postingContactPerson = faker.name.firstName() + faker.name.lastName();
@@ -51,6 +47,7 @@ function generateDataPoint({ id }) {
   let postalCode = faker.address.zipCode();
   let city = faker.address.city();
   let country = faker.address.country();
+  let benefit = faker.lorem.word();
 
   let date = new Date();
   return {
@@ -85,7 +82,6 @@ function generateDataPoint({ id }) {
       posting_startdate: date,
       posting_enddate: date,
       posting_description: postingDescription,
-      posting_benefits: postingBenefits,
       posting_qualifications: postingQualifications,
       posting_working_hours: postingWorkingHours,
       posting_contact_person: postingContactPerson,
@@ -102,6 +98,12 @@ function generateDataPoint({ id }) {
       address_postal_code: postalCode,
       address_city: city,
       address_country: country,
+      created_at: date,
+      updated_at: date,
+    },
+    posting_benefits: {
+      posting_id: id,
+      posting_benefit: benefit,
       created_at: date,
       updated_at: date,
     },

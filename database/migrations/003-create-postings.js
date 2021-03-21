@@ -36,10 +36,7 @@ module.exports = {
             allowNull: false,
             type: Sequelize.STRING,
           },
-          posting_benefits: {
-            allowNull: false,
-            type: Sequelize.ARRAY(Sequelize.TEXT),
-          },
+
           posting_qualifications: {
             allowNull: false,
             type: Sequelize.STRING,
