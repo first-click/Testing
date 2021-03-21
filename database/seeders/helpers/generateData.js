@@ -97,7 +97,7 @@ function generateDataPoint({ id }) {
     },
 
     address: {
-      address_street: street,
+      address_street_name: street,
       address_street_number: streetNumber,
       address_postal_code: postalCode,
       address_city: city,

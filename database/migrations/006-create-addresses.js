@@ -24,7 +24,7 @@ module.exports = {
             type: Sequelize.INTEGER,
           },
 
-          address_street: {
+          address_street_name: {
             type: Sequelize.STRING,
 
             allowNull: true,
