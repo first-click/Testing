@@ -27,28 +27,28 @@ module.exports = (sequelize, DataTypes) => {
 
       address_street: {
         type: DataTypes.STRING,
-        unique: true,
+
         allowNull: true,
       },
       address_street_number: {
         type: DataTypes.INTEGER,
-        unique: true,
+
         allowNull: true,
       },
       address_postal_code: {
-        type: DataTypes.INTEGER,
-        unique: true,
+        type: DataTypes.STRING,
+
         allowNull: true,
       },
       address_city: {
         type: DataTypes.STRING,
-        unique: true,
+
         allowNull: true,
       },
 
       address_country: {
         type: DataTypes.STRING,
-        unique: true,
+
         allowNull: true,
       },
     },

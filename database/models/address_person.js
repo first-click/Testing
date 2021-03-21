@@ -22,20 +22,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       address_id: {
-        primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
-          model: 'address',
+          model: 'addresses',
           key: 'address_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
       person_id: {
-        primaryKey: true,
         type: DataTypes.INTEGER,
         references: {
-          model: 'person',
+          model: 'persons',
           key: 'person_id',
         },
         onUpdate: 'CASCADE',

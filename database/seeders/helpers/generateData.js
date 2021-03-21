@@ -31,11 +31,8 @@ function generateDataPoint({ id }) {
     }
   }
 
-  var benefits = [];
-
+  let benefits = [];
   for (var i = 0; i < 5; i++) benefits.push(faker.lorem.word());
-
-  console.log(benefits);
 
   let firstName = faker.name.firstName();
   let lastName = faker.name.lastName();
@@ -64,7 +61,6 @@ function generateDataPoint({ id }) {
       company_id: companyId,
       created_at: date,
       updated_at: date,
-      // junk: 'junk',
     },
     person: {
       company_id: companyId,
@@ -110,7 +106,7 @@ function generateDataPoint({ id }) {
       updated_at: date,
     },
     address_company: {
-      address_comany_id: id,
+      address_company_id: id,
       address_id: id,
       company_id: id,
       created_at: date,

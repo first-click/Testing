@@ -25,7 +25,6 @@ module.exports = {
           },
           role_id: {
             type: Sequelize.INTEGER,
-            // primaryKey: true,
             references: {
               model: 'roles',
               key: 'role_id',
@@ -35,7 +34,6 @@ module.exports = {
           },
           user_id: {
             type: Sequelize.INTEGER,
-            // primaryKey: true,
             references: {
               model: 'users',
               key: 'user_id',

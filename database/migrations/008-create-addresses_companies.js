@@ -24,10 +24,10 @@ module.exports = {
             type: Sequelize.INTEGER,
           },
           address_id: {
-            primaryKey: true,
+            // primaryKey: true,
             type: Sequelize.INTEGER,
             references: {
-              model: 'address',
+              model: 'addresses',
               key: 'address_id',
             },
             onUpdate: 'CASCADE',
@@ -35,10 +35,10 @@ module.exports = {
           },
 
           company_id: {
-            primaryKey: true,
+            //primaryKey: true,
             type: Sequelize.INTEGER,
             references: {
-              model: 'company',
+              model: 'companies',
               key: 'company_id',
             },
             onUpdate: 'CASCADE',
