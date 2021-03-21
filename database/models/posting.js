@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       Posting.belongsTo(models.position, {
         foreignKey: 'position_id',
       });
-      Posting.hasMany(models.benefit, {
+      Posting.hasMany(models.posting_benefit, {
         foreignKey: 'benefit_id',
       });
     }

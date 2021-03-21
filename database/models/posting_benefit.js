@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  Posting.init(
+  Posting_benefit.init(
     {
       posting_benefit_id: {
         allowNull: false,
