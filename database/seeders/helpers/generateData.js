@@ -43,7 +43,7 @@ function generateDataPoint({ id }) {
   let postingContactPhonenumber = faker.phone.phoneNumber();
   let postingSalary = 1000;
   let street = faker.address.streetName();
-  let streetNumber = 5;
+  let houseNumber = 5;
   let postalCode = faker.address.zipCode();
   let city = faker.address.city();
   let country = faker.address.country();
@@ -94,7 +94,7 @@ function generateDataPoint({ id }) {
 
     address: {
       address_street_name: street,
-      address_street_number: streetNumber,
+      address_house_number: houseNumber,
       address_postal_code: postalCode,
       address_city: city,
       address_country: country,

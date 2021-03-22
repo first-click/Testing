@@ -28,7 +28,7 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: true,
           },
-          address_street_number: {
+          address_house_number: {
             type: Sequelize.INTEGER,
             allowNull: true,
           },
