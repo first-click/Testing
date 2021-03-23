@@ -23,11 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         through: models.posting_user,
         foreignKey: 'user_id',
       });
-      // User.belongsToMany(models.company, {
-      //   through: models.company_user,
 
-      //   foreignKey: 'user_id',
-      // });
       User.belongsTo(models.company, {
         targetKey: 'company_id',
         foreignKey: 'company_id',

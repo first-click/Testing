@@ -2,6 +2,9 @@ const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Company = sequelize.models.company;
+const User = sequelize.models.user;
+const Address = sequelize.models.address;
+const Address_company = sequelize.models.address_company;
 
 //@desc Get all companies
 //@route GET /api/v1/companies
@@ -49,16 +52,48 @@ exports.getCompany = asyncHandler(async (req, res, next) => {
 //@route POST /api/v1/companies
 //@access Private/Admin
 exports.createCompany = asyncHandler(async (req, res) => {
-  // const { title, department, department_short } = req.body;
-  // const company = await Company.create({
-  //   title,
-  //   department,
-  //   department_short,
-  //   company_id,
-  // });
-  res.status(400).json({
-    success: false,
-    message: 'creating companies is not allowed',
+  const user_id = req.user.user_id;
+
+  const {
+    company_name,
+    address_street_name,
+    address_house_number,
+    address_postal_code,
+    address_city,
+    address_country,
+  } = req.body;
+  // company will ich eigentlich als Teil der transaction haben, funktioniert aber ncht, warum?
+  const company = await Company.create({ company_name });
+  await sequelize.transaction(async (t) => {
+    await User.update(
+      { company_id: company.company_id },
+      { where: { user_id } },
+      { transaction: t }
+    );
+
+    const address = await Address.create(
+      {
+        address_street_name,
+        address_house_number,
+        address_postal_code,
+        address_city,
+        address_country,
+      },
+      { transaction: t }
+    );
+
+    await Address_company.create(
+      {
+        address_id: address.address_id,
+        company_id: company.company_id,
+      },
+      { transaction: t }
+    );
+
+    res.status(200).json({
+      success: true,
+      data: [address, company],
+    });
   });
 });
 

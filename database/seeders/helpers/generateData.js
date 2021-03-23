@@ -108,7 +108,6 @@ function generateDataPoint({ id }) {
       updated_at: date,
     },
     address_company: {
-      address_company_id: id,
       address_id: id,
       company_id: id,
       created_at: date,
