@@ -22,7 +22,12 @@ module.exports = {
     const positions = data.map((entry) => entry.position);
     const postings = data.map((entry) => entry.posting);
     const addresses = data.map((entry) => entry.address);
-    const posting_benefits = data.map((entry) => entry.posting_benefits);
+    const benefits = data.map((entry) => entry.benefit);
+    const qualifications = data.map((entry) => entry.qualification);
+    const posting_benefits = data.map((entry) => entry.posting_benefit);
+    const posting_qualifications = data.map(
+      (entry) => entry.posting_qualification
+    );
 
     const addresses_companies = data.map((entry) => entry.address_company);
     const addresses_persons = data.map((entry) => entry.address_person);
@@ -37,52 +42,15 @@ module.exports = {
       await queryInterface.bulkInsert('positions', positions, {});
       await queryInterface.bulkInsert('postings', postings, {});
       await queryInterface.bulkInsert('addresses', addresses, {});
+      await queryInterface.bulkInsert('benefits', benefits, {});
       await queryInterface.bulkInsert('posting_benefits', posting_benefits, {});
+      await queryInterface.bulkInsert('qualifications', qualifications, {});
+      await queryInterface.bulkInsert(
+        'posting_qualifications',
+        posting_qualifications,
+        {}
+      );
 
-      await queryInterface.bulkInsert('roles', [
-        {
-          role_id: 1,
-          role_user: 'posting_creator',
-          created_at: date,
-          updated_at: date,
-        },
-        {
-          role_id: 2,
-          role_user: 'posting_editor',
-          created_at: date,
-          updated_at: date,
-        },
-        {
-          role_id: 3,
-          role_user: 'posting_reader',
-          created_at: date,
-          updated_at: date,
-        },
-        {
-          role_id: 4,
-          role_user: 'posting_applicant',
-          created_at: date,
-          updated_at: date,
-        },
-        {
-          role_id: 5,
-          role_user: 'user',
-          created_at: date,
-          updated_at: date,
-        },
-        {
-          role_id: 6,
-          role_user: 'admin',
-          created_at: date,
-          updated_at: date,
-        },
-        {
-          role_id: 7,
-          role_user: 'publisher',
-          created_at: date,
-          updated_at: date,
-        },
-      ]);
       await queryInterface.bulkInsert(
         'addresses_companies',
         addresses_companies,
@@ -153,8 +121,10 @@ module.exports = {
     await queryInterface.bulkDelete('positions', null, {});
     await queryInterface.bulkDelete('postings', null, {});
     await queryInterface.bulkDelete('addresses', null, {});
+    await queryInterface.bulkDelete('benefits', null, {});
     await queryInterface.bulkDelete('posting_benefits', null, {});
-    await queryInterface.bulkDelete('roles', null, {});
+    await queryInterface.bulkDelete('qualifications', null, {});
+    await queryInterface.bulkDelete('posting_qualifications', null, {});
     await queryInterface.bulkDelete('persons_positions', null, {});
     await queryInterface.bulkDelete('postings_users', null, {});
     await queryInterface.bulkDelete('addresses_persons', null, {});

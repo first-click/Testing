@@ -16,8 +16,14 @@ module.exports = (sequelize, DataTypes) => {
       Posting.belongsTo(models.position, {
         foreignKey: 'position_id',
       });
-      Posting.hasMany(models.posting_benefit, {
-        foreignKey: 'benefit_id',
+
+      Posting.belongsToMany(models.benefit, {
+        through: models.posting_benefit,
+        foreignKey: 'posting_id',
+      });
+      Posting.belongsToMany(models.qualification, {
+        through: models.posting_qualification,
+        foreignKey: 'posting_id',
       });
     }
   }
@@ -61,10 +67,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
 
-      posting_qualifications: {
-        allowNull: false,
-        type: DataTypes.STRING,
-      },
       posting_working_hours: {
         allowNull: false,
         type: DataTypes.INTEGER,

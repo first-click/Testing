@@ -15,47 +15,18 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'postings',
+        'benefits',
         {
-          posting_id: {
-            type: Sequelize.INTEGER,
+          benefit_id: {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-          },
-
-          posting_startdate: {
-            allowNull: false,
-            type: Sequelize.DATE,
-          },
-          posting_enddate: {
-            allowNull: false,
-            type: Sequelize.DATE,
-          },
-          posting_description: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-
-          posting_working_hours: {
-            allowNull: false,
             type: Sequelize.INTEGER,
           },
-          posting_contact_person: {
-            allowNull: false,
+
+          benefit: {
+            allowNull: true,
             type: Sequelize.STRING,
-          },
-          posting_contact_email: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_contact_phonenumber: {
-            allowNull: false,
-            type: Sequelize.STRING,
-          },
-          posting_salary: {
-            allowNull: false,
-            type: Sequelize.INTEGER,
           },
 
           created_at: {
@@ -78,7 +49,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('postings', { transaction });
+      await queryInterface.dropTable('benefits', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

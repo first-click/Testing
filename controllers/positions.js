@@ -117,16 +117,20 @@ exports.getPosition = asyncHandler(async (req, res, next) => {
 exports.createPosition = asyncHandler(async (req, res, next) => {
   // Insert into table
   const { company_id } = req.user; // man kann nur in der eigenen Company positions createn
-  const { title, department, department_short } = req.body;
+  const {
+    position_title,
+    position_department,
+    position_department_short,
+  } = req.body;
   const position = await Position.create({
-    title,
-    department,
-    department_short,
+    position_title,
+    position_department,
+    position_department_short,
     company_id,
   });
 
   if (!position) {
-    return next(new ErrorResponse('Position couls not be created', 401));
+    return next(new ErrorResponse('Position could not be created', 401));
   }
   res.status(200).json({
     success: true,

@@ -45,9 +45,6 @@ exports.createPosting = asyncHandler(async (req, res, next) => {
   const company_id = req.user.company_id;
 
   const {
-    position_title,
-    position_department,
-    position_department_short,
     posting_startdate,
     posting_enddate,
     posting_description,
@@ -63,54 +60,46 @@ exports.createPosting = asyncHandler(async (req, res, next) => {
   await sequelize.transaction(async (t) => {
     let position_id;
 
-    const positionExists = await Position.findOne({
-      where: { position_title },
+    const positionExists = await Position.findByPk({
+      where: { company_id },
     });
     if (positionExists) {
       position_id = positionExists.position_id;
-    } else {
-      const position = await Position.create({
-        position_title,
-        position_department,
-        position_department_short,
-        company_id,
-      });
-
-      position_id = position.position_id;
     }
 
-    const posting = await Posting.create(
-      {
-        position_id: position_id,
-        company_id,
-        posting_startdate,
-        posting_startdate,
-        posting_enddate,
-        posting_description,
-        posting_benefits,
-        posting_qualifications,
-        posting_working_hours,
-        posting_contact_person,
-        posting_contact_email,
-        posting_contact_phonenumber,
-        posting_salary,
-      },
-      { transaction: t }
-    );
+    position_id = position.position_id;
+  });
 
-    await Posting_user.create(
-      {
-        posting_id: posting.posting_id,
-        user_id: req.user.user_id,
-      },
-      { transaction: t }
-    );
+  const posting = await Posting.create(
+    {
+      position_id,
+      company_id,
+      posting_startdate,
+      posting_startdate,
+      posting_enddate,
+      posting_description,
+      posting_benefits,
+      posting_qualifications,
+      posting_working_hours,
+      posting_contact_person,
+      posting_contact_email,
+      posting_contact_phonenumber,
+      posting_salary,
+    },
+    { transaction: t }
+  );
 
-    return res.status(200).json({
-      success: true,
-      data: posting,
-    });
-    // }
+  await Posting_user.create(
+    {
+      posting_id: posting.posting_id,
+      user_id: req.user.user_id,
+    },
+    { transaction: t }
+  );
+
+  return res.status(200).json({
+    success: true,
+    data: posting,
   });
 });
 

@@ -37,7 +37,6 @@ function generateDataPoint({ id }) {
   let department = faker.name.jobArea();
   let departmentShort = department.split('').slice(0, 3).join('').toUpperCase();
   let postingDescription = faker.lorem.sentence();
-  let postingQualifications = faker.lorem.sentence();
   let postingWorkingHours = 10;
   let postingContactPerson = faker.name.firstName() + faker.name.lastName();
   let postingContactPhonenumber = faker.phone.phoneNumber();
@@ -48,6 +47,7 @@ function generateDataPoint({ id }) {
   let city = faker.address.city();
   let country = faker.address.country();
   let benefit = faker.lorem.word();
+  let qualification = faker.lorem.word();
 
   let date = new Date();
   return {
@@ -82,7 +82,6 @@ function generateDataPoint({ id }) {
       posting_startdate: date,
       posting_enddate: date,
       posting_description: postingDescription,
-      posting_qualifications: postingQualifications,
       posting_working_hours: postingWorkingHours,
       posting_contact_person: postingContactPerson,
       posting_contact_email: faker.internet.email(),
@@ -101,12 +100,33 @@ function generateDataPoint({ id }) {
       created_at: date,
       updated_at: date,
     },
-    posting_benefits: {
-      posting_id: id,
-      posting_benefit: benefit,
+    benefit: {
+      benefit_id: id,
+      benefit: benefit,
       created_at: date,
       updated_at: date,
     },
+    qualification: {
+      qualification_id: id,
+      qualification: qualification,
+      created_at: date,
+      updated_at: date,
+    },
+    posting_benefit: {
+      posting_benefit_id: id,
+      posting_id: id,
+      benefit_id: id,
+      created_at: date,
+      updated_at: date,
+    },
+    posting_qualification: {
+      posting_qualification_id: id,
+      posting_id: id,
+      qualification_id: id,
+      created_at: date,
+      updated_at: date,
+    },
+
     address_company: {
       address_id: id,
       company_id: id,

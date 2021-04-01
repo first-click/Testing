@@ -2,19 +2,19 @@
 
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Posting_benefit extends Model {
+  class Posting_qualification extends Model {
     static associate(models) {
-      Posting_benefit.belongsTo(models.posting, {
+      Posting_qualification.belongsTo(models.posting, {
         foreignKey: 'posting_id',
       });
-      Posting_benefit.belongsTo(models.benefit, {
-        foreignKey: 'benefit_id',
+      Posting_qualification.belongsTo(models.qualification, {
+        foreignKey: 'qualification_id',
       });
     }
   }
-  Posting_benefit.init(
+  Posting_qualification.init(
     {
-      posting_benefit_id: {
+      posting_qualification_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -29,11 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         type: DataTypes.INTEGER,
       },
-      benefit_id: {
+      qualification_id: {
         allowNull: false,
         references: {
-          model: 'benefits',
-          key: 'benefit_id',
+          model: 'qualifications',
+          key: 'qualification_id',
         },
         type: DataTypes.INTEGER,
       },
@@ -41,10 +41,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'posting_benefit',
-      name: { singular: 'posting_benefit', plural: 'posting_benefits' },
-      tableName: 'posting_benefits',
+      modelName: 'posting_qualification',
+      name: {
+        singular: 'posting_qualification',
+        plural: 'posting_qualifications',
+      },
+      tableName: 'posting_qualifications',
     }
   );
-  return Posting_benefit;
+  return Posting_qualification;
 };
