@@ -64,6 +64,7 @@ exports.createCompany = asyncHandler(async (req, res) => {
   } = req.body;
 
   await sequelize.transaction(async (t) => {
+    //warum geht transaction bei der ersten create nicht
     const company = await Company.create({ company_name });
     await User.update(
       { company_id: company.company_id },

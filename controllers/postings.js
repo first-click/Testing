@@ -60,6 +60,7 @@ exports.createPosting = asyncHandler(async (req, res) => {
     posting_salary,
   } = req.body;
   await sequelize.transaction(async (t) => {
+    //warum geht transaction bei der ersten create nicht
     const posting = await Posting.create({
       position_id: posting_position_id,
       company_id,
@@ -84,39 +85,37 @@ exports.createPosting = asyncHandler(async (req, res) => {
     for (const benefit of posting_benefits) {
       await Benefit.create({
         benefit,
-      });
+      }),
+        { transaction: t };
     }
 
     for (const benefit of posting_benefits) {
       const postingBenefit = await Benefit.findOne({
         where: { benefit },
       });
-      await Posting_benefit.create(
-        {
-          benefit_id: postingBenefit.benefit_id,
-          posting_id: posting.posting_id,
-        },
-        { transaction: t }
-      );
+      await Posting_benefit.create({
+        benefit_id: postingBenefit.benefit_id,
+        posting_id: posting.posting_id,
+      }),
+        { transaction: t };
     }
 
     for (const qualification of posting_qualifications) {
       await Qualification.create({
         qualification,
-      });
+      }),
+        { transaction: t };
     }
 
     for (const qualification of posting_qualifications) {
       const postingQualification = await Qualification.findOne({
         where: { qualification },
       });
-      await Posting_qualification.create(
-        {
-          qualification_id: postingQualification.qualification_id,
-          posting_id: posting.posting_id,
-        },
-        { transaction: t }
-      );
+      await Posting_qualification.create({
+        qualification_id: postingQualification.qualification_id,
+        posting_id: posting.posting_id,
+      }),
+        { transaction: t };
     }
 
     res.status(200).json({
