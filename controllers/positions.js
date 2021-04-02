@@ -115,8 +115,8 @@ exports.getPosition = asyncHandler(async (req, res, next) => {
 //@route POST /api/v1/positions
 //@access Private/Admin
 exports.createPosition = asyncHandler(async (req, res, next) => {
-  // Insert into table
-  const { company_id } = req.user; // man kann nur in der eigenen Company positions createn
+  // man kann nur in der eigenen Company positions createn
+  const { company_id } = req.user;
   const {
     position_title,
     position_department,

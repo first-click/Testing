@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Posting.belongsToMany(models.user, {
         through: models.posting_user,
-
         foreignKey: 'posting_id',
       });
 

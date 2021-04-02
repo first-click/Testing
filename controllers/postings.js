@@ -3,9 +3,11 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Posting = sequelize.models.posting;
 const Posting_user = sequelize.models.posting_user;
-const Company = sequelize.models.company;
-const Company_user = sequelize.models.company_user;
+const Benefit = sequelize.models.benefit;
 const Position = sequelize.models.position;
+const Posting_benefit = sequelize.models.posting_benefit;
+const Posting_qualification = sequelize.models.posting_qualification;
+const Qualification = sequelize.models.qualification;
 
 //@desc Get all postings
 //@route GET /api/v1/postings
@@ -41,10 +43,11 @@ exports.getPosting = asyncHandler(async (req, res, next) => {
 //@desc Create new posting
 //@route POST /api/v1/postings
 //@access Private/Admin
-exports.createPosting = asyncHandler(async (req, res, next) => {
-  const company_id = req.user.company_id;
+exports.createPosting = asyncHandler(async (req, res) => {
+  const { company_id } = req.user;
 
   const {
+    posting_position_id,
     posting_startdate,
     posting_enddate,
     posting_description,
@@ -56,50 +59,70 @@ exports.createPosting = asyncHandler(async (req, res, next) => {
     posting_contact_phonenumber,
     posting_salary,
   } = req.body;
-
   await sequelize.transaction(async (t) => {
-    let position_id;
-
-    const positionExists = await Position.findByPk({
-      where: { company_id },
-    });
-    if (positionExists) {
-      position_id = positionExists.position_id;
-    }
-
-    position_id = position.position_id;
-  });
-
-  const posting = await Posting.create(
-    {
-      position_id,
+    const posting = await Posting.create({
+      position_id: posting_position_id,
       company_id,
       posting_startdate,
       posting_startdate,
       posting_enddate,
       posting_description,
-      posting_benefits,
-      posting_qualifications,
       posting_working_hours,
       posting_contact_person,
       posting_contact_email,
       posting_contact_phonenumber,
       posting_salary,
-    },
-    { transaction: t }
-  );
+    });
+    await Posting_user.create(
+      {
+        posting_id: posting.posting_id,
+        user_id: req.user.user_id,
+      },
+      { transaction: t }
+    );
 
-  await Posting_user.create(
-    {
-      posting_id: posting.posting_id,
-      user_id: req.user.user_id,
-    },
-    { transaction: t }
-  );
+    for (const benefit of posting_benefits) {
+      await Benefit.create({
+        benefit,
+      });
+    }
 
-  return res.status(200).json({
-    success: true,
-    data: posting,
+    for (const benefit of posting_benefits) {
+      const postingBenefit = await Benefit.findOne({
+        where: { benefit },
+      });
+      await Posting_benefit.create(
+        {
+          benefit_id: postingBenefit.benefit_id,
+          posting_id: posting.posting_id,
+        },
+        { transaction: t }
+      );
+    }
+
+    for (const qualification of posting_qualifications) {
+      await Qualification.create({
+        qualification,
+      });
+    }
+
+    for (const qualification of posting_qualifications) {
+      const postingQualification = await Qualification.findOne({
+        where: { qualification },
+      });
+      await Posting_qualification.create(
+        {
+          qualification_id: postingQualification.qualification_id,
+          posting_id: posting.posting_id,
+        },
+        { transaction: t }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      data: posting,
+    });
   });
 });
 

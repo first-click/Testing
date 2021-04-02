@@ -101,26 +101,22 @@ function generateDataPoint({ id }) {
       updated_at: date,
     },
     benefit: {
-      benefit_id: id,
       benefit: benefit,
       created_at: date,
       updated_at: date,
     },
     qualification: {
-      qualification_id: id,
       qualification: qualification,
       created_at: date,
       updated_at: date,
     },
     posting_benefit: {
-      posting_benefit_id: id,
       posting_id: id,
       benefit_id: id,
       created_at: date,
       updated_at: date,
     },
     posting_qualification: {
-      posting_qualification_id: id,
       posting_id: id,
       qualification_id: id,
       created_at: date,

@@ -100,7 +100,7 @@ module.exports = {
         ],
         {}
       );
-      await queryInterface.bulkInsert('postings_users', postings_users, {});
+      await queryInterface.bulkInsert('posting_users', postings_users, {});
     } catch (err) {
       console.log(err);
     }
@@ -126,7 +126,7 @@ module.exports = {
     await queryInterface.bulkDelete('qualifications', null, {});
     await queryInterface.bulkDelete('posting_qualifications', null, {});
     await queryInterface.bulkDelete('persons_positions', null, {});
-    await queryInterface.bulkDelete('postings_users', null, {});
+    await queryInterface.bulkDelete('posting_users', null, {});
     await queryInterface.bulkDelete('addresses_persons', null, {});
     await queryInterface.bulkDelete('addresses_companies', null, {});
     await queryInterface.bulkDelete('roles_users', null, {});

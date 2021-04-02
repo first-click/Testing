@@ -62,9 +62,9 @@ exports.createCompany = asyncHandler(async (req, res) => {
     address_city,
     address_country,
   } = req.body;
-  // company will ich eigentlich als Teil der transaction haben, funktioniert aber nicht, warum?
-  const company = await Company.create({ company_name });
+
   await sequelize.transaction(async (t) => {
+    const company = await Company.create({ company_name });
     await User.update(
       { company_id: company.company_id },
       { where: { user_id } },
