@@ -65,6 +65,8 @@ exports.createCompany = asyncHandler(async (req, res) => {
 
   await sequelize.transaction(async (t) => {
     //warum geht transaction bei der ersten create nicht
+    // ist update zu schnell?
+
     const company = await Company.create({ company_name });
     await User.update(
       { company_id: company.company_id },
@@ -93,7 +95,7 @@ exports.createCompany = asyncHandler(async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: [address, company],
+      data: company,
     });
   });
 });
