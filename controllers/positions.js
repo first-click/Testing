@@ -122,6 +122,7 @@ exports.createPosition = asyncHandler(async (req, res, next) => {
     position_department,
     position_department_short,
   } = req.body;
+  console.log(req.body);
   const position = await Position.create({
     position_title,
     position_department,

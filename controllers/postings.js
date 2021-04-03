@@ -81,17 +81,20 @@ exports.createPosting = asyncHandler(async (req, res) => {
       },
       { transaction: t }
     );
+    const benefits = await posting_benefits.filter(
+      (benefit) => benefit.active === true
+    );
 
-    for (const benefit of posting_benefits) {
+    for (const benefit of benefits) {
       await Benefit.create({
-        benefit,
+        benefit: benefit.label,
       }),
         { transaction: t };
     }
 
-    for (const benefit of posting_benefits) {
+    for (const benefit of benefits) {
       const postingBenefit = await Benefit.findOne({
-        where: { benefit },
+        where: { benefit: benefit.label },
       });
       await Posting_benefit.create({
         benefit_id: postingBenefit.benefit_id,
