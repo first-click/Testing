@@ -83,9 +83,6 @@ exports.createPosting = asyncHandler(async (req, res) => {
       return next(new ErrorResponse('Create a company for the posting', 404));
     }
 
-    if (!posting) {
-      return next(new ErrorResponse('Posting could not be created', 401));
-    }
     await Posting_user.create(
       {
         posting_id: posting.posting_id,
@@ -143,7 +140,11 @@ exports.createPosting = asyncHandler(async (req, res) => {
 
     posting.dataValues.posting_benefits = sendBenefits;
     posting.dataValues.posting_qualifications = sendQualifications;
-    console.log(posting);
+
+    if (!posting) {
+      return next(new ErrorResponse('Posting could not be created', 401));
+    }
+
     res.status(200).json({
       success: true,
       data: posting,
