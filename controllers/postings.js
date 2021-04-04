@@ -141,11 +141,12 @@ exports.createPosting = asyncHandler(async (req, res) => {
         { transaction: t };
     }
 
+    posting.dataValues.posting_benefits = sendBenefits;
+    posting.dataValues.posting_qualifications = sendQualifications;
+    console.log(posting);
     res.status(200).json({
       success: true,
-      data: { posting: posting },
-      sendBenefits,
-      sendQualifications,
+      data: posting,
     });
   });
 });
