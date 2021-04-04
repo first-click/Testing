@@ -74,6 +74,18 @@ exports.createPosting = asyncHandler(async (req, res) => {
       posting_contact_phonenumber,
       posting_salary,
     });
+    // wie soll ich hier das error management machen?
+    if (!posting_position_id) {
+      return next(new ErrorResponse('Create a position for the posting', 404));
+    }
+
+    if (!company_id) {
+      return next(new ErrorResponse('Create a company for the posting', 404));
+    }
+
+    if (!posting) {
+      return next(new ErrorResponse('Posting could not be created', 401));
+    }
     await Posting_user.create(
       {
         posting_id: posting.posting_id,
@@ -85,35 +97,43 @@ exports.createPosting = asyncHandler(async (req, res) => {
       (benefit) => benefit.active === true
     );
 
+    let sendBenefits = [];
     for (const benefit of benefits) {
-      await Benefit.create({
-        benefit: benefit.label,
-      }),
-        { transaction: t };
-    }
+      const benefitAvailable = await Benefit.findOne({
+        where: { benefit: benefit.label },
+      });
 
-    for (const benefit of benefits) {
+      if (benefitAvailable === null) {
+        await Benefit.create({
+          benefit: benefit.label,
+        }),
+          { transaction: t };
+      }
       const postingBenefit = await Benefit.findOne({
         where: { benefit: benefit.label },
       });
+      sendBenefits.push(postingBenefit);
       await Posting_benefit.create({
         benefit_id: postingBenefit.benefit_id,
         posting_id: posting.posting_id,
       }),
         { transaction: t };
     }
-
+    let sendQualifications = [];
     for (const qualification of posting_qualifications) {
-      await Qualification.create({
-        qualification,
-      }),
-        { transaction: t };
-    }
-
-    for (const qualification of posting_qualifications) {
+      const qualificationAvailable = await Qualification.findOne({
+        where: { qualification },
+      });
+      if (qualificationAvailable === null) {
+        await Qualification.create({
+          qualification,
+        }),
+          { transaction: t };
+      }
       const postingQualification = await Qualification.findOne({
         where: { qualification },
       });
+      sendQualifications.push(postingQualification);
       await Posting_qualification.create({
         qualification_id: postingQualification.qualification_id,
         posting_id: posting.posting_id,
@@ -123,7 +143,9 @@ exports.createPosting = asyncHandler(async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: posting,
+      data: { posting: posting },
+      sendBenefits,
+      sendQualifications,
     });
   });
 });

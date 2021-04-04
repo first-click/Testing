@@ -68,17 +68,6 @@ exports.queryPositions = asyncHandler(async (req, res) => {
     // limit: 10,
   });
 
-  // Petras Version
-
-  // const positions = await Position.findAll(
-  //   // { include: 'person' }
-  //   {
-  //     where: {
-  //       company_id,
-  //     },
-  //   }
-  // );
-
   if (!positions) {
     return next(new ErrorResponse('Positions could not be found', 401));
   }
