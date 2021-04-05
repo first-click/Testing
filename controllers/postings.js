@@ -116,19 +116,25 @@ exports.createPosting = asyncHandler(async (req, res) => {
       }),
         { transaction: t };
     }
+
+    const qualifications = await posting_qualifications.filter(
+      (qualification) => qualification.active === true
+    );
+
     let sendQualifications = [];
-    for (const qualification of posting_qualifications) {
+    for (const qualification of qualifications) {
       const qualificationAvailable = await Qualification.findOne({
-        where: { qualification },
+        where: { qualification: qualification.label },
       });
+
       if (qualificationAvailable === null) {
         await Qualification.create({
-          qualification,
+          qualification: qualification.label,
         }),
           { transaction: t };
       }
       const postingQualification = await Qualification.findOne({
-        where: { qualification },
+        where: { qualification: qualification.label },
       });
       sendQualifications.push(postingQualification);
       await Posting_qualification.create({
