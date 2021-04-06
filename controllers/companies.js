@@ -19,24 +19,29 @@ exports.queryCompanies = asyncHandler(async (req, res) => {
     'base64'
   ).toString('binary');
 
-  const companies = await sequelize.query(
-    `
+  if ((queryString = 'closed')) {
+    res.status(200).json({
+      success: true,
+      data: null,
+    });
+  } else {
+    const companies = await sequelize.query(
+      `
 SELECT *
 FROM ${Company.tableName}
 WHERE _search @@ plainto_tsquery('german', :query);
 `,
-    {
-      model: Company,
-      replacements: { query: queryString },
-    }
-  );
-  if (!companies) {
-    return next(new ErrorResponse('Company could not be found', 401));
+      {
+        model: Company,
+        replacements: { query: queryString },
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      data: companies,
+    });
   }
-  res.status(200).json({
-    success: true,
-    data: companies,
-  });
 });
 // exports.queryCompanies = asyncHandler(async (req, res) => {
 //   let queryString = Buffer.from(
