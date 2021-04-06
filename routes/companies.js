@@ -5,6 +5,7 @@ const {
   createCompany,
   updateCompany,
   deleteCompany,
+  queryCompanies,
 } = require('../controllers/companies');
 
 const router = express({ mergeParams: true });
@@ -16,7 +17,7 @@ const { protect } = require('../middleware/auth');
 // router.use(authorize('admin'));
 
 router.route('/').get(protect, getCompanies).post(protect, createCompany);
-
+router.route('/query/:encodedQueryString').get(queryCompanies);
 router
   .route('/:company_id')
   .put(updateCompany)

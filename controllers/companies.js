@@ -6,6 +6,63 @@ const User = sequelize.models.user;
 const Address = sequelize.models.address;
 const Address_company = sequelize.models.address_company;
 
+//@desc Query company
+//@route GET /api/v1/companies/query/:encodedQueryString
+//@access Private/Admin
+//@desc search Post
+//@route GET /api/v1/posts
+//@access Public
+
+exports.queryCompanies = asyncHandler(async (req, res) => {
+  let queryString = Buffer.from(
+    req.params.encodedQueryString,
+    'base64'
+  ).toString('binary');
+
+  const companies = await sequelize.query(
+    `
+SELECT *
+FROM ${Company.tableName}
+WHERE _search @@ plainto_tsquery('german', :query);
+`,
+    {
+      model: Company,
+      replacements: { query: queryString },
+    }
+  );
+  if (!companies) {
+    return next(new ErrorResponse('Company could not be found', 401));
+  }
+  res.status(200).json({
+    success: true,
+    data: companies,
+  });
+});
+// exports.queryCompanies = asyncHandler(async (req, res) => {
+//   let queryString = Buffer.from(
+//     req.params.encodedQueryString,
+//     'base64'
+//   ).toString('binary');
+//   //console.log(queryString);
+
+//   const companies = await Company.findAll({
+//     where: {
+//       company_name: {
+//         [Sequelize.Op.like]: `%${queryString}%`,
+//       },
+//     },
+//     // limit: 10,
+//   });
+
+//   if (!companies) {
+//     return next(new ErrorResponse('Company could not be found', 401));
+//   }
+//   res.status(200).json({
+//     success: true,
+//     data: companies,
+//   });
+// });
+
 //@desc Get all companies
 //@route GET /api/v1/companies
 //@access Private/Admin
