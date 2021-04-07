@@ -51,12 +51,6 @@ exports.queryCompanies = asyncHandler(async (req, res) => {
     'base64'
   ).toString('binary');
 
-  if (queryString === 'closed') {
-    return res.status(200).json({
-      success: true,
-      data: null,
-    });
-  }
   const companies = await sequelize.query(
     `
   SELECT *
