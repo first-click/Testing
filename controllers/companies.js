@@ -50,31 +50,29 @@ exports.queryCompanies = asyncHandler(async (req, res) => {
     req.params.encodedQueryString,
     'base64'
   ).toString('binary');
-  console.log(queryString);
 
   if (queryString === 'closed') {
     return res.status(200).json({
       success: true,
       data: null,
     });
-  } else {
-    const companies = await sequelize.query(
-      `
+  }
+  const companies = await sequelize.query(
+    `
   SELECT *
   FROM ${Company.tableName}
    WHERE _search @@ plainto_tsquery('german', :query);
   `,
-      {
-        model: Company,
-        replacements: { query: queryString },
-      }
-    );
+    {
+      model: Company,
+      replacements: { query: queryString },
+    }
+  );
 
-    return res.status(200).json({
-      success: true,
-      data: companies,
-    });
-  }
+  return res.status(200).json({
+    success: true,
+    data: companies,
+  });
 });
 
 //@desc Get all companies
