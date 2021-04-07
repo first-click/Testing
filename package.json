@@ -13,7 +13,7 @@
     "coverage": "jest --coverage --watchAll",
     "initialize-migration": "sequelize db:migrate:undo:all && sequelize db:migrate",
     "initialize-seed": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:undo:all && sequelize db:seed:all",
-    "rollback": "sequelize db:migrate:undo:all"
+    "rollback": "sequelize db:drop && sequelize db:create && npm run initialize-seed"
   },
   "jest": {
     "testEnvironment": "node"
