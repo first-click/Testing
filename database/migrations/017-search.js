@@ -27,6 +27,7 @@ module.exports = {
                 { transaction: t }
               )
             )
+
             .then(() =>
               queryInterface.sequelize.query(
                 `
@@ -40,7 +41,7 @@ module.exports = {
                 `
                 CREATE TRIGGER ${table}_vector_update
                 BEFORE INSERT OR UPDATE ON ${table}
-                FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger(${vectorName}, 'pg_catalog.english', ${searchObjects[
+                FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger(${vectorName}, 'pg_catalog.german', ${searchObjects[
                   table
                 ].join(', ')});
               `,

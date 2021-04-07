@@ -13,60 +13,69 @@ const Address_company = sequelize.models.address_company;
 //@route GET /api/v1/posts
 //@access Public
 
+// exports.queryCompanies = asyncHandler(async (req, res) => {
+//   let queryString = Buffer.from(
+//     req.params.encodedQueryString,
+//     'base64'
+//   ).toString('binary');
+//   console.log(queryString);
+
+//   if (queryString === 'closed') {
+//     return res.status(200).json({
+//       success: true,
+//       data: null,
+//     });
+//   } else {
+//     const companies = await sequelize.query(
+//       `
+//   SELECT *
+//   FROM ${Company.tableName}
+//    WHERE _search @@ plainto_tsquery('german', :query);
+//   `,
+//       {
+//         model: Company,
+//         replacements: { query: queryString },
+//       }
+//     );
+
+//     return res.status(200).json({
+//       success: true,
+//       data: companies,
+//     });
+//   }
+// });
+
 exports.queryCompanies = asyncHandler(async (req, res) => {
   let queryString = Buffer.from(
     req.params.encodedQueryString,
     'base64'
   ).toString('binary');
+  console.log(queryString);
 
-  if ((queryString = 'closed')) {
-    res.status(200).json({
+  if (queryString === 'closed') {
+    return res.status(200).json({
       success: true,
       data: null,
     });
   } else {
     const companies = await sequelize.query(
       `
-SELECT *
-FROM ${Company.tableName}
-WHERE _search @@ plainto_tsquery('german', :query);
-`,
+  SELECT *
+  FROM ${Company.tableName}
+   WHERE _search @@ plainto_tsquery('german', :query);
+  `,
       {
         model: Company,
         replacements: { query: queryString },
       }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: companies,
     });
   }
 });
-// exports.queryCompanies = asyncHandler(async (req, res) => {
-//   let queryString = Buffer.from(
-//     req.params.encodedQueryString,
-//     'base64'
-//   ).toString('binary');
-//   //console.log(queryString);
-
-//   const companies = await Company.findAll({
-//     where: {
-//       company_name: {
-//         [Sequelize.Op.like]: `%${queryString}%`,
-//       },
-//     },
-//     // limit: 10,
-//   });
-
-//   if (!companies) {
-//     return next(new ErrorResponse('Company could not be found', 401));
-//   }
-//   res.status(200).json({
-//     success: true,
-//     data: companies,
-//   });
-// });
 
 //@desc Get all companies
 //@route GET /api/v1/companies
