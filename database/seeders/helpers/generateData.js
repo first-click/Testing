@@ -9,6 +9,7 @@ const hashedPassword = (password) => {
 function generateDataPoint({ id }) {
   faker.seed(id); // Auskommentieren für Random-Werte
   let companyId = faker.helpers.randomize([1, 2, 3]);
+
   let role = 'user';
   switch (id) {
     case 1: {
@@ -125,7 +126,7 @@ function generateDataPoint({ id }) {
 
     address_company: {
       address_id: id,
-      company_id: id,
+      company_id: companyId,
       created_at: date,
       updated_at: date,
     },
