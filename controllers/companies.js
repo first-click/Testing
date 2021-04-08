@@ -13,38 +13,6 @@ const Address_company = sequelize.models.address_company;
 //@route GET /api/v1/posts
 //@access Public
 
-// exports.queryCompanies = asyncHandler(async (req, res) => {
-//   let queryString = Buffer.from(
-//     req.params.encodedQueryString,
-//     'base64'
-//   ).toString('binary');
-//   console.log(queryString);
-
-//   if (queryString === 'closed') {
-//     return res.status(200).json({
-//       success: true,
-//       data: null,
-//     });
-//   } else {
-//     const companies = await sequelize.query(
-//       `
-//   SELECT *
-//   FROM ${Company.tableName}
-//    WHERE _search @@ plainto_tsquery('german', :query);
-//   `,
-//       {
-//         model: Company,
-//         replacements: { query: queryString },
-//       }
-//     );
-
-//     return res.status(200).json({
-//       success: true,
-//       data: companies,
-//     });
-//   }
-// });
-
 exports.queryCompanies = asyncHandler(async (req, res) => {
   let queryString = Buffer.from(
     req.params.encodedQueryString,
