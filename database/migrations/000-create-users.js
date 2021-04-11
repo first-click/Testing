@@ -37,6 +37,9 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: false,
           },
+          avatar: {
+            type: Sequelize.STRING,
+          },
           reset_password_token: Sequelize.STRING,
           reset_password_expire: Sequelize.DATE,
           created_at: {

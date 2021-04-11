@@ -17,7 +17,12 @@ module.exports = {
       await queryInterface.createTable(
         'panel_stakeholders',
         {
-          // composite primary key
+          // panel_stakeholder_id: {
+          //   primaryKey: true,
+          //   autoIncrement: true,
+          //   type: Sequelize.INTEGER,
+          //   allowNull: false,
+          // },
           panel_id: {
             primaryKey: true,
             type: Sequelize.INTEGER,
@@ -53,7 +58,14 @@ module.exports = {
             allowNull: false,
           },
         },
-        { transaction }
+        {
+          // uniqueKeys: {
+          //   stakeholder_unique: {
+          //     fields: [panel_id, user_id],
+          //   },
+          // },
+          transaction,
+        }
       );
       await transaction.commit();
     } catch (err) {

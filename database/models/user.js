@@ -68,7 +68,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-
+      avatar: {
+        type: DataTypes.STRING,
+      },
       reset_password_token: DataTypes.STRING,
       reset_password_expire: DataTypes.DATE,
     },

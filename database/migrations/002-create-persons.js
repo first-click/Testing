@@ -24,7 +24,6 @@ module.exports = {
           },
           person_first_name: Sequelize.STRING,
           person_last_name: Sequelize.STRING,
-
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,

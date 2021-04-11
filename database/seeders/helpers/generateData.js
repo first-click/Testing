@@ -53,10 +53,11 @@ function generateDataPoint({ id }) {
   let date = new Date();
   return {
     user: {
+      company_id: companyId,
       username: faker.internet.userName(firstName, lastName),
       email: faker.internet.email(firstName, lastName),
       password: hashedPassword('secret'),
-      company_id: companyId,
+      avatar: faker.image.avatar(id),
       created_at: date,
       updated_at: date,
     },

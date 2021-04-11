@@ -3,6 +3,7 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const User = sequelize.models.user;
 const Position = sequelize.models.position;
+const Person = sequelize.models.person;
 const Panel = sequelize.models.panel;
 const Panel_Stakeholder = sequelize.models.panel_stakeholder;
 const PanelItem = sequelize.models.panel_item;
@@ -36,6 +37,60 @@ exports.getPanels = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: panels,
+  });
+});
+
+//@desc Get a single panel
+//@route GET /api/v1/panels/:panel_id
+//@access Private/Admin
+exports.getPanel = asyncHandler(async (req, res, next) => {
+  const { company_id, user_id } = req.user;
+  const { panel_id } = req.params;
+
+  const panel = await Panel.findByPk(panel_id, {
+    include: [
+      { model: Position },
+      {
+        model: Panel_Stakeholder,
+        // attributes: ['panel_role'],
+        include: {
+          model: User,
+          attributes: ['username', 'user_id', 'avatar'],
+          include: {
+            model: Person,
+            attributes: ['person_first_name', 'person_last_name'],
+            include: {
+              model: Position,
+            },
+          },
+        },
+      },
+    ],
+  });
+
+  res.status(200).json({
+    success: true,
+    data: panel,
+  });
+});
+
+//@desc Get all stakeholders
+//@route GET /api/v1/panels/:panel_id/stakeholder
+//@access Private/Admin
+exports.getPanelStakeholders = asyncHandler(async (req, res, next) => {
+  const { panel_id } = req.params;
+  const { company_id, user_id } = req.user;
+
+  const stakeholders = await Panel_Stakeholder.findAll({
+    where: { panel_id },
+    // include: { model: Panel, include: Position },
+    // order: [['created_at', 'ASC']],
+    // order: [[{ model: Panel, as: 'Panel' }, 'created_at', 'ASC']],
+  });
+
+  res.status(200).json({
+    success: true,
+    data: stakeholders,
   });
 });
 
@@ -117,9 +172,66 @@ exports.addStakeholderToPanel = asyncHandler(async (req, res, next) => {
     panel_role,
   });
 
+  const new_stakeholder_enriched = await Panel_Stakeholder.findAll({
+    where: {
+      panel_id: new_stakeholder_created.panel_id,
+      user_id: new_stakeholder_created.user_id,
+    },
+    include: {
+      model: User,
+      attributes: ['username', 'user_id', 'avatar'],
+      include: {
+        model: Person,
+        attributes: ['person_first_name', 'person_last_name'],
+        include: {
+          model: Position,
+        },
+      },
+    },
+  });
+
   res.status(200).json({
     success: true,
-    data: new_stakeholder_created,
+    data: new_stakeholder_enriched[0],
+    // data: new_stakeholder_created,
+  });
+});
+
+//@desc Delete a stakeholder from panel
+//@route DELETE /api/v1/panels/:panel_id/stakeholders/:stakeholder_id
+//@access Private/Admin
+exports.deleteStakeholderFromPanel = asyncHandler(async (req, res, next) => {
+  const { company_id, user_id } = req.user;
+  const { stakeholder_id } = req.params;
+  const panel = await Panel.findByPk(req.params.panel_id);
+
+  const current_stakeholders = await Panel_Stakeholder.findAll({
+    where: { panel_id: panel.panel_id },
+  });
+
+  // prüfen, ob der User, der den Post Request ausführt, berechtigt ist
+  if (
+    !current_stakeholders.some((stakeholder) => {
+      // console.log(stakeholder);
+      return (
+        user_id === stakeholder.user_id && // user ist stakeholder
+        stakeholder.panel_role === 'master' // user ist master
+      );
+    })
+  ) {
+    return next(new ErrorResponse('Not authorized to do that', 401));
+  }
+
+  const deleteCount = await Panel_Stakeholder.destroy({
+    where: {
+      panel_id: panel.panel_id,
+      user_id: stakeholder_id,
+    },
+  });
+
+  res.status(200).json({
+    success: true,
+    data: deleteCount,
   });
 });
 

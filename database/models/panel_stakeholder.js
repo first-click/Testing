@@ -11,10 +11,19 @@ module.exports = (sequelize, DataTypes) => {
       Panel_Stakeholder.belongsTo(models.panel, {
         foreignKey: { name: 'panel_id' },
       });
+      Panel_Stakeholder.belongsTo(models.user, {
+        foreignKey: { name: 'user_id' },
+      });
     }
   }
   Panel_Stakeholder.init(
     {
+      // panel_stakeholder_id: {
+      //   primaryKey: true,
+      //   autoIncrement: true,
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      // },
       panel_id: {
         primaryKey: true,
         type: DataTypes.INTEGER,

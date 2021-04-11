@@ -1,7 +1,8 @@
-const { sequelize } = require('../database/models');
+const { sequelize, Sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Person = sequelize.models.person;
+const Position = sequelize.models.position;
 
 //@desc Get all persons
 //@route GET /api/v1/persons
@@ -31,6 +32,57 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: person,
+  });
+});
+
+//@desc Query persons
+//@route GET /api/v1/persons/query/:encodedQueryString
+//@access Private/Admin
+exports.queryPersons = asyncHandler(async (req, res) => {
+  const { company_id } = req.user;
+  let queryString = Buffer.from(
+    req.params.encodedQueryString,
+    'base64'
+  ).toString('binary');
+  //console.log(queryString);
+
+  const persons = await Person.findAll({
+    where: {
+      [Sequelize.Op.and]: [
+        { company_id },
+        {
+          [Sequelize.Op.or]: [
+            {
+              person_id: {
+                [Sequelize.Op.eq]: isNaN(parseInt(queryString))
+                  ? undefined
+                  : queryString,
+              },
+            },
+            {
+              person_first_name: {
+                [Sequelize.Op.like]: `%${queryString}%`,
+              },
+            },
+            {
+              person_last_name: {
+                [Sequelize.Op.like]: `%${queryString}%`,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    include: { model: Position },
+    // limit: 10,
+  });
+
+  if (!persons) {
+    return next(new ErrorResponse('Positions could not be found', 401));
+  }
+  res.status(200).json({
+    success: true,
+    data: persons,
   });
 });
 
