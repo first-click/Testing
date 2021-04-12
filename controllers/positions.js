@@ -21,12 +21,12 @@ exports.queryPositions = asyncHandler(async (req, res) => {
   SELECT *
   FROM ${Position.tableName}
 
-  WHERE _search @@ plainto_tsquery('german', :query );
+  WHERE _search @@ to_tsquery('simple', :query );
   
   `,
     {
       model: Position,
-      replacements: { query: queryString },
+      replacements: { query: `${queryString}:*` },
     }
   );
 

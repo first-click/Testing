@@ -16,18 +16,18 @@ exports.queryCompanies = asyncHandler(async (req, res) => {
     req.params.encodedQueryString,
     'base64'
   ).toString('binary');
-  // query mit * geht noch nicht
+
   const companies = await sequelize.query(
     `
   SELECT *
   FROM ${Company.tableName}
 
-  WHERE _search @@ plainto_tsquery('german', :query );
+  WHERE _search @@ to_tsquery('simple', :query );
   
   `,
     {
       model: Company,
-      replacements: { query: queryString },
+      replacements: { query: `${queryString}:*` },
       include: [Address],
     }
   );
