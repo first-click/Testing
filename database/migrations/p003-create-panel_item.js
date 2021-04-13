@@ -42,21 +42,40 @@ module.exports = {
             onUpdate: 'CASCADE',
             onDelete: 'SET NULL',
           },
-          name: {
+          editor_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'users',
+              key: 'user_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+          },
+          title: {
             type: Sequelize.STRING,
             allowNull: false,
           },
           description: {
             type: Sequelize.STRING,
           },
-          scale: {
-            type: Sequelize.STRING,
+          length: {
+            type: Sequelize.INTEGER,
+          },
+          fields: {
+            type: Sequelize.ARRAY(Sequelize.INTEGER),
             allowNull: false,
           },
-          type: {
-            type: Sequelize.STRING,
-            allowNull: false,
+          anchors: {
+            type: Sequelize.ARRAY(Sequelize.STRING),
           },
+          // scale: {
+          //   type: Sequelize.STRING,
+          //   allowNull: false,
+          // },
+          // type: {
+          //   type: Sequelize.STRING,
+          //   allowNull: false,
+          // },
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,

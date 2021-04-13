@@ -39,7 +39,16 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      name: {
+      editor_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'users',
+          key: 'user_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+      },
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: { notNull: { msg: 'name must be defined' } },
@@ -50,28 +59,43 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: { notNull: { msg: 'description must be defined' } },
       },
-      scale: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      length: {
+        type: DataTypes.INTEGER,
         validate: {
-          notNull: { msg: 'scale must be defined' },
-          isIn: {
-            args: [['text', '2', '3', '4', '5', '6', '7']],
-            msg: 'scale must be "text", "2", "3", "4", "5", "6", "7"',
-          },
+          min: { args: 2, msg: 'length must be between 2 and 10' },
+          max: { args: 10, msg: 'length must be between 2 and 10' },
         },
       },
-      type: {
-        type: DataTypes.STRING,
+      fields: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false,
-        validate: {
-          notNull: { msg: 'type must be defined' },
-          isIn: {
-            args: [['number', 'string']],
-            msg: 'type must be "number" or "string"',
-          },
-        },
+        validate: { notNull: { msg: 'description must be defined' } },
       },
+      anchors: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+      },
+      // scale: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      //   validate: {
+      //     notNull: { msg: 'scale must be defined' },
+      //     isIn: {
+      //       args: [['text', '2', '3', '4', '5', '6', '7']],
+      //       msg: 'scale must be "text", "2", "3", "4", "5", "6", "7"',
+      //     },
+      //   },
+      // },
+      // type: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      //   validate: {
+      //     notNull: { msg: 'type must be defined' },
+      //     isIn: {
+      //       args: [['number', 'string']],
+      //       msg: 'type must be "number" or "string"',
+      //     },
+      //   },
+      // },
     },
     {
       sequelize,
