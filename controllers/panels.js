@@ -240,19 +240,17 @@ exports.deleteStakeholderFromPanel = asyncHandler(async (req, res, next) => {
 //@access Private/Admin
 exports.createPanelItem = asyncHandler(async (req, res, next) => {
   const { company_id, user_id } = req.user;
-  const { name, description, scale } = req.body;
-  // const { position_id } = req.params;
-
-  let type = 'number';
-  if (scale === 'text') type = 'string';
+  const { title, description, length, fields, anchors } = req.body;
 
   const panel_item = await PanelItem.create({
     company_id,
     creator_id: user_id, // Creator is the logged in user
-    name,
-    description, // optional
-    scale, // "text", "2", "3", "4", "5", "6", "7"
-    type, // "string", "number"
+    editor_id: user_id, // Initial editor is the logged in user
+    title,
+    description, //optional
+    length,
+    fields,
+    anchors,
   });
 
   res.status(200).json({
@@ -265,7 +263,7 @@ exports.createPanelItem = asyncHandler(async (req, res, next) => {
 //@route GET /api/v1/panels/panel_items
 //@access Private/Admin
 exports.getPanelItems = asyncHandler(async (req, res, next) => {
-  console.log('getPanelItems', req.user);
+  // console.log('getPanelItems', req.user);
   const { company_id, user_id } = req.user;
   // const { position_id } = req.params;
 

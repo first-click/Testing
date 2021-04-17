@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       title: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: { notNull: { msg: 'name must be defined' } },
+        validate: { notNull: { msg: 'title must be defined' } },
         unique: true,
       },
       description: {
@@ -61,7 +61,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       length: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         validate: {
+          notNull: { msg: 'length must be defined' },
           min: { args: 2, msg: 'length must be between 2 and 10' },
           max: { args: 10, msg: 'length must be between 2 and 10' },
         },
@@ -69,10 +71,22 @@ module.exports = (sequelize, DataTypes) => {
       fields: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false,
-        validate: { notNull: { msg: 'description must be defined' } },
+        validate: {
+          notNull: { msg: 'fields must be defined' },
+          checkLength(arr) {
+            if (arr.length !== this.dataValues.length)
+              throw new Error('Field count must be equal to desired length');
+          },
+        },
       },
       anchors: {
         type: DataTypes.ARRAY(DataTypes.STRING),
+        validate: {
+          checkLength(arr) {
+            if (arr.length !== this.dataValues.length)
+              throw new Error('Anchor count must be equal to desired length');
+          },
+        },
       },
       // scale: {
       //   type: DataTypes.STRING,

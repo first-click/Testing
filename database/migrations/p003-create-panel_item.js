@@ -60,6 +60,7 @@ module.exports = {
           },
           length: {
             type: Sequelize.INTEGER,
+            allowNull: false,
           },
           fields: {
             type: Sequelize.ARRAY(Sequelize.INTEGER),
