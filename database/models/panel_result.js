@@ -54,10 +54,10 @@ module.exports = (sequelize, DataTypes) => {
         // allowNull: false,
         // validate: { notNull: { msg: 'applicant_id must be defined' } },
       },
-      panel_panel_item_id: {
+      panel_scale_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'panel_panel_items',
+          model: 'panel_scales',
           key: 'panel_panel_item_id',
         },
         onUpdate: 'CASCADE',

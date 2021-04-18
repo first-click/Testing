@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class PanelItem extends Model {
+  class Scale extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       // });
     }
   }
-  PanelItem.init(
+  Scale.init(
     {
-      panel_item_id: {
+      scale_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
@@ -114,8 +114,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'panel_item',
+      modelName: 'scale',
     }
   );
-  return PanelItem;
+  return Scale;
 };

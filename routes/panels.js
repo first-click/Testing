@@ -5,9 +5,9 @@ const {
   getPanels,
   addStakeholderToPanel,
   deleteStakeholderFromPanel,
-  createPanelItem,
-  getPanelItems,
-  addPanelItemToPanel,
+  createScale,
+  getScales,
+  addScaleToPanel,
   addResult,
   getPanelStakeholders,
 } = require('../controllers/panels');
@@ -20,9 +20,9 @@ const { protect } = require('../middleware/auth');
 // router.use(authorize('admin'));
 
 router.route('/').get(protect, getPanels);
-router.route('/panel_item').post(protect, createPanelItem);
-router.route('/panel_items').get(protect, getPanelItems);
-router.route('/:panel_id/panel_item').post(protect, addPanelItemToPanel);
+router.route('/scale').post(protect, createScale);
+router.route('/scales').get(protect, getScales);
+router.route('/:panel_id/scale').post(protect, addScaleToPanel);
 router.route('/:panel_id').get(protect, getPanel);
 router.route('/:position_id').post(protect, createPanel);
 router

@@ -6,8 +6,8 @@ const Position = sequelize.models.position;
 const Person = sequelize.models.person;
 const Panel = sequelize.models.panel;
 const Panel_Stakeholder = sequelize.models.panel_stakeholder;
-const PanelItem = sequelize.models.panel_item;
-const Panel_PanelItem = sequelize.models.panel_panel_item;
+const Scale = sequelize.models.scale;
+const Panel_Scale = sequelize.models.panel_scale;
 const PanelResult = sequelize.models.panel_result;
 
 //@desc Get all panels
@@ -236,18 +236,19 @@ exports.deleteStakeholderFromPanel = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Create a new panel item
-//@route POST /api/v1/panels/panel_item
+//@route POST /api/v1/panels/scale
 //@access Private/Admin
-exports.createPanelItem = asyncHandler(async (req, res, next) => {
+exports.createScale = asyncHandler(async (req, res, next) => {
   const { company_id, user_id } = req.user;
-  const { title, description, length, fields, anchors } = req.body;
+  const { title, description, base, length, fields, anchors } = req.body;
 
-  const panel_item = await PanelItem.create({
+  const scale = await Scale.create({
     company_id,
     creator_id: user_id, // Creator is the logged in user
     editor_id: user_id, // Initial editor is the logged in user
     title,
     description, //optional
+    base,
     length,
     fields,
     anchors,
@@ -255,39 +256,39 @@ exports.createPanelItem = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: panel_item,
+    data: scale,
   });
 });
 
 //@desc Get panel items
-//@route GET /api/v1/panels/panel_items
+//@route GET /api/v1/panels/scales
 //@access Private/Admin
-exports.getPanelItems = asyncHandler(async (req, res, next) => {
-  // console.log('getPanelItems', req.user);
+exports.getScales = asyncHandler(async (req, res, next) => {
+  // console.log('getScales', req.user);
   const { company_id, user_id } = req.user;
   // const { position_id } = req.params;
 
-  const panel_items = await PanelItem.findAll({
+  const scales = await Scale.findAll({
     where: { company_id },
   });
 
   res.status(200).json({
     success: true,
-    data: panel_items,
+    data: scales,
   });
 });
 
 //@desc Link panel item to panel
-//@route POST /api/v1/panels/:panel_id/panel_item/
+//@route POST /api/v1/panels/:panel_id/scale/
 //@access Private/Admin
-exports.addPanelItemToPanel = asyncHandler(async (req, res, next) => {
+exports.addScaleToPanel = asyncHandler(async (req, res, next) => {
   const { company_id, user_id } = req.user;
   const { panel_id } = req.params;
-  const { panel_item_id } = req.body;
+  const { scale_id } = req.body;
 
   const panel = await Panel.findByPk(panel_id);
-  const panel_item = await PanelItem.findByPk(panel_item_id);
-  console.log(panel_item);
+  const scale = await Scale.findByPk(scale_id);
+  console.log(scale);
 
   if (panel.status !== 'planning') {
     return next(
@@ -298,18 +299,18 @@ exports.addPanelItemToPanel = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const added_panel_item = await Panel_PanelItem.create({
+  const added_scale = await Panel_Scale.create({
     panel_id,
-    panel_item_id: panel_item.panel_item_id,
-    name: panel_item.name,
-    description: panel_item.description,
-    scale: panel_item.scale,
-    type: panel_item.type,
+    scale_id: scale.scale_id,
+    name: scale.name,
+    description: scale.description,
+    scale: scale.scale,
+    type: scale.type,
   });
 
   res.status(200).json({
     success: true,
-    data: added_panel_item,
+    data: added_scale,
   });
 });
 
@@ -319,9 +320,9 @@ exports.addPanelItemToPanel = asyncHandler(async (req, res, next) => {
 exports.addResult = asyncHandler(async (req, res, next) => {
   const { company_id, user_id } = req.user;
   const { panel_id } = req.params;
-  const { panel_panel_item_id, applicant_id, value, comment } = req.body;
-  const panel_panel_item = await Panel_PanelItem.findByPk(panel_panel_item_id);
-  const { scale, type } = panel_panel_item;
+  const { panel_scale_id, applicant_id, value, comment } = req.body;
+  const panel_scale = await Panel_Scale.findByPk(panel_scale_id);
+  const { scale, type } = panel_scale;
 
   let value_number, value_string;
   if (type === 'number') {
@@ -349,7 +350,7 @@ exports.addResult = asyncHandler(async (req, res, next) => {
     panel_id,
     interviewer_id: user_id,
     applicant_id,
-    panel_panel_item_id,
+    panel_scale_id,
     scale,
     type,
     value_number,

@@ -15,68 +15,59 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'panel_items',
+        'panel_scales',
         {
-          panel_item_id: {
+          panel_scale_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
           },
-          company_id: {
+          scale_id: {
             type: Sequelize.INTEGER,
             references: {
-              model: 'companies',
-              key: 'company_id',
+              model: 'scales',
+              key: 'scale_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+            // allowNull: false,
+          },
+          panel_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'panels',
+              key: 'panel_id',
             },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
             allowNull: false,
           },
-          creator_id: {
-            type: Sequelize.INTEGER,
-            references: {
-              model: 'users',
-              key: 'user_id',
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'SET NULL',
-          },
-          editor_id: {
-            type: Sequelize.INTEGER,
-            references: {
-              model: 'users',
-              key: 'user_id',
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'SET NULL',
-          },
-          title: {
+          // company_id: {
+          //   type: Sequelize.INTEGER,
+          //   references: {
+          //     model: 'company',
+          //     key: 'company_id',
+          //   },
+          // },
+
+          // Werte werden kopiert. Damit kann das PanelItem für zukünftige Panels
+          // verändert oder gelöscht werden
+          name: {
             type: Sequelize.STRING,
             allowNull: false,
           },
           description: {
             type: Sequelize.STRING,
           },
-          length: {
-            type: Sequelize.INTEGER,
+          scale: {
+            type: Sequelize.STRING,
             allowNull: false,
           },
-          fields: {
-            type: Sequelize.ARRAY(Sequelize.INTEGER),
+          type: {
+            type: Sequelize.STRING,
             allowNull: false,
           },
-          anchors: {
-            type: Sequelize.ARRAY(Sequelize.STRING),
-          },
-          // scale: {
-          //   type: Sequelize.STRING,
-          //   allowNull: false,
-          // },
-          // type: {
-          //   type: Sequelize.STRING,
-          //   allowNull: false,
-          // },
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -98,7 +89,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('panel_items', { transaction });
+      await queryInterface.dropTable('panel_scales', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

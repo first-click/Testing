@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Panel_PanelItem extends Model {
+  class Panel_Scale extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,24 +13,24 @@ module.exports = (sequelize, DataTypes) => {
       // });
     }
   }
-  Panel_PanelItem.init(
+  Panel_Scale.init(
     {
-      panel_panel_item_id: {
+      panel_scale_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      panel_item_id: {
+      scale_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'panel_items',
-          key: 'panel_item_id',
+          model: 'scales',
+          key: 'scale_id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         // allowNull: false,
-        // validate: { notNull: { msg: 'panel_item_id must be defined' } },
+        // validate: { notNull: { msg: 'scale_id must be defined' } },
       },
       panel_id: {
         type: DataTypes.INTEGER,
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       //   },
       // },
 
-      // Werte werden kopiert. Damit kann das PanelItem für zukünftige Panels
+      // Werte werden kopiert. Damit kann das Scale für zukünftige Panels
       // verändert oder gelöscht werden
       name: {
         type: DataTypes.STRING,
@@ -75,8 +75,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       ...sequelize.options,
-      modelName: 'panel_panel_item',
+      modelName: 'panel_scale',
     }
   );
-  return Panel_PanelItem;
+  return Panel_Scale;
 };

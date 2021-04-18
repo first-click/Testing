@@ -51,11 +51,11 @@ module.exports = {
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
           },
-          panel_panel_item_id: {
+          panel_scale_id: {
             type: Sequelize.INTEGER,
             references: {
-              model: 'panel_panel_items',
-              key: 'panel_panel_item_id',
+              model: 'panel_scales',
+              key: 'panel_scale_id',
             },
             allowNull: false,
             onUpdate: 'CASCADE',
