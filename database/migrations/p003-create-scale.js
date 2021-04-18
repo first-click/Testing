@@ -58,6 +58,10 @@ module.exports = {
           description: {
             type: Sequelize.STRING,
           },
+          base: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+          },
           length: {
             type: Sequelize.INTEGER,
             allowNull: false,

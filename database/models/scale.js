@@ -59,13 +59,22 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: { notNull: { msg: 'description must be defined' } },
       },
+      base: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: 'base must be defined' },
+          min: { args: '0', msg: 'base must be 0 or 1' },
+          max: { args: '1', msg: 'base must be 0 or 1' },
+        },
+      },
       length: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
           notNull: { msg: 'length must be defined' },
-          min: { args: 2, msg: 'length must be between 2 and 10' },
-          max: { args: 10, msg: 'length must be between 2 and 10' },
+          min: { args: '2', msg: 'length must be between 2 and 10' },
+          max: { args: '10', msg: 'length must be between 2 and 10' },
         },
       },
       fields: {
