@@ -15,7 +15,6 @@ exports.queryPositions = asyncHandler(async (req, res) => {
     'base64'
   ).toString('binary');
 
-  // query mit * geht noch nicht
   const positions = await sequelize.query(
     `
   SELECT *
