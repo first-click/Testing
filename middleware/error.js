@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
-  console.log(err);
+  //console.log(err);
   // prüfen & ggf. ausbauen
   // auch checken, ob die unten genannten Postgres Errors greifen
 
@@ -43,7 +43,9 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse('Object already exists', 400);
   }
 
-  // console.log(err.name);
+  if (err.name === 'SequelizeDatabaseError') {
+    error = new ErrorResponse('input is not valid');
+  }
 
   res.status(error.statusCode || 500).json({
     success: false,
