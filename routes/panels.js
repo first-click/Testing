@@ -9,6 +9,7 @@ const {
   getScales,
   addScaleToPanel,
   addResult,
+  updateScale,
   getPanelStakeholders,
 } = require('../controllers/panels');
 const router = express({ mergeParams: true });
@@ -21,6 +22,7 @@ const { protect } = require('../middleware/auth');
 
 router.route('/').get(protect, getPanels);
 router.route('/scale').post(protect, createScale);
+router.route('/scale/:scale_id').put(protect, updateScale);
 router.route('/scales').get(protect, getScales);
 router.route('/:panel_id/scale').post(protect, addScaleToPanel);
 router.route('/:panel_id').get(protect, getPanel);

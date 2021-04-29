@@ -235,7 +235,7 @@ exports.deleteStakeholderFromPanel = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desc Create a new panel item
+//@desc Create a new scale
 //@route POST /api/v1/panels/scale
 //@access Private/Admin
 exports.createScale = asyncHandler(async (req, res, next) => {
@@ -253,6 +253,33 @@ exports.createScale = asyncHandler(async (req, res, next) => {
     fields,
     anchors,
   });
+
+  res.status(200).json({
+    success: true,
+    data: scale,
+  });
+});
+
+//@desc Update a scale
+//@route PUT /api/v1/panels/scale/:scale_id
+//@access Private/Admin
+exports.updateScale = asyncHandler(async (req, res, next) => {
+  const { scale_id } = req.params;
+  const { user_id } = req.user;
+  const { title, description, base, length, fields, anchors } = req.body;
+
+  const scale = await Scale.update(
+    {
+      editor_id: user_id, // Editor is the logged in user
+      title,
+      description, //optional
+      base,
+      length,
+      fields,
+      anchors,
+    },
+    { where: { scale_id } }
+  );
 
   res.status(200).json({
     success: true,
