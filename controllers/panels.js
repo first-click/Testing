@@ -287,6 +287,20 @@ exports.updateScale = asyncHandler(async (req, res, next) => {
   });
 });
 
+//@desc Delete a scale
+//@route DELETE /api/v1/panels/scale/:scale_id
+//@access Private/Admin
+exports.deleteScale = asyncHandler(async (req, res, next) => {
+  const { scale_id } = req.params;
+
+  const scale = await Scale.destroy({ where: { scale_id } });
+
+  res.status(200).json({
+    success: true,
+    data: scale,
+  });
+});
+
 //@desc Get panel items
 //@route GET /api/v1/panels/scales
 //@access Private/Admin
