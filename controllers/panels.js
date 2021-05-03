@@ -278,12 +278,12 @@ exports.updateScale = asyncHandler(async (req, res, next) => {
       fields,
       anchors,
     },
-    { where: { scale_id } }
+    { where: { scale_id }, returning: true, plain: true }
   );
 
   res.status(200).json({
     success: true,
-    data: scale,
+    data: scale[1],
   });
 });
 
