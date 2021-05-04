@@ -5,6 +5,7 @@ const Posting = sequelize.models.posting;
 const Posting_user = sequelize.models.posting_user;
 const Benefit = sequelize.models.benefit;
 const Position = sequelize.models.position;
+const Company = sequelize.models.company;
 const Posting_benefit = sequelize.models.posting_benefit;
 const Posting_qualification = sequelize.models.posting_qualification;
 const Qualification = sequelize.models.qualification;
@@ -22,7 +23,9 @@ exports.queryPostings = asyncHandler(async (req, res) => {
   console.log(queryString.length);
 
   if (queryString === 'all' || queryString.length === 0) {
-    const postings = await Posting.findAll({});
+    const postings = await Posting.findAll({
+      include: [Company, Position],
+    });
     return res.status(200).json({
       success: true,
       data: postings,
@@ -40,6 +43,7 @@ exports.queryPostings = asyncHandler(async (req, res) => {
     {
       model: Posting,
       replacements: { query: `${queryString}:*` },
+      include: [Company, Position],
     }
   );
 
