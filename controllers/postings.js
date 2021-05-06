@@ -6,6 +6,7 @@ const Posting_user = sequelize.models.posting_user;
 const Benefit = sequelize.models.benefit;
 const Position = sequelize.models.position;
 const Company = sequelize.models.company;
+const Address = sequelize.models.address;
 const Posting_benefit = sequelize.models.posting_benefit;
 const Posting_qualification = sequelize.models.posting_qualification;
 const Qualification = sequelize.models.qualification;
@@ -20,7 +21,6 @@ exports.queryPostings = asyncHandler(async (req, res) => {
     req.params.encodedQueryString,
     'base64'
   ).toString('binary');
-  console.log(queryString.length);
 
   if (queryString === 'all' || queryString.length === 0) {
     const postings = await Posting.findAll({
@@ -35,7 +35,7 @@ exports.queryPostings = asyncHandler(async (req, res) => {
   const postings = await sequelize.query(
     `
   SELECT *
-  FROM ${Posting.tableName}
+  FROM ${Posting.tableName} 
 
   WHERE _search @@ to_tsquery('simple', :query );
   
@@ -43,13 +43,21 @@ exports.queryPostings = asyncHandler(async (req, res) => {
     {
       model: Posting,
       replacements: { query: `${queryString}:*` },
-      include: [Company, Position],
     }
   );
 
+  let sendPostings = [];
+  for (const posting of postings) {
+    const postingData = await Posting.findOne({
+      where: { posting_id: posting.posting_id },
+      include: [Company, Position],
+    });
+    sendPostings.push(postingData);
+  }
+
   return res.status(200).json({
     success: true,
-    data: postings,
+    data: sendPostings,
   });
 });
 

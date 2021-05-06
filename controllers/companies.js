@@ -28,7 +28,6 @@ exports.queryCompanies = asyncHandler(async (req, res) => {
     {
       model: Company,
       replacements: { query: `${queryString}:*` },
-      include: [Address],
     }
   );
 
