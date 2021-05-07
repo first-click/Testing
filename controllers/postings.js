@@ -24,7 +24,10 @@ exports.queryPostings = asyncHandler(async (req, res) => {
 
   if (queryString === 'all' || queryString.length === 0) {
     const postings = await Posting.findAll({
-      include: [Company, Position],
+      include: [
+        { model: Position },
+        { model: Company, include: [{ model: Address }] },
+      ],
     });
     return res.status(200).json({
       success: true,
@@ -50,7 +53,11 @@ exports.queryPostings = asyncHandler(async (req, res) => {
   for (const posting of postings) {
     const postingData = await Posting.findOne({
       where: { posting_id: posting.posting_id },
-      include: [Company, Position],
+
+      include: [
+        { model: Position },
+        { model: Company, include: [{ model: Address }] },
+      ],
     });
     sendPostings.push(postingData);
   }
