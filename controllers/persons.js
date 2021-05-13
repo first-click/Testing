@@ -67,7 +67,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
         person_phonenumber: fields.applicant_phonenumber,
         person_applicant_message_hiring_manager:
           fields.applicant_message_hiring_manager,
-        person_linkin: fields.applicant_linkin,
+        person_linkedin: fields.applicant_linkedin,
         person_xing: fields.applicant_xing,
         person_applicant_data_protection: fields.applicant_data_protection,
         company_id: fields.company_id,

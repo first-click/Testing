@@ -40,7 +40,7 @@ module.exports = {
           person_applicant_message_hiring_manager: {
             type: Sequelize.STRING,
           },
-          person_linkin: {
+          person_linkedin: {
             type: Sequelize.STRING,
             unique: true,
           },

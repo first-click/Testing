@@ -83,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
       person_applicant_message_hiring_manager: {
         type: DataTypes.STRING,
       },
-      person_linkin: {
+      person_linkedin: {
         type: DataTypes.STRING,
         unique: true,
       },

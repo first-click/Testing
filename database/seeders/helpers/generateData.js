@@ -70,7 +70,7 @@ function generateDataPoint({ id }) {
 
       person_phonenumber: faker.phone.phoneNumber(),
       person_applicant_message_hiring_manager: faker.lorem.sentence(),
-      person_linkin: faker.lorem.sentence(),
+      person_linkedin: faker.lorem.sentence(),
       person_xing: faker.lorem.sentence(),
       person_applicant_data_protection: true,
       person_applicant_upload: faker.lorem.sentence(),
