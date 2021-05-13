@@ -33,7 +33,7 @@ function generateDataPoint({ id }) {
   }
 
   let firstName = faker.name.firstName();
-  let lastName = faker.name.lastName();
+  let surname = faker.name.lastName();
   let title = faker.name.jobTitle();
   let department = faker.name.jobArea();
   let departmentShort = department.split('').slice(0, 3).join('').toUpperCase();
@@ -53,8 +53,8 @@ function generateDataPoint({ id }) {
   let date = new Date();
   return {
     user: {
-      username: faker.internet.userName(firstName, lastName),
-      email: faker.internet.email(firstName, lastName),
+      username: faker.internet.userName(firstName, surname),
+      email: faker.internet.email(firstName, surname),
       password: hashedPassword('secret'),
       company_id: companyId,
       created_at: date,
@@ -64,7 +64,17 @@ function generateDataPoint({ id }) {
       company_id: companyId,
       user_id: id,
       person_first_name: firstName,
-      person_last_name: lastName,
+      person_surname: surname,
+
+      person_email: faker.internet.email(firstName, surname),
+
+      person_phonenumber: faker.phone.phoneNumber(),
+      person_applicant_message_hiring_manager: faker.lorem.sentence(),
+      person_linkin: faker.lorem.sentence(),
+      person_xing: faker.lorem.sentence(),
+      person_applicant_data_protection: true,
+      person_applicant_upload: faker.lorem.sentence(),
+
       created_at: date,
       updated_at: date,
     },

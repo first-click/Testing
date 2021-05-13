@@ -56,17 +56,46 @@ module.exports = (sequelize, DataTypes) => {
       person_first_name: {
         type: DataTypes.STRING,
       },
-      person_last_name: {
+      person_surname: {
         type: DataTypes.STRING,
       },
       person_fullName: {
         type: DataTypes.VIRTUAL,
         get() {
-          return `${this.person_first_name} ${this.person_last_name}`;
+          return `${this.person_first_name} ${this.person_surname}`;
         },
         set(value) {
           throw new Error('Do not try to set the `fullName` value!');
         },
+      },
+      person_email: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+        validate: { isEmail: true },
+      },
+
+      person_phonenumber: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      person_applicant_message_hiring_manager: {
+        type: DataTypes.STRING,
+      },
+      person_linkin: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      person_xing: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      person_applicant_data_protection: {
+        type: DataTypes.BOOLEAN,
+      },
+      person_applicant_upload: {
+        type: DataTypes.STRING,
       },
     },
     {

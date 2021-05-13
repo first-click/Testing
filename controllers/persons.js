@@ -2,6 +2,7 @@ const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Person = sequelize.models.person;
+const formidable = require('formidable');
 
 //@desc Get all persons
 //@route GET /api/v1/persons
@@ -38,16 +39,47 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
 //@route POST /api/v1/persons
 //@access Private/Admin
 exports.createPerson = asyncHandler(async (req, res, next) => {
-  // Insert into table
-  const { person_first_name, person_last_name } = req.body;
-  const person = await Person.create({
-    person_first_name,
-    person_last_name,
-  });
+  const { user_id } = req.user;
+  let filePath = null;
 
-  res.status(200).json({
-    success: true,
-    data: person,
+  new formidable.IncomingForm()
+    .parse(req)
+    .on('fileBegin', (name, file) => {
+      file.path =
+        __dirname + '/uploads/' + new Date().toISOString() + file.name;
+      filePath = file.path;
+    })
+    .on('file', (name, file) => {
+      console.log('Uploaded file', name, file);
+    });
+
+  const form = formidable({ multiples: true });
+
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return next(new ErrorResponse('Person could not be created', 401));
+    }
+    if (fields) {
+      const newPerson = await Person.create({
+        person_first_name: fields.applicant_firstname,
+        person_surname: fields.applicant_surname,
+        person_email: fields.applicant_email,
+        person_phonenumber: fields.applicant_phonenumber,
+        person_applicant_message_hiring_manager:
+          fields.applicant_message_hiring_manager,
+        person_linkin: fields.applicant_linkin,
+        person_xing: fields.applicant_xing,
+        person_applicant_data_protection: fields.applicant_data_protection,
+        company_id: fields.company_id,
+        position_id: fields.position_id,
+        user_id: user_id,
+        person_applicant_upload: filePath,
+      });
+      res.status(200).json({
+        success: true,
+        data: newPerson,
+      });
+    }
   });
 });
 
