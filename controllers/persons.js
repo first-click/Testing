@@ -40,7 +40,7 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
 //@access Private/Admin
 exports.createPerson = asyncHandler(async (req, res, next) => {
   const { user_id } = req.user;
-  let filePath = null;
+  let fileName = null;
   console.log(__dirname);
   new formidable.IncomingForm()
     .parse(req)
@@ -48,7 +48,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
       file.path =
         '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
         file.name;
-      filePath = file.path;
+      fileName = file.name;
     })
     .on('file', (name, file) => {
       console.log('Uploaded file', name, file);
@@ -74,7 +74,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
         company_id: fields.company_id,
         position_id: fields.position_id,
         user_id: user_id,
-        person_applicant_upload: filePath,
+        person_applicant_upload: './uploads/' + fileName,
       });
       res.status(200).json({
         success: true,
