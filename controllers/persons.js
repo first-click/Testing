@@ -41,18 +41,19 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
 exports.createPerson = asyncHandler(async (req, res, next) => {
   const { user_id } = req.user;
   let filePath = null;
-
+  console.log(__dirname);
   new formidable.IncomingForm()
     .parse(req)
     .on('fileBegin', (name, file) => {
       file.path =
-        __dirname + '/uploads/' + new Date().toISOString() + file.name;
+        '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
+        file.name;
       filePath = file.path;
     })
     .on('file', (name, file) => {
       console.log('Uploaded file', name, file);
     });
-
+  // __dirname + '/uploads/' + new Date().toISOString() + file.name;
   const form = formidable({ multiples: true });
 
   form.parse(req, async (err, fields, files) => {
