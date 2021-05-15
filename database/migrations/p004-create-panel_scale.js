@@ -31,7 +31,15 @@ module.exports = {
             },
             onUpdate: 'CASCADE',
             onDelete: 'SET NULL',
-            // allowNull: false,
+          },
+          company_id: {
+            type: Sequelize.INTEGER,
+            references: {
+              model: 'companies',
+              key: 'company_id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
           },
           panel_id: {
             type: Sequelize.INTEGER,
@@ -43,28 +51,29 @@ module.exports = {
             onDelete: 'CASCADE',
             allowNull: false,
           },
-          // company_id: {
-          //   type: Sequelize.INTEGER,
-          //   references: {
-          //     model: 'company',
-          //     key: 'company_id',
-          //   },
-          // },
-
-          // Werte werden kopiert. Damit kann das PanelItem für zukünftige Panels
-          // verändert oder gelöscht werden
-          name: {
+          title: {
             type: Sequelize.STRING,
             allowNull: false,
           },
           description: {
             type: Sequelize.STRING,
           },
-          scale: {
-            type: Sequelize.STRING,
+          base: {
+            type: Sequelize.INTEGER,
             allowNull: false,
           },
-          type: {
+          length: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+          },
+          fields: {
+            type: Sequelize.ARRAY(Sequelize.INTEGER),
+            allowNull: false,
+          },
+          anchors: {
+            type: Sequelize.ARRAY(Sequelize.STRING),
+          },
+          rank: {
             type: Sequelize.STRING,
             allowNull: false,
           },

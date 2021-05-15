@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       Panel.hasMany(models.panel_stakeholder, {
         foreignKey: { name: 'panel_id' },
       });
+      Panel.hasMany(models.panel_scale, {
+        foreignKey: { name: 'panel_id' },
+      });
     }
   }
   Panel.init(

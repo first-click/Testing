@@ -29,8 +29,15 @@ module.exports = (sequelize, DataTypes) => {
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
-        // allowNull: false,
-        // validate: { notNull: { msg: 'scale_id must be defined' } },
+      },
+      company_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'companies',
+          key: 'company_id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       panel_id: {
         type: DataTypes.INTEGER,
@@ -43,17 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: { notNull: { msg: 'panel_id must be defined' } },
       },
-      // company_id: {
-      //   type: DataTypes.INTEGER,
-      //   references: {
-      //     model: 'company',
-      //     key: 'company_id',
-      //   },
-      // },
-
-      // Werte werden kopiert. Damit kann das Scale für zukünftige Panels
-      // verändert oder gelöscht werden
-      name: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: { notNull: { msg: 'name must be defined' } },
@@ -61,15 +58,47 @@ module.exports = (sequelize, DataTypes) => {
       description: {
         type: DataTypes.STRING,
       },
-      scale: {
-        type: DataTypes.STRING,
+      base: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        validate: { notNull: { msg: 'scale must be defined' } },
+        validate: {
+          notNull: { msg: 'base must be defined' },
+          min: { args: '0', msg: 'base must be 0 or 1' },
+          max: { args: '1', msg: 'base must be 0 or 1' },
+        },
       },
-      type: {
+      length: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: 'length must be defined' },
+          min: { args: '2', msg: 'length must be between 2 and 10' },
+          max: { args: '10', msg: 'length must be between 2 and 10' },
+        },
+      },
+      fields: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        allowNull: false,
+        validate: {
+          notNull: { msg: 'fields must be defined' },
+          checkLength(arr) {
+            if (arr.length !== this.dataValues.length)
+              throw new Error('Field count must be equal to desired length');
+          },
+        },
+      },
+      anchors: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        validate: {
+          checkLength(arr) {
+            if (arr.length !== this.dataValues.length)
+              throw new Error('Anchor count must be equal to desired length');
+          },
+        },
+      },
+      rank: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: { notNull: { msg: 'type must be defined' } },
       },
     },
     {

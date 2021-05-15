@@ -52,12 +52,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: { notNull: { msg: 'title must be defined' } },
-        unique: true,
       },
       description: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: { notNull: { msg: 'description must be defined' } },
       },
       base: {
         type: DataTypes.INTEGER,
@@ -97,28 +94,6 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      // scale: {
-      //   type: DataTypes.STRING,
-      //   allowNull: false,
-      //   validate: {
-      //     notNull: { msg: 'scale must be defined' },
-      //     isIn: {
-      //       args: [['text', '2', '3', '4', '5', '6', '7']],
-      //       msg: 'scale must be "text", "2", "3", "4", "5", "6", "7"',
-      //     },
-      //   },
-      // },
-      // type: {
-      //   type: DataTypes.STRING,
-      //   allowNull: false,
-      //   validate: {
-      //     notNull: { msg: 'type must be defined' },
-      //     isIn: {
-      //       args: [['number', 'string']],
-      //       msg: 'type must be "number" or "string"',
-      //     },
-      //   },
-      // },
     },
     {
       sequelize,

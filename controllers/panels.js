@@ -65,6 +65,7 @@ exports.getPanel = asyncHandler(async (req, res, next) => {
           },
         },
       },
+      { model: Panel_Scale },
     ],
   });
 
