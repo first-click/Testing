@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       Person.belongsTo(models.user, {
         foreignKey: 'user_id',
       });
+      Person.belongsToMany(models.applicant_filename, {
+        through: models.person_applicant_filename,
+        foreignKey: 'person_id',
+      });
 
       Person.belongsTo(models.company, {
         foreignKey: 'company_id',
@@ -93,9 +97,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       person_applicant_data_protection: {
         type: DataTypes.BOOLEAN,
-      },
-      person_applicant_upload: {
-        type: DataTypes.STRING,
       },
     },
     {

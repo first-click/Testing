@@ -49,6 +49,7 @@ function generateDataPoint({ id }) {
   let country = faker.address.country();
   let benefit = faker.lorem.word();
   let qualification = faker.lorem.word();
+  let filename = faker.lorem.word();
 
   let date = new Date();
   return {
@@ -65,16 +66,12 @@ function generateDataPoint({ id }) {
       user_id: id,
       person_first_name: firstName,
       person_surname: surname,
-
       person_email: faker.internet.email(firstName, surname),
-
       person_phonenumber: faker.phone.phoneNumber(),
       person_applicant_message_hiring_manager: faker.lorem.sentence(),
       person_linkedin: faker.lorem.sentence(),
       person_xing: faker.lorem.sentence(),
       person_applicant_data_protection: true,
-      person_applicant_upload: faker.lorem.sentence(),
-
       created_at: date,
       updated_at: date,
     },
@@ -121,6 +118,11 @@ function generateDataPoint({ id }) {
       created_at: date,
       updated_at: date,
     },
+    applicant_filename: {
+      filename: filename,
+      created_at: date,
+      updated_at: date,
+    },
     posting_benefit: {
       posting_id: id,
       benefit_id: id,
@@ -130,6 +132,12 @@ function generateDataPoint({ id }) {
     posting_qualification: {
       posting_id: id,
       qualification_id: id,
+      created_at: date,
+      updated_at: date,
+    },
+    person_applicant_filename: {
+      person_id: id,
+      applicant_filename_id: id,
       created_at: date,
       updated_at: date,
     },

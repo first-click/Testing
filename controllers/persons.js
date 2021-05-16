@@ -2,6 +2,8 @@ const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Person = sequelize.models.person;
+const Applicant_filename = sequelize.models.applicant_filename;
+const Person_applicant_filename = sequelize.models.person_applicant_filename;
 const formidable = require('formidable');
 
 //@desc Get all persons
@@ -40,21 +42,17 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
 //@access Private/Admin
 exports.createPerson = asyncHandler(async (req, res, next) => {
   const { user_id } = req.user;
-  let fileName = null;
-  console.log(req.file);
+  let fileNames = [];
+  let newPerson = {};
 
   new formidable.IncomingForm()
     .parse(req)
-    .on('fileBegin', (name, file) => {
-      console.log(file);
+    .on('fileBegin', async (name, file) => {
       file.path =
         '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
         new Date().toISOString() +
         file.name;
-      fileName = file.name;
-    })
-    .on('file', (name, file) => {
-      console.log('Uploaded file', name, file);
+      fileNames.push(file.name);
     });
 
   const form = formidable({ multiples: true });
@@ -64,7 +62,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse('Person could not be created', 401));
     }
     if (fields) {
-      const newPerson = await Person.create({
+      newPerson = await Person.create({
         person_first_name: fields.applicant_firstname,
         person_surname: fields.applicant_surname,
         person_email: fields.applicant_email,
@@ -77,14 +75,29 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
         company_id: fields.company_id,
         position_id: fields.position_id,
         user_id: user_id,
-        person_applicant_upload: './uploads/' + fileName,
-      });
-
-      res.status(200).json({
-        success: true,
-        data: newPerson,
       });
     }
+
+    let sendApplicantUploads = [];
+    for (const filename of fileNames) {
+      const applicantFilename = await Applicant_filename.create({
+        filename: `./uploads/${filename}`,
+      });
+
+      sendApplicantUploads.push(applicantFilename);
+
+      await Person_applicant_filename.create({
+        person_id: newPerson.person_id,
+        applicant_filename_id: applicantFilename.applicant_filename_id,
+      });
+    }
+
+    newPerson.dataValues.uploads = sendApplicantUploads;
+
+    res.status(200).json({
+      success: true,
+      data: newPerson,
+    });
   });
 });
 
