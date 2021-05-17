@@ -3,6 +3,7 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Person = sequelize.models.person;
 const Position = sequelize.models.position;
+const User = sequelize.models.user;
 
 //@desc Get all persons
 //@route GET /api/v1/persons
@@ -73,7 +74,7 @@ exports.queryPersons = asyncHandler(async (req, res) => {
         },
       ],
     },
-    include: { model: Position },
+    include: [{ model: Position }, { model: User }],
     // limit: 10,
   });
 
