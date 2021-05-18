@@ -50,8 +50,13 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
     .on('fileBegin', async (name, file) => {
       file.path =
         '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
-        new Date().toISOString() +
         file.name;
+
+      // file.path =
+      // '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
+      // new Date().toISOString() +
+      // file.name;
+
       fileNames.push(file.name);
     });
 
