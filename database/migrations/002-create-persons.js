@@ -51,9 +51,6 @@ module.exports = {
           person_applicant_data_protection: {
             type: Sequelize.BOOLEAN,
           },
-          person_applicant_upload: {
-            type: Sequelize.STRING,
-          },
 
           created_at: {
             type: Sequelize.DATE,
