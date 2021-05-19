@@ -58,7 +58,7 @@ exports.getPanel = asyncHandler(async (req, res, next) => {
           attributes: ['username', 'user_id', 'avatar'],
           include: {
             model: Person,
-            attributes: ['person_first_name', 'person_last_name'],
+            attributes: ['person_first_name', 'person_last_name', 'person_id'],
             include: {
               model: Position,
             },
@@ -124,7 +124,10 @@ exports.createPanel = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: { ...stakeholder.dataValues, panel: { ...panel.dataValues, position } },
+    data: {
+      ...stakeholder.dataValues,
+      panel: { ...panel.dataValues, position },
+    },
     // data: { ...panel.dataValues, position, panel_stakeholders: [stakeholder] },
   });
 });
