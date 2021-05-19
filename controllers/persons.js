@@ -9,7 +9,11 @@ const User = sequelize.models.user;
 //@route GET /api/v1/persons
 //@access Private/Admin
 exports.getPersons = asyncHandler(async (req, res, next) => {
-  const persons = await Person.findAll({});
+  const { company_id } = req.user;
+  const persons = await Person.findAll({
+    where: { company_id },
+    include: [{ model: Position }, { model: User }],
+  });
 
   if (!persons) {
     return next(new ErrorResponse('Persons could not be found', 401));
@@ -24,7 +28,18 @@ exports.getPersons = asyncHandler(async (req, res, next) => {
 //@route GET /api/v1/persons/:person_id
 //@access Private/Admin
 exports.getPerson = asyncHandler(async (req, res, next) => {
-  const person = await Person.findByPk(req.params.person_id);
+  const { company_id } = req.user;
+  const person = await Person.findAll({
+    where: {
+      company_id,
+      person_id: req.params.person_id,
+    },
+    include: [{ model: Position }, { model: User }],
+    plain: true,
+  });
+  // const person = await Person.findByPk(req.params.person_id, {
+  //   include: [{ model: Position }, { model: User }],
+  // });
 
   if (!person) {
     return next(new ErrorResponse('Person could not be found', 401));

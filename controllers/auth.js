@@ -9,6 +9,7 @@ const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
 const Role = sequelize.models.role;
+const Person = sequelize.models.person;
 const Role_user = sequelize.models.role_user;
 const Company = sequelize.models.company;
 
@@ -17,13 +18,8 @@ const Company = sequelize.models.company;
 //@access Public
 
 exports.register = asyncHandler(async (req, res, next) => {
-  const {
-    username,
-    email,
-    password,
-    generalrole_user,
-    postingrole_user,
-  } = req.body;
+  const { username, email, password, generalrole_user, postingrole_user } =
+    req.body;
   //Check for user
   const userExists = await User.findOne({
     where: { email: email },
@@ -152,6 +148,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
     attributes: {
       exclude: ['password', 'reset_password_token', 'reset_password_expire'],
     },
+    include: [{ model: Person }],
   });
 
   if (!user) {

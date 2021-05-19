@@ -15,13 +15,13 @@ const { protect, authorize } = require('../middleware/auth');
 //router.use(protect);
 //router.use(authorize('admin'));
 
-router.route('/').get(getPersons).post(createPerson);
+router.route('/').get(protect, getPersons).post(protect, createPerson);
 router.route('/query/:encodedQueryString').get(protect, queryPersons);
 
 router
   .route('/:person_id')
-  .put(updatePerson)
-  .get(getPerson)
-  .delete(deletePerson);
+  .get(protect, getPerson)
+  .put(protect, updatePerson)
+  .delete(protect, deletePerson);
 
 module.exports = router;

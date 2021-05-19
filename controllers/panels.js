@@ -124,7 +124,8 @@ exports.createPanel = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: { ...panel.dataValues, position, panel_stakeholders: [stakeholder] },
+    data: { ...stakeholder.dataValues, panel: { ...panel.dataValues, position } },
+    // data: { ...panel.dataValues, position, panel_stakeholders: [stakeholder] },
   });
 });
 
