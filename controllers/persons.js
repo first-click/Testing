@@ -53,9 +53,9 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
         file.name;
 
       // file.path =
-      // '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
-      // new Date().toISOString() +
-      // file.name;
+      //   '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
+      //   new Date().toISOString() +
+      //   file.name;
 
       fileNames.push(file.name);
     });
