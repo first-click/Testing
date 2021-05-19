@@ -60,7 +60,14 @@ exports.queryPersons = asyncHandler(async (req, res) => {
     req.params.encodedQueryString,
     'base64'
   ).toString('binary');
-  //console.log(queryString);
+  console.log('queryString:', queryString);
+  if (queryString === '') {
+    console.log('ooops');
+    return res.status(200).json({
+      success: true,
+      data: [],
+    });
+  }
 
   const persons = await Person.findAll({
     where: {

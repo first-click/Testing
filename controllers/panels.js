@@ -187,7 +187,7 @@ exports.addStakeholderToPanel = asyncHandler(async (req, res, next) => {
       attributes: ['username', 'user_id', 'avatar'],
       include: {
         model: Person,
-        attributes: ['person_first_name', 'person_last_name'],
+        attributes: ['person_first_name', 'person_last_name', 'person_id'],
         include: {
           model: Position,
         },
