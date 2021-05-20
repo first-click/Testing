@@ -45,7 +45,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
   let fileNames = [];
   let newPerson = {};
 
-  new formidable.IncomingForm()
+  await new formidable.IncomingForm()
     .parse(req)
     .on('fileBegin', async (name, file) => {
       file.path =
@@ -60,7 +60,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
       fileNames.push(file.name);
     });
 
-  const form = formidable({ multiples: true });
+  const form = await formidable({ multiples: true });
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
