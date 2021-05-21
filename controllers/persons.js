@@ -47,7 +47,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
 
   await new formidable.IncomingForm()
     .parse(req)
-    .on('fileBegin', async (name, file) => {
+    .on('fileBegin', (name, file) => {
       file.path =
         '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
         file.name;
