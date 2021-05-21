@@ -334,7 +334,7 @@ exports.addScaleToPanel = asyncHandler(async (req, res, next) => {
 
   const panel = await Panel.findByPk(panel_id);
   const scale = await Scale.findByPk(scale_id);
-  console.log(scale);
+  // console.log(scale);
 
   if (panel.status !== 'planning') {
     return next(
@@ -347,11 +347,16 @@ exports.addScaleToPanel = asyncHandler(async (req, res, next) => {
 
   const added_scale = await Panel_Scale.create({
     panel_id,
+    company_id: scale.company_id,
     scale_id: scale.scale_id,
-    name: scale.name,
+    title: scale.title,
     description: scale.description,
-    scale: scale.scale,
     type: scale.type,
+    base: scale.base,
+    length: scale.length,
+    fields: scale.fields,
+    anchors: scale.anchors,
+    rank: '1000',
   });
 
   res.status(200).json({
