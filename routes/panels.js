@@ -8,6 +8,7 @@ const {
   createScale,
   getScales,
   addScaleToPanel,
+  deleteScaleFromPanel,
   addResult,
   updateScale,
   deleteScale,
@@ -28,7 +29,10 @@ router
   .put(protect, updateScale)
   .delete(protect, deleteScale);
 router.route('/scales').get(protect, getScales);
-router.route('/:panel_id/scale').post(protect, addScaleToPanel);
+router
+  .route('/:panel_id/scale')
+  .post(protect, addScaleToPanel)
+  .delete(protect, deleteScaleFromPanel);
 router.route('/:panel_id').get(protect, getPanel);
 router.route('/:position_id').post(protect, createPanel);
 router

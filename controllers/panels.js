@@ -324,7 +324,7 @@ exports.getScales = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desc Link panel item to panel
+//@desc Add scale to panel
 //@route POST /api/v1/panels/:panel_id/scale/
 //@access Private/Admin
 exports.addScaleToPanel = asyncHandler(async (req, res, next) => {
@@ -362,6 +362,41 @@ exports.addScaleToPanel = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: added_scale,
+  });
+});
+
+//@desc Remove scale from panel
+//@route DELETE /api/v1/panels/:panel_id/scale/
+//@access Private/Admin
+exports.deleteScaleFromPanel = asyncHandler(async (req, res, next) => {
+  const { company_id, user_id } = req.user;
+  const { panel_id } = req.params;
+  const { scale_id, panel_scale_id } = req.body;
+
+  let panel_scale;
+
+  if (!!panel_scale_id) {
+    panel_scale = await Panel_Scale.findAll({
+      where: panel_scale_id,
+      plain: true,
+    });
+  } else {
+    panel_scale = await Panel_Scale.findAll({
+      where: { panel_id, scale_id },
+      plain: true,
+    });
+  }
+
+  if (panel_scale.length === 0)
+    return next(new ErrorResponse('Delete not successful', 400));
+
+  await Panel_Scale.destroy({
+    where: { panel_scale_id: panel_scale.panel_scale_id },
+  });
+
+  res.status(200).json({
+    success: true,
+    data: panel_scale,
   });
 });
 
