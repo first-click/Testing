@@ -5,6 +5,8 @@ const Person = sequelize.models.person;
 const Applicant_filename = sequelize.models.applicant_filename;
 const Person_applicant_filename = sequelize.models.person_applicant_filename;
 const formidable = require('formidable');
+var fs = require('fs');
+var path = require('path');
 
 //@desc Get all persons
 //@route GET /api/v1/persons
@@ -45,27 +47,34 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
   let fileNames = [];
   let newPerson = {};
 
-  await new formidable.IncomingForm()
-    .parse(req)
-    .on('fileBegin', (name, file) => {
-      file.path =
-        '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
-        file.name;
-
-      // file.path =
-      //   '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
-      //   new Date().toISOString() +
-      //   file.name;
-
-      fileNames.push(file.name);
-    });
-
-  const form = await formidable({ multiples: true });
+  const form = await formidable({
+    multiples: true,
+  });
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
       return next(new ErrorResponse('Person could not be created', 401));
     }
+    if (files) {
+      files.file.map((file) => {
+        const pathFile =
+          '/Users/petrakohler/Desktop/firstClick/client/public/uploads/';
+
+        fs.rename(file.path, path.join(pathFile, file.name), (err) => {
+          if (err) {
+            return next(new ErrorResponse('Person could not be created', 401));
+          }
+        });
+
+        fileNames.push(file.name);
+
+        // file.path =
+        //   '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
+        //   new Date().toISOString() +
+        //   file.name;
+      });
+    }
+
     if (fields) {
       newPerson = await Person.create({
         person_first_name: fields.applicant_firstname,
