@@ -132,6 +132,25 @@ exports.createPanel = asyncHandler(async (req, res, next) => {
   });
 });
 
+//@desc Delete a panel
+//@route DELETE /api/v1/panels/:panel_id
+//@access Private/Admin
+exports.deletePanel = asyncHandler(async (req, res, next) => {
+  const { company_id, user_id } = req.user;
+  const { panel_id } = req.params;
+
+  const count = await Panel.destroy({
+    where: { panel_id },
+  });
+
+  if (count === 0) return next(new ErrorResponse('Something went wrong', 400));
+
+  res.status(200).json({
+    success: true,
+    data: { panel_id },
+  });
+});
+
 //@desc Add a new stakeholder to panel
 //@route POST /api/v1/panels/:panel_id/stakeholders
 //@access Private/Admin

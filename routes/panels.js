@@ -1,6 +1,7 @@
 const express = require('express');
 const {
   createPanel,
+  deletePanel,
   getPanel,
   getPanels,
   addStakeholderToPanel,
@@ -33,7 +34,7 @@ router
   .route('/:panel_id/scale')
   .post(protect, addScaleToPanel)
   .delete(protect, deleteScaleFromPanel);
-router.route('/:panel_id').get(protect, getPanel);
+router.route('/:panel_id').get(protect, getPanel).delete(protect, deletePanel);
 router.route('/:position_id').post(protect, createPanel);
 router
   .route('/:panel_id/stakeholder')
