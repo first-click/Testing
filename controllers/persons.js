@@ -7,6 +7,7 @@ const Person_applicant_filename = sequelize.models.person_applicant_filename;
 const formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
+const { uploadFile } = require('../s3');
 
 //@desc Get all persons
 //@route GET /api/v1/persons
@@ -46,6 +47,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
   const { user_id } = req.user;
   let fileNames = [];
   let newPerson = {};
+  let fileChange = [];
 
   const form = await formidable({
     multiples: true,
@@ -56,7 +58,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse('Person could not be created', 401));
     }
     if (files) {
-      files.file.map((file) => {
+      files.file.map(async (file) => {
         const pathFile =
           '/Users/petrakohler/Desktop/firstClick/client/public/uploads/';
 
@@ -65,6 +67,19 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
             return next(new ErrorResponse('Person could not be created', 401));
           }
         });
+
+        // const result = await uploadFile({
+        //   ...file,
+        //   path: `/Users/petrakohler/Desktop/firstClick/client/public/uploads/${file.name}`,
+        // });
+
+        fileChange = {
+          ...file,
+          path: `uploads/${file.name}`,
+        };
+
+        const result = await uploadFile(fileChange);
+        console.log(result);
 
         fileNames.push(file.name);
 
