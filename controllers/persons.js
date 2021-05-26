@@ -7,9 +7,27 @@ const Person_applicant_filename = sequelize.models.person_applicant_filename;
 const formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
-const { uploadFile, getFileStream } = require('../s3');
+const { getFileStream } = require('../s3');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
+const S3 = require('aws-sdk/clients/s3');
+const dotenv = require('dotenv');
+
+// require('./utils/logOrigin');
+
+// Load env vars
+dotenv.config({ path: './config/config.env' });
+
+const bucketName = process.env.AWS_BUCKET_NAME;
+const region = process.env.AWS_BUCKET_REGION;
+const accessKeyId = process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_KEY;
+
+const s3 = new S3({
+  region,
+  accessKeyId,
+  secretAccessKey,
+});
 
 //@desc Get all persons
 //@route GET /api/v1/persons
@@ -42,15 +60,21 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desc Create new person
-//@route POST /api/v1/persons
+//@get pdf from s3 bucket send to frontend
+//@route GET /api/v1/persons/pdf/:key
 //@access Private/Admin
+exports.getFile = asyncHandler(async (req, res, next) => {
+  // console.log(req.params);
+  const key = req.params.key;
+  const readStream = getFileStream(key);
+  await readStream.pipe(res);
+});
+
 // exports.createPerson = asyncHandler(async (req, res, next) => {
 //   const { user_id } = req.user;
-//   let fileNames = [];
 //   let newPerson = {};
 //   let fileChange = [];
-//   let result = {};
+//   let sendApplicantUploads = ['hello'];
 
 //   const form = await formidable({
 //     multiples: true,
@@ -60,40 +84,8 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
 //     if (err) {
 //       return next(new ErrorResponse('Person could not be created', 401));
 //     }
-//     if (files) {
-//       files.file.map(async (file) => {
-//         // const pathFile =
-//         //   '/Users/petrakohler/Desktop/firstClick/client/public/uploads/';
-
-//         // fs.rename(file.path, path.join(pathFile, file.name), (err) => {
-//         //   if (err) {
-//         //     return next(new ErrorResponse('Person could not be created', 401));
-//         //   }
-//         // });
-
-//         // const result = await uploadFile({
-//         //   ...file,
-//         //   path: `/Users/petrakohler/Desktop/firstClick/client/public/uploads/${file.name}`,
-//         // });
-
-//         fileChange = {
-//           ...file,
-//           path: `uploads/${file.name}`,
-//         };
-
-//         result = await uploadFile(fileChange);
-//         console.log(result);
-
-//         fileNames.push(file.name);
-
-//         // file.path =
-//         //   '/Users/petrakohler/Desktop/firstClick/client/public/uploads/' +
-//         //   new Date().toISOString() +
-//         //   file.name;
-//       });
-//     }
-
 //     if (fields) {
+//       console.log('in if(fields)');
 //       newPerson = await Person.create({
 //         person_first_name: fields.applicant_firstname,
 //         person_surname: fields.applicant_surname,
@@ -109,52 +101,65 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
 //         user_id: user_id,
 //       });
 //     }
+//     if (files) {
 
-//     let sendApplicantUploads = [];
-//     for (const filename of fileNames) {
-//       const applicantFilename = await Applicant_filename.create({
-//         filename: `./uploads/${filename}`,
-//       });
+//       files.file.map(async (file) => {
+//         // const pathFile = 'uploads/';
 
-//       sendApplicantUploads.push(applicantFilename);
+//         // fs.rename(file.path, path.join(pathFile, file.name), (err) => {
+//         //   if (err) {
+//         //     return next(new ErrorResponse('Person could not be created', 401));
+//         //   }
+//         // });
 
-//       await Person_applicant_filename.create({
-//         person_id: newPerson.person_id,
-//         applicant_filename_id: applicantFilename.applicant_filename_id,
+//         fileChange = {
+//           ...file,
+//           path: `uploads/${file.name}`,
+//         };
+
+//         const fileStream = fs.createReadStream(fileChange.path);
+
+//         const uploadParams = {
+//           Bucket: bucketName,
+//           Body: fileStream,
+//           Key: fileChange.name,
+//         };
+
+//         const s3Data = await s3.upload(uploadParams).promise();
+
+//         const applicantFilename = await Applicant_filename.create({
+//           filename: `/api/v1/persons/pdf/${s3Data.key}`,
+//         });
+
+//         console.log('before sendApplicantUploads.push()');
+//         sendApplicantUploads.push(applicantFilename.dataValues.filename);
+//         // newPerson.dataValues.uploads.push(
+//         //   applicantFilename.dataValues.filename
+//         // );
+
+//         console.log('before Person_applicant_filename.create()');
+//         await Person_applicant_filename.create({
+//           person_id: newPerson.person_id,
+//           applicant_filename_id: applicantFilename.applicant_filename_id,
+//         });
 //       });
 //     }
 
-//     newPerson.dataValues.uploads = sendApplicantUploads;
-
-//     // await res.write({ pdfPath: `/pdf/${result.Key}` });
-//     // await res.end();
-//     res.send({ pdfPath: '/api/v1/persons/pdf/lebenslauf-dunkel.pdf' });
-//     // res.write.json({
-//     //   success: true,
-//     //   data: newPerson,
-//     // });
-
-//     // res.end();
+//     await res.status(200).json({
+//       success: true,
+//       data: newPerson,
+//     });
 //   });
 // });
 
-//@get pdf from s3 bucket send to frontend
-//@route GET /api/v1/persons/pdf/:key
+//@desc Create new person
+//@route POST /api/v1/persons
 //@access Private/Admin
-exports.getFile = asyncHandler(async (req, res, next) => {
-  // console.log(req.params);
-  const key = req.params.key;
-  const readStream = getFileStream(key);
-  console.log(res);
-  await readStream.pipe(res);
-});
-
 exports.createPerson = asyncHandler(async (req, res, next) => {
   const { user_id } = req.user;
-  let fileNames = [];
   let newPerson = {};
   let fileChange = [];
-  let result = {};
+  let sendApplicantUploads = [];
 
   const form = await formidable({
     multiples: true,
@@ -164,29 +169,8 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
     if (err) {
       return next(new ErrorResponse('Person could not be created', 401));
     }
-    if (files) {
-      files.file.map(async (file) => {
-        // const pathFile = 'uploads/';
-
-        // fs.rename(file.path, path.join(pathFile, file.name), (err) => {
-        //   if (err) {
-        //     return next(new ErrorResponse('Person could not be created', 401));
-        //   }
-        // });
-
-        fileChange = {
-          ...file,
-          path: `uploads/${file.name}`,
-        };
-
-        result = await uploadFile(fileChange);
-        console.log(result);
-
-        fileNames.push(result.Key);
-      });
-    }
-
     if (fields) {
+      console.log('in if(fields)');
       newPerson = await Person.create({
         person_first_name: fields.applicant_firstname,
         person_surname: fields.applicant_surname,
@@ -202,28 +186,48 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
         user_id: user_id,
       });
     }
+    if (files) {
+      for (const file of files.file) {
+        // const pathFile = 'uploads/';
 
-    let sendApplicantUploads = [];
-    for (const filename of fileNames) {
-      const applicantFilename = await Applicant_filename.create({
-        filename: `/api/v1/persons/pdf/${filename}`,
-      });
+        // fs.rename(file.path, path.join(pathFile, file.name), (err) => {
+        //   if (err) {
+        //     return next(new ErrorResponse('Person could not be created', 401));
+        //   }
+        // });
 
-      sendApplicantUploads.push(applicantFilename);
+        fileChange = {
+          ...file,
+          path: `uploads/${file.name}`,
+        };
 
-      await Person_applicant_filename.create({
-        person_id: newPerson.person_id,
-        applicant_filename_id: applicantFilename.applicant_filename_id,
-      });
+        const fileStream = fs.createReadStream(fileChange.path);
+
+        const uploadParams = {
+          Bucket: bucketName,
+          Body: fileStream,
+          Key: fileChange.name,
+        };
+
+        const s3Data = await s3.upload(uploadParams).promise();
+
+        const applicantFilename = await Applicant_filename.create({
+          filename: `/api/v1/persons/pdf/${s3Data.key}`,
+        });
+
+        sendApplicantUploads.push(applicantFilename.dataValues.filename);
+
+        await Person_applicant_filename.create({
+          person_id: newPerson.person_id,
+          applicant_filename_id: applicantFilename.applicant_filename_id,
+        });
+      }
     }
 
     newPerson.dataValues.uploads = sendApplicantUploads;
-
-    //  res.write({ pdfPath: `/pdf/${result.Key}` });
-    //  res.end();
-    // res.send({ pdfPath: '/api/v1/persons/pdf/lebenslauf-dunkel.pdf' });
-    res.status(200).json({
+    await res.status(200).json({
       success: true,
+      data: newPerson,
     });
   });
 });
