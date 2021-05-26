@@ -188,13 +188,13 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
     }
     if (files) {
       for (const file of files.file) {
-        // const pathFile = 'uploads/';
+        const pathFile = 'uploads/';
 
-        // fs.rename(file.path, path.join(pathFile, file.name), (err) => {
-        //   if (err) {
-        //     return next(new ErrorResponse('Person could not be created', 401));
-        //   }
-        // });
+        fs.rename(file.path, path.join(pathFile, file.name), (err) => {
+          if (err) {
+            return next(new ErrorResponse('Person could not be created', 401));
+          }
+        });
 
         fileChange = {
           ...file,
