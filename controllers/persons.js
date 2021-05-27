@@ -170,7 +170,6 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse('Person could not be created', 401));
     }
     if (fields) {
-      console.log('in if(fields)');
       newPerson = await Person.create({
         person_first_name: fields.applicant_firstname,
         person_surname: fields.applicant_surname,
@@ -225,6 +224,8 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
     }
 
     newPerson.dataValues.uploads = sendApplicantUploads;
+
+    console.log(newPerson);
     await res.status(200).json({
       success: true,
       data: newPerson,
