@@ -107,15 +107,26 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
 
     if (files) {
       for (const file of files.file) {
-        console.log(file);
         const pathFile = 'uploads/';
+
+        function getCurrentFilenames() {
+          console.log('Current filenames:');
+          fs.readdirSync(__dirname).forEach((file) => {
+            console.log(file);
+          });
+        }
 
         fs.rename(file.path, path.join(pathFile, file.name), (err) => {
           if (err) {
             return next(new ErrorResponse('Person could not be created', 401));
+          } else {
+            // List all the filenames after renaming
+            console.log('\nFile Renamed\n');
+
+            // List all the filenames after renaming
+            getCurrentFilenames();
           }
         });
-        console.log(file);
 
         fileChange = {
           ...file,
