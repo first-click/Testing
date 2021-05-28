@@ -65,92 +65,11 @@ exports.getPerson = asyncHandler(async (req, res, next) => {
 //@access Private/Admin
 exports.getFile = asyncHandler(async (req, res, next) => {
   // console.log(req.params);
+  // unlink file!!!
   const key = req.params.key;
   const readStream = getFileStream(key);
   await readStream.pipe(res);
 });
-
-// exports.createPerson = asyncHandler(async (req, res, next) => {
-//   const { user_id } = req.user;
-//   let newPerson = {};
-//   let fileChange = [];
-//   let sendApplicantUploads = ['hello'];
-
-//   const form = await formidable({
-//     multiples: true,
-//   });
-
-//   form.parse(req, async (err, fields, files) => {
-//     if (err) {
-//       return next(new ErrorResponse('Person could not be created', 401));
-//     }
-//     if (fields) {
-//       console.log('in if(fields)');
-//       newPerson = await Person.create({
-//         person_first_name: fields.applicant_firstname,
-//         person_surname: fields.applicant_surname,
-//         person_email: fields.applicant_email,
-//         person_phonenumber: fields.applicant_phonenumber,
-//         person_applicant_message_hiring_manager:
-//           fields.applicant_message_hiring_manager,
-//         person_linkedin: fields.applicant_linkedin,
-//         person_xing: fields.applicant_xing,
-//         person_applicant_data_protection: fields.applicant_data_protection,
-//         company_id: fields.company_id,
-//         position_id: fields.position_id,
-//         user_id: user_id,
-//       });
-//     }
-//     if (files) {
-
-//       files.file.map(async (file) => {
-//         // const pathFile = 'uploads/';
-
-//         // fs.rename(file.path, path.join(pathFile, file.name), (err) => {
-//         //   if (err) {
-//         //     return next(new ErrorResponse('Person could not be created', 401));
-//         //   }
-//         // });
-
-//         fileChange = {
-//           ...file,
-//           path: `uploads/${file.name}`,
-//         };
-
-//         const fileStream = fs.createReadStream(fileChange.path);
-
-//         const uploadParams = {
-//           Bucket: bucketName,
-//           Body: fileStream,
-//           Key: fileChange.name,
-//         };
-
-//         const s3Data = await s3.upload(uploadParams).promise();
-
-//         const applicantFilename = await Applicant_filename.create({
-//           filename: `/api/v1/persons/pdf/${s3Data.key}`,
-//         });
-
-//         console.log('before sendApplicantUploads.push()');
-//         sendApplicantUploads.push(applicantFilename.dataValues.filename);
-//         // newPerson.dataValues.uploads.push(
-//         //   applicantFilename.dataValues.filename
-//         // );
-
-//         console.log('before Person_applicant_filename.create()');
-//         await Person_applicant_filename.create({
-//           person_id: newPerson.person_id,
-//           applicant_filename_id: applicantFilename.applicant_filename_id,
-//         });
-//       });
-//     }
-
-//     await res.status(200).json({
-//       success: true,
-//       data: newPerson,
-//     });
-//   });
-// });
 
 //@desc Create new person
 //@route POST /api/v1/persons
@@ -161,7 +80,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
   let fileChange = [];
   let sendApplicantUploads = [];
 
-  const form = await formidable({
+  const form = formidable({
     multiples: true,
   });
 
@@ -185,8 +104,10 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
         user_id: user_id,
       });
     }
+
     if (files) {
       for (const file of files.file) {
+        console.log(file);
         const pathFile = 'uploads/';
 
         fs.rename(file.path, path.join(pathFile, file.name), (err) => {
@@ -194,6 +115,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
             return next(new ErrorResponse('Person could not be created', 401));
           }
         });
+        console.log(file);
 
         fileChange = {
           ...file,
@@ -220,12 +142,12 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
           person_id: newPerson.person_id,
           applicant_filename_id: applicantFilename.applicant_filename_id,
         });
+        // await unlinkFile(file.path)
       }
     }
 
     newPerson.dataValues.uploads = sendApplicantUploads;
 
-    console.log(newPerson);
     await res.status(200).json({
       success: true,
       data: newPerson,
