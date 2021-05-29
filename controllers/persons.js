@@ -106,6 +106,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
     }
 
     if (files) {
+      // noch eine funktion schreiben, wenn ich ein file nur habe
       for (const file of files.file) {
         const pathFile = 'uploads/';
 
