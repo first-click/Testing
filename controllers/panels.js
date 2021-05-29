@@ -1,6 +1,8 @@
 const { sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
+const checkPlanningDone = require('./helpers/checkPlanningDone');
+
 const User = sequelize.models.user;
 const Position = sequelize.models.position;
 const Person = sequelize.models.person;
@@ -50,9 +52,9 @@ exports.getPanel = asyncHandler(async (req, res, next) => {
   const panel = await Panel.findByPk(panel_id, {
     include: [
       { model: Position },
+      { model: Panel_Scale },
       {
         model: Panel_Stakeholder,
-        // attributes: ['panel_role'],
         include: {
           model: User,
           attributes: ['username', 'user_id', 'avatar'],
@@ -65,7 +67,6 @@ exports.getPanel = asyncHandler(async (req, res, next) => {
           },
         },
       },
-      { model: Panel_Scale },
     ],
   });
 
@@ -130,6 +131,71 @@ exports.createPanel = asyncHandler(async (req, res, next) => {
     },
     // data: { ...panel.dataValues, position, panel_stakeholders: [stakeholder] },
   });
+});
+
+//@desc Update a new panel
+//@route PUT /api/v1/panels/:panel_id
+//@access Private/Admin
+exports.updatePanel = asyncHandler(async (req, res, next) => {
+  const { company_id, user_id } = req.user;
+  const { panel_id } = req.params;
+  const updates = req.body;
+
+  // Make sure user is panel master
+  const panel = await Panel.findByPk(panel_id, {
+    include: [
+      Position,
+      Panel_Scale,
+      {
+        model: Panel_Stakeholder,
+        include: {
+          model: User,
+          attributes: ['username', 'user_id', 'avatar'],
+          include: {
+            model: Person,
+            attributes: ['person_first_name', 'person_last_name', 'person_id'],
+            include: {
+              model: Position,
+            },
+          },
+        },
+      },
+    ],
+  });
+
+  const stakeholders = panel.panel_stakeholders;
+  const scales = panel.panel_scales;
+
+  const isMaster = stakeholders.some(
+    (stakeholder) => stakeholder.user_id === user_id
+  );
+  if (!isMaster) {
+    return next(new ErrorResponse('You are not authorized', 401));
+  }
+
+  // Wechsel von "planning" nach "ongoing"
+  // if (panel.status === 'planning' && updates.status === 'ongoing') {
+  if (panel.status) {
+    const result = checkPlanningDone({
+      panel_stakeholders: stakeholders,
+      panel_scales: scales,
+    });
+    // Fehler, wenn noch Stakeholder oder Skalen fehlen
+    if (result.some((entry) => !entry.passed)) {
+      return next(new ErrorResponse('Panel is not yet fully configured', 400));
+    }
+
+    panel.status = 'ongoing';
+    panel.save();
+
+    return res.status(200).json({
+      success: true,
+      data: panel,
+    });
+  }
+
+  // wenn das Update nicht gültig ist
+  return next(new ErrorResponse('Invalid request', 400));
 });
 
 //@desc Delete a panel
