@@ -17,13 +17,8 @@ const Company = sequelize.models.company;
 //@access Public
 
 exports.register = asyncHandler(async (req, res, next) => {
-  const {
-    username,
-    email,
-    password,
-    generalrole_user,
-    postingrole_user,
-  } = req.body;
+  const { username, email, password, generalrole_user, postingrole_user } =
+    req.body;
   //Check for user
   const userExists = await User.findOne({
     where: { email: email },
@@ -154,12 +149,18 @@ exports.getMe = asyncHandler(async (req, res, next) => {
     },
   });
 
-  if (!user) {
-    return next(new ErrorResponse('No user could be found', 401));
+  const roles = await Role_user.findAll({
+    where: { user_id: req.user.user_id },
+  });
+  // user.dataValues.roles = roles;
+
+  if (!user || !roles) {
+    return next(new ErrorResponse('User could not be found', 401));
   }
   res.status(200).json({
     success: true,
     data: user,
+    roles: roles,
   });
 });
 
