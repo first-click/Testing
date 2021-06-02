@@ -395,9 +395,7 @@ exports.deleteScale = asyncHandler(async (req, res, next) => {
 //@route GET /api/v1/panels/scales
 //@access Private/Admin
 exports.getScales = asyncHandler(async (req, res, next) => {
-  // console.log('getScales', req.user);
   const { company_id, user_id } = req.user;
-  // const { position_id } = req.params;
 
   const scales = await Scale.findAll({
     where: { company_id },
