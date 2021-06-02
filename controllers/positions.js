@@ -6,8 +6,6 @@ const Position = sequelize.models.position;
 //@desc Query positions
 //@route GET /api/v1/positions/query/:encodedQueryString
 //@access Private/Admin
-//@desc search Position
-
 exports.queryPositions = asyncHandler(async (req, res) => {
   const { company_id } = req.user;
   let queryString = Buffer.from(
@@ -39,28 +37,9 @@ exports.queryPositions = asyncHandler(async (req, res) => {
   });
 });
 
-//@desc Get all positions
-//@route GET /api/v1/positions
-//@access Private/Admin
-exports.getPositions = asyncHandler(async (req, res, next) => {
-  const { company_id } = req.user;
-  const positions = await Position.findAll({
-    // include: 'persons',
-    where: {
-      company_id,
-    },
-    //limit: 50,
-    limit: 5,
-  });
-  res.status(200).json({
-    success: true,
-    data: positions,
-  });
-});
-
-//@desc Query positions
-//@route GET /api/v1/positions/query/:encodedQueryString
-//@access Private/Admin
+// //@desc Query positions
+// //@route GET /api/v1/positions/query/:encodedQueryString
+// //@access Private/Admin
 // exports.queryPositions = asyncHandler(async (req, res) => {
 //   const { company_id } = req.user;
 //   let queryString = Buffer.from(
@@ -112,6 +91,25 @@ exports.getPositions = asyncHandler(async (req, res, next) => {
 //     data: positions,
 //   });
 // });
+
+//@desc Get all positions
+//@route GET /api/v1/positions
+//@access Private/Admin
+exports.getPositions = asyncHandler(async (req, res, next) => {
+  const { company_id } = req.user;
+  const positions = await Position.findAll({
+    // include: 'persons',
+    where: {
+      company_id,
+    },
+    //limit: 50,
+    limit: 5,
+  });
+  res.status(200).json({
+    success: true,
+    data: positions,
+  });
+});
 
 //@desc Get a single position
 //@route GET /api/v1/positions/:position_id
