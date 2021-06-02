@@ -23,7 +23,7 @@ module.exports = {
             primaryKey: true,
           },
           person_first_name: Sequelize.STRING,
-          person_surname: Sequelize.STRING,
+          person_last_name: Sequelize.STRING,
           person_email: {
             type: Sequelize.STRING,
             unique: true,

@@ -115,7 +115,7 @@ exports.queryPersons = asyncHandler(async (req, res) => {
               },
             },
             {
-              person_surname: {
+              person_last_name: {
                 [Sequelize.Op.like]: `%${queryString}%`,
               },
             },
@@ -167,7 +167,7 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
     if (fields) {
       newPerson = await Person.create({
         person_first_name: fields.applicant_firstname,
-        person_surname: fields.applicant_surname,
+        person_last_name: fields.applicant_last_name,
         person_email: fields.applicant_email,
         person_phonenumber: fields.applicant_phonenumber,
         person_applicant_message_hiring_manager:
@@ -234,12 +234,12 @@ exports.createPerson = asyncHandler(async (req, res, next) => {
 //@route PUT /api/v1/persons/:person_id
 //@access Private/Admin
 exports.updatePerson = asyncHandler(async (req, res, next) => {
-  const { person_first_name, person_surname } = req.body;
+  const { person_first_name, person_last_name } = req.body;
   // update a person
   const person = await Person.update(
     {
       person_first_name: person_first_name,
-      person_surname: person_surname,
+      person_last_name: person_last_name,
     },
     { where: { person_id: req.params.person_id }, returning: true, plain: true }
   );
