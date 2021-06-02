@@ -5,13 +5,72 @@ const Posting = sequelize.models.posting;
 const Posting_user = sequelize.models.posting_user;
 const Benefit = sequelize.models.benefit;
 const Position = sequelize.models.position;
+const Company = sequelize.models.company;
+const Address = sequelize.models.address;
 const Posting_benefit = sequelize.models.posting_benefit;
 const Posting_qualification = sequelize.models.posting_qualification;
 const Qualification = sequelize.models.qualification;
 
+//@desc Query postings
+//@route GET /api/v1/postings/query/:encodedQueryString
+//@access Public
+//@desc search postings
+
+exports.queryPostings = asyncHandler(async (req, res) => {
+  let queryString = Buffer.from(
+    req.params.encodedQueryString,
+    'base64'
+  ).toString('binary');
+
+  if (queryString === 'all' || queryString.length === 0) {
+    const postings = await Posting.findAll({
+      include: [
+        { model: Position },
+        { model: Company, include: [{ model: Address }] },
+      ],
+    });
+    return res.status(200).json({
+      success: true,
+      data: postings,
+    });
+  }
+
+  const postings = await sequelize.query(
+    `
+  SELECT *
+  FROM ${Posting.tableName} 
+
+  WHERE _search @@ to_tsquery('simple', :query );
+  
+  `,
+    {
+      model: Posting,
+      replacements: { query: `${queryString}:*` },
+    }
+  );
+
+  let sendPostings = [];
+  for (const posting of postings) {
+    const postingData = await Posting.findOne({
+      where: { posting_id: posting.posting_id },
+
+      include: [
+        { model: Position },
+        { model: Company, include: [{ model: Address }] },
+      ],
+    });
+    sendPostings.push(postingData);
+  }
+
+  return res.status(200).json({
+    success: true,
+    data: sendPostings,
+  });
+});
+
 //@desc Get all postings
 //@route GET /api/v1/postings
-//@access Private/Admin
+//@access Public
 exports.getPostings = asyncHandler(async (req, res, next) => {
   const postings = await Posting.findAll({});
   if (!postings) {

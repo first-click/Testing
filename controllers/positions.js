@@ -3,6 +3,42 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Position = sequelize.models.position;
 
+//@desc Query position
+//@route GET /api/v1/positions/query/:encodedQueryString
+//@access Private/Admin
+//@desc search Position
+
+exports.queryPositions = asyncHandler(async (req, res) => {
+  const { company_id } = req.user;
+  let queryString = Buffer.from(
+    req.params.encodedQueryString,
+    'base64'
+  ).toString('binary');
+
+  const positions = await sequelize.query(
+    `
+  SELECT *
+  FROM ${Position.tableName}
+
+  WHERE _search @@ to_tsquery('simple', :query );
+  
+  `,
+    {
+      model: Position,
+      replacements: { query: `${queryString}:*` },
+    }
+  );
+
+  let foundPositions = await positions.filter(
+    (position) => position.company_id === company_id
+  );
+
+  return res.status(200).json({
+    success: true,
+    data: foundPositions,
+  });
+});
+
 //@desc Get all positions
 //@route GET /api/v1/positions
 //@access Private/Admin
@@ -25,57 +61,57 @@ exports.getPositions = asyncHandler(async (req, res, next) => {
 //@desc Query positions
 //@route GET /api/v1/positions/query/:encodedQueryString
 //@access Private/Admin
-exports.queryPositions = asyncHandler(async (req, res) => {
-  const { company_id } = req.user;
-  let queryString = Buffer.from(
-    req.params.encodedQueryString,
-    'base64'
-  ).toString('binary');
-  //console.log(queryString);
+// exports.queryPositions = asyncHandler(async (req, res) => {
+//   const { company_id } = req.user;
+//   let queryString = Buffer.from(
+//     req.params.encodedQueryString,
+//     'base64'
+//   ).toString('binary');
+//   //console.log(queryString);
 
-  const positions = await Position.findAll({
-    where: {
-      [Sequelize.Op.and]: [
-        { company_id },
-        {
-          [Sequelize.Op.or]: [
-            {
-              position_id: {
-                [Sequelize.Op.eq]: isNaN(parseInt(queryString))
-                  ? undefined
-                  : queryString,
-              },
-            },
-            {
-              position_title: {
-                [Sequelize.Op.like]: `%${queryString}%`,
-              },
-            },
-            {
-              position_department: {
-                [Sequelize.Op.like]: `%${queryString}%`,
-              },
-            },
-            {
-              position_department_short: {
-                [Sequelize.Op.like]: `%${queryString}%`,
-              },
-            },
-          ],
-        },
-      ],
-    },
-    // limit: 10,
-  });
+//   const positions = await Position.findAll({
+//     where: {
+//       [Sequelize.Op.and]: [
+//         { company_id },
+//         {
+//           [Sequelize.Op.or]: [
+//             {
+//               position_id: {
+//                 [Sequelize.Op.eq]: isNaN(parseInt(queryString))
+//                   ? undefined
+//                   : queryString,
+//               },
+//             },
+//             {
+//               position_title: {
+//                 [Sequelize.Op.like]: `%${queryString}%`,
+//               },
+//             },
+//             {
+//               position_department: {
+//                 [Sequelize.Op.like]: `%${queryString}%`,
+//               },
+//             },
+//             {
+//               position_department_short: {
+//                 [Sequelize.Op.like]: `%${queryString}%`,
+//               },
+//             },
+//           ],
+//         },
+//       ],
+//     },
+//     // limit: 10,
+//   });
 
-  if (!positions) {
-    return next(new ErrorResponse('Positions could not be found', 401));
-  }
-  res.status(200).json({
-    success: true,
-    data: positions,
-  });
-});
+//   if (!positions) {
+//     return next(new ErrorResponse('Positions could not be found', 401));
+//   }
+//   res.status(200).json({
+//     success: true,
+//     data: positions,
+//   });
+// });
 
 //@desc Get a single position
 //@route GET /api/v1/positions/:position_id
@@ -106,26 +142,36 @@ exports.getPosition = asyncHandler(async (req, res, next) => {
 exports.createPosition = asyncHandler(async (req, res, next) => {
   // man kann nur in der eigenen Company positions createn
   const { company_id } = req.user;
+
   const {
     position_title,
     position_department,
     position_department_short,
   } = req.body;
-  console.log(req.body);
-  const position = await Position.create({
-    position_title,
-    position_department,
-    position_department_short,
-    company_id,
+
+  const positionExists = await Position.findOne({
+    where: { position_title },
   });
 
-  if (!position) {
-    return next(new ErrorResponse('Position could not be created', 401));
+  if (positionExists) {
+    res.status(200).json({
+      success: true,
+      data: positionExists,
+    });
   }
-  res.status(200).json({
-    success: true,
-    data: position,
-  });
+  if (!positionExists) {
+    const position = await Position.create({
+      position_title,
+      position_department,
+      position_department_short,
+      company_id,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: position,
+    });
+  }
 });
 
 //@desc Update a position

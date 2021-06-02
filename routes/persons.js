@@ -1,6 +1,7 @@
 const express = require('express');
 const {
   createPerson,
+  getFile,
   getPerson,
   getPersons,
   updatePerson,
@@ -14,8 +15,9 @@ const { protect, authorize } = require('../middleware/auth');
 //router.use(protect);
 //router.use(authorize('admin'));
 
-router.route('/').get(getPersons).post(createPerson);
+router.route('/').get(getPersons).post(protect, createPerson);
 
+router.route('/pdf/:key').get(getFile);
 router
   .route('/:person_id')
   .put(updatePerson)

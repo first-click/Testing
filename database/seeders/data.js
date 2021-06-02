@@ -24,7 +24,11 @@ module.exports = {
     const addresses = data.map((entry) => entry.address);
     const benefits = data.map((entry) => entry.benefit);
     const qualifications = data.map((entry) => entry.qualification);
+    const applicant_filenames = data.map((entry) => entry.applicant_filename);
     const posting_benefits = data.map((entry) => entry.posting_benefit);
+    const person_applicant_filenames = data.map(
+      (entry) => entry.person_applicant_filename
+    );
     const posting_qualifications = data.map(
       (entry) => entry.posting_qualification
     );
@@ -45,6 +49,16 @@ module.exports = {
       await queryInterface.bulkInsert('benefits', benefits, {});
       await queryInterface.bulkInsert('posting_benefits', posting_benefits, {});
       await queryInterface.bulkInsert('qualifications', qualifications, {});
+      await queryInterface.bulkInsert(
+        'applicant_filenames',
+        applicant_filenames,
+        {}
+      );
+      await queryInterface.bulkInsert(
+        'person_applicant_filenames',
+        person_applicant_filenames,
+        {}
+      );
       await queryInterface.bulkInsert(
         'posting_qualifications',
         posting_qualifications,
@@ -124,6 +138,8 @@ module.exports = {
     await queryInterface.bulkDelete('benefits', null, {});
     await queryInterface.bulkDelete('posting_benefits', null, {});
     await queryInterface.bulkDelete('qualifications', null, {});
+    await queryInterface.bulkDelete('applicant_filenames', null, {});
+    await queryInterface.bulkDelete('person_applicant_filenames', null, {});
     await queryInterface.bulkDelete('posting_qualifications', null, {});
     await queryInterface.bulkDelete('persons_positions', null, {});
     await queryInterface.bulkDelete('posting_users', null, {});

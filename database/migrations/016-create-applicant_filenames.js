@@ -15,36 +15,18 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'addresses_companies',
+        'applicant_filenames',
         {
-          address_company_id: {
-            primaryKey: true,
+          applicant_filename_id: {
             allowNull: false,
             autoIncrement: true,
+            primaryKey: true,
             type: Sequelize.INTEGER,
           },
-          address_id: {
-            // primaryKey: true,
-            type: Sequelize.INTEGER,
 
-            references: {
-              model: 'addresses',
-              key: 'address_id',
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-          },
-
-          company_id: {
-            //primaryKey: true,
-            type: Sequelize.INTEGER,
-
-            references: {
-              model: 'companies',
-              key: 'company_id',
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
+          filename: {
+            allowNull: true,
+            type: Sequelize.STRING,
           },
 
           created_at: {
@@ -67,7 +49,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('addresses_companies', { transaction });
+      await queryInterface.dropTable('applicant_filenames', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

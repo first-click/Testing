@@ -9,6 +9,7 @@ const hashedPassword = (password) => {
 function generateDataPoint({ id }) {
   faker.seed(id); // Auskommentieren für Random-Werte
   let companyId = faker.helpers.randomize([1, 2, 3]);
+
   let role = 'user';
   switch (id) {
     case 1: {
@@ -32,7 +33,7 @@ function generateDataPoint({ id }) {
   }
 
   let firstName = faker.name.firstName();
-  let lastName = faker.name.lastName();
+  let surname = faker.name.lastName();
   let title = faker.name.jobTitle();
   let department = faker.name.jobArea();
   let departmentShort = department.split('').slice(0, 3).join('').toUpperCase();
@@ -48,12 +49,13 @@ function generateDataPoint({ id }) {
   let country = faker.address.country();
   let benefit = faker.lorem.word();
   let qualification = faker.lorem.word();
+  let filename = faker.lorem.word();
 
   let date = new Date();
   return {
     user: {
-      username: faker.internet.userName(firstName, lastName),
-      email: faker.internet.email(firstName, lastName),
+      username: faker.internet.userName(firstName, surname),
+      email: faker.internet.email(firstName, surname),
       password: hashedPassword('secret'),
       company_id: companyId,
       created_at: date,
@@ -63,7 +65,13 @@ function generateDataPoint({ id }) {
       company_id: companyId,
       user_id: id,
       person_first_name: firstName,
-      person_last_name: lastName,
+      person_surname: surname,
+      person_email: faker.internet.email(firstName, surname),
+      person_phonenumber: faker.phone.phoneNumber(),
+      person_applicant_message_hiring_manager: faker.lorem.sentence(),
+      person_linkedin: faker.lorem.sentence(),
+      person_xing: faker.lorem.sentence(),
+      person_applicant_data_protection: true,
       created_at: date,
       updated_at: date,
     },
@@ -110,6 +118,11 @@ function generateDataPoint({ id }) {
       created_at: date,
       updated_at: date,
     },
+    applicant_filename: {
+      filename: filename,
+      created_at: date,
+      updated_at: date,
+    },
     posting_benefit: {
       posting_id: id,
       benefit_id: id,
@@ -122,10 +135,16 @@ function generateDataPoint({ id }) {
       created_at: date,
       updated_at: date,
     },
+    person_applicant_filename: {
+      person_id: id,
+      applicant_filename_id: id,
+      created_at: date,
+      updated_at: date,
+    },
 
     address_company: {
       address_id: id,
-      company_id: id,
+      company_id: companyId,
       created_at: date,
       updated_at: date,
     },

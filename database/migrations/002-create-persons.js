@@ -23,7 +23,34 @@ module.exports = {
             primaryKey: true,
           },
           person_first_name: Sequelize.STRING,
-          person_last_name: Sequelize.STRING,
+          person_surname: Sequelize.STRING,
+
+          person_email: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: false,
+            validate: { isEmail: true },
+          },
+
+          person_phonenumber: {
+            type: Sequelize.STRING,
+            unique: true,
+            allowNull: false,
+          },
+          person_applicant_message_hiring_manager: {
+            type: Sequelize.STRING,
+          },
+          person_linkedin: {
+            type: Sequelize.STRING,
+            unique: true,
+          },
+          person_xing: {
+            type: Sequelize.STRING,
+            unique: true,
+          },
+          person_applicant_data_protection: {
+            type: Sequelize.BOOLEAN,
+          },
 
           created_at: {
             type: Sequelize.DATE,
