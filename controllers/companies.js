@@ -9,9 +9,7 @@ const Address_company = sequelize.models.address_company;
 //@desc Query company
 //@route GET /api/v1/companies/query/:encodedQueryString
 //@access Private/Admin
-//@desc search Post
-//@route GET /api/v1/posts
-//@access Public
+//@desc search company
 
 exports.queryCompanies = asyncHandler(async (req, res) => {
   let queryString = Buffer.from(
@@ -23,17 +21,28 @@ exports.queryCompanies = asyncHandler(async (req, res) => {
     `
   SELECT *
   FROM ${Company.tableName}
-   WHERE _search @@ plainto_tsquery('german', :query);
+
+  WHERE _search @@ to_tsquery('simple', :query );
+  
   `,
     {
       model: Company,
-      replacements: { query: queryString },
+      replacements: { query: `${queryString}:*` },
     }
   );
 
+  let foundCompanies = [];
+  for (const company of companies) {
+    const companyAddress = await Company.findOne({
+      where: { company_id: company.dataValues.company_id },
+      include: [Address],
+    });
+    foundCompanies.push(companyAddress);
+  }
+
   return res.status(200).json({
     success: true,
-    data: companies,
+    data: foundCompanies,
   });
 });
 
@@ -97,37 +106,56 @@ exports.createCompany = asyncHandler(async (req, res) => {
   await sequelize.transaction(async (t) => {
     //warum geht transaction bei der ersten create nicht
     // ist update zu schnell?
-    const company = await Company.create({ company_name });
 
-    await User.update(
-      { company_id: company.company_id },
-      { where: { user_id } },
-      { transaction: t }
-    );
-
-    const address = await Address.create(
-      {
-        address_street_name,
-        address_house_number,
-        address_postal_code,
-        address_city,
-        address_country,
-      },
-      { transaction: t }
-    );
-
-    await Address_company.create(
-      {
-        address_id: address.address_id,
-        company_id: company.company_id,
-      },
-      { transaction: t }
-    );
-
-    res.status(200).json({
-      success: true,
-      data: company,
+    const companyExists = await Company.findOne({
+      where: { company_name },
+      include: [Address],
     });
+
+    if (companyExists) {
+      await User.update(
+        { company_id: companyExists.company_id },
+        { where: { user_id } },
+        { transaction: t }
+      );
+      res.status(200).json({
+        success: true,
+        data: companyExists,
+      });
+    }
+    if (!companyExists) {
+      const company = await Company.create({ company_name });
+
+      await User.update(
+        { company_id: company.company_id },
+        { where: { user_id } },
+        { transaction: t }
+      );
+      // noch die Addresse suchen, bevor ich sie create
+      const address = await Address.create(
+        {
+          address_street_name,
+          address_house_number,
+          address_postal_code,
+          address_city,
+          address_country,
+        },
+        { transaction: t }
+      );
+
+      await Address_company.create(
+        {
+          address_id: address.address_id,
+          company_id: company.company_id,
+        },
+        { transaction: t }
+      );
+      company.dataValues.addresses = [address];
+      res.status(200).json({
+        success: true,
+        data: company,
+      });
+    }
   });
 });
 

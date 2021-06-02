@@ -2,7 +2,8 @@ const vectorName = '_search';
 
 const searchObjects = {
   companies: ['company_name'],
-  // positions: ['position_title', 'position_department'],
+  positions: ['position_title'],
+  postings: ['posting_description'],
 };
 
 module.exports = {

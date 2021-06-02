@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = {
   /**
    * @typedef {import('sequelize').Sequelize} Sequelize
@@ -14,41 +15,18 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.createTable(
-        'persons',
+        'applicant_filenames',
         {
-          person_id: {
-            type: Sequelize.INTEGER,
+          applicant_filename_id: {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-          },
-          person_first_name: Sequelize.STRING,
-          person_surname: Sequelize.STRING,
-          person_email: {
-            type: Sequelize.STRING,
-            unique: true,
-            allowNull: false,
-            validate: { isEmail: true },
+            type: Sequelize.INTEGER,
           },
 
-          person_phonenumber: {
+          filename: {
+            allowNull: true,
             type: Sequelize.STRING,
-            unique: true,
-            allowNull: false,
-          },
-          person_applicant_message_hiring_manager: {
-            type: Sequelize.STRING,
-          },
-          person_linkedin: {
-            type: Sequelize.STRING,
-            unique: true,
-          },
-          person_xing: {
-            type: Sequelize.STRING,
-            unique: true,
-          },
-          person_applicant_data_protection: {
-            type: Sequelize.BOOLEAN,
           },
 
           created_at: {
@@ -59,7 +37,6 @@ module.exports = {
             type: Sequelize.DATE,
             allowNull: false,
           },
-          // junk: Sequelize.CHAR(1000),
         },
         { transaction }
       );
@@ -72,7 +49,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('persons', { transaction });
+      await queryInterface.dropTable('applicant_filenames', { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();

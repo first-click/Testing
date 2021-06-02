@@ -26,6 +26,7 @@ module.exports = {
           address_id: {
             // primaryKey: true,
             type: Sequelize.INTEGER,
+
             references: {
               model: 'addresses',
               key: 'address_id',
@@ -37,6 +38,7 @@ module.exports = {
           company_id: {
             //primaryKey: true,
             type: Sequelize.INTEGER,
+
             references: {
               model: 'companies',
               key: 'company_id',
