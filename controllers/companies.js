@@ -75,10 +75,6 @@ exports.getCompany = asyncHandler(async (req, res, next) => {
 
   const company = await Company.findByPk(req.params.id);
 
-  const users = await company.getUsers();
-  const persons = await company.getPersons();
-  // const positions = await company.getPositions();
-
   if (!company) {
     return next(new ErrorResponse('Company does not exist', 401));
   }
