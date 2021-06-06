@@ -11,15 +11,21 @@ const User = sequelize.models.user;
 const Role = sequelize.models.role;
 const Person = sequelize.models.person;
 const Role_user = sequelize.models.role_user;
-const Company = sequelize.models.company;
 
 //@desc Register as company user to create postings
 //@route Post /api/v1/auth/register
 //@access Public
 
 exports.register = asyncHandler(async (req, res, next) => {
-  const { username, email, password, generalrole_user, postingrole_user } =
-    req.body;
+  const {
+    username,
+    email,
+    password,
+    avatar,
+    generalrole_user,
+    postingrole_user,
+  } = req.body;
+
   //Check for user
   const userExists = await User.findOne({
     where: { email: email },
@@ -34,6 +40,7 @@ exports.register = asyncHandler(async (req, res, next) => {
         username,
         email,
         password,
+        avatar,
       },
       { transaction: t }
     );

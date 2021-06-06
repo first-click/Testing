@@ -2,6 +2,8 @@ const { sequelize, Sequelize } = require('../database/models');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Position = sequelize.models.position;
+const Company = sequelize.models.company;
+const Address = sequelize.models.address;
 
 //@desc Query positions
 //@route GET /api/v1/positions/query/:encodedQueryString
@@ -12,6 +14,17 @@ exports.queryPositions = asyncHandler(async (req, res) => {
     req.params.encodedQueryString,
     'base64'
   ).toString('binary');
+
+  if (queryString === 'all' || queryString.length === 0) {
+    const positions = await Position.findAll({
+      where: { company_id },
+      include: [{ model: Company, include: [{ model: Address }] }],
+    });
+    return res.status(200).json({
+      success: true,
+      data: positions,
+    });
+  }
 
   const positions = await sequelize.query(
     `
