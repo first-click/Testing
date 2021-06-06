@@ -115,8 +115,8 @@ exports.getPositions = asyncHandler(async (req, res, next) => {
     where: {
       company_id,
     },
-    //limit: 50,
-    limit: 5,
+
+    limit: 50,
   });
   res.status(200).json({
     success: true,
