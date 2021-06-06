@@ -73,7 +73,7 @@ exports.getCompany = asyncHandler(async (req, res, next) => {
   //   include: ['persons'],
   // });
 
-  const company = await Company.findByPk(req.params.company_id);
+  const company = await Company.findByPk(req.params.id);
 
   const users = await company.getUsers();
   const persons = await company.getPersons();
@@ -84,7 +84,7 @@ exports.getCompany = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({
     success: true,
-    data: { company, persons, users },
+    data: company,
   });
 });
 
