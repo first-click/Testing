@@ -10,6 +10,7 @@ const asyncHandler = require('../middleware/async');
 const User = sequelize.models.user;
 const Role = sequelize.models.role;
 const Person = sequelize.models.person;
+const Company = sequelize.models.company;
 const Role_user = sequelize.models.role_user;
 
 //@desc Register as company user to create postings
@@ -94,10 +95,9 @@ exports.login = asyncHandler(async (req, res, next) => {
   //Check for user
   const user = await User.findOne({
     where: { email: email },
-    attributes: ['user_id', 'password', 'email'],
+    attributes: ['user_id', 'password', 'email', 'company_id'],
   });
 
-  // console.log(user);
   if (!user) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }

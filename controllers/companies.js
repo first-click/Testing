@@ -73,8 +73,10 @@ exports.getCompany = asyncHandler(async (req, res, next) => {
   //   include: ['persons'],
   // });
 
-  const company = await Company.findByPk(req.params.id);
-
+  const company = await Company.findOne({
+    where: { company_id: req.params.company_id },
+    include: [Address],
+  });
   if (!company) {
     return next(new ErrorResponse('Company does not exist', 401));
   }

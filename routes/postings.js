@@ -12,15 +12,15 @@ const router = express({ mergeParams: true });
 
 const { protect, authorize, authorizePosting } = require('../middleware/auth');
 router.route('/query/:encodedQueryString').get(queryPostings);
-router
-  .route('/')
-  .get(getPostings)
-  .post(
-    protect,
-    authorize('admin'),
-    authorizePosting('posting_creator'),
-    createPosting
-  );
+router.route('/').get(getPostings).post(createPosting);
+
+// .get(getPostings)
+// .post(
+//   protect,
+//   authorize('admin'),
+//   authorizePosting('posting_creator'),
+//   createPosting
+// );
 
 router
   .route('/:posting_id')

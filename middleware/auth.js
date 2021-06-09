@@ -47,12 +47,19 @@ exports.protect = asyncHandler(async (req, res, next) => {
 });
 
 // Grant access to specific roles
+// noch genau schauen, wer was sehen darf
 exports.authorize = (...roles) => {
   return async (req, res, next) => {
     const role = await Role_user.findOne({
       where: {
         user_id: req.user.user_id,
-        role_user: ['admin', 'user', 'publisher'],
+        role_user: [
+          'admin',
+          'user',
+          'publisher',
+          'posting_creator',
+          'posting_applicant',
+        ],
       },
     });
 
